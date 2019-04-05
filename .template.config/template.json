@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Wiz Solucoes e Corretagem de Seguros S.A.",
+  "classifications": [
+    "Web",
+    "WebAPI",
+    "Test",
+    "xUnit"
+  ],
+  "name": "Wiz Template - Web API .NET Core 2.2",
+  "generatorVersions": "[1.0.0.0-*)",
+  "identity": "Wiz.Template.API",
+  "groupIdentity": "Wiz.Template.API.v1",
+  "shortName": "wizapi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "Template",
+  "preferNameDirectory": false,
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "netcoreapp3.0",
+          "description": "Target netcoreapp3.0"
+        }
+      ],
+      "replaces": "netcoreapp3.0",
+      "defaultValue": "netcoreapp3.0"
+    },
+    "copyrightYear": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "copyrightYear",
+      "parameters": {
+        "format": "yyyy"
+      }
+    },
+    "skipRestore": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "If specified, skips the automatic restore of the project on create.",
+      "defaultValue": "false"
+    }
+  },
+  "primaryOutputs": [
+    {
+      "path": "Wiz.Template.sln"
+    }
+  ],
+  "defaultName": "Template",
+  "postActions": [
+    {
+      "condition": "(!skipRestore)",
+      "description": "Restore NuGet packages required by this project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet restore'"
+        }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ]
+}

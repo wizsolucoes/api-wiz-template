@@ -1,0 +1,58 @@
+# ASP.NET Core
+# Build a Web project that uses ASP.NET Core.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# YAML reference:
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
+
+trigger:
+  branches:
+    include:
+    - master
+    - releases/*
+  paths:
+    exclude:
+    - README.md
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  BuildConfiguration: 'Release'
+  RestoreBuildProjects: '**/*.csproj'
+  RestoreBuildProjectsTest: '**/*[Tt]ests/*.csproj'
+  # Necessário caso há Wiz.Common (Nuget)
+  #wizCrossFeed: '09b2821a-2950-4eff-a722-dbc8adf4da55'
+
+resources:
+- repo: self
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '$(RestoreBuildProjects)'
+    # Necessário caso há Wiz.Common (Nuget)
+    #feedRestore: '$(wizCrossFeed)'
+
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: '$(RestoreBuildProjects)'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish
+  inputs:
+    command: publish
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    projects: '$(RestoreBuildProjects)'
+    publishWebProjects: false
+    modifyOutputPath: true
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
