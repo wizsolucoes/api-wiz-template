@@ -52,6 +52,21 @@
       "path": "Wiz.Template.sln"
     }
   ],
+  "sources": [
+    {
+      "source": ".",
+      "target": ".",
+      "exclude": "README.md",
+      "rename": {
+        "README-TEMPLATE.md": "README.md"
+      }
+    },
+    {
+      "source": ".",
+      "target": ".",
+      "exclude": "LICENSE"
+    }
+  ],
   "defaultName": "Template",
   "postActions": [
     {
