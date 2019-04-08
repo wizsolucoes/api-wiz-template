@@ -45,6 +45,13 @@
       "datatype": "bool",
       "description": "If specified, skips the automatic restore of the project on create.",
       "defaultValue": "false"
+    },
+    "applicationInsights": {
+      "type": "parameter",
+      "datatype": "text",
+      "description": "Application Insights' Key.",
+      "replaces": "KEY_APPLICATION_INSIGHTS",
+      "defaultValue": "KEY_APPLICATION_INSIGHTS"
     }
   },
   "primaryOutputs": [
@@ -56,15 +63,20 @@
     {
       "source": ".",
       "target": ".",
-      "exclude": "README.md",
+      "exclude": [
+        "**/[Bb]in/**", 
+        "**/[Oo]bj/**", 
+        ".template.config/**/*", 
+        "**/*.filelist", 
+        "**/*.user", 
+        "**/*.lock.json",
+        "README.md", 
+        "LICENSE",
+        ".git/**/*"
+      ],
       "rename": {
         "README-TEMPLATE.md": "README.md"
       }
-    },
-    {
-      "source": ".",
-      "target": ".",
-      "exclude": "LICENSE"
     }
   ],
   "defaultName": "Template",
