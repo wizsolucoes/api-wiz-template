@@ -8,16 +8,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Wiz.Template.Domain.Models.Services;
 using Wiz.Template.Infra.Services;
-using Wiz.Template.Tests.Mocks.Models.Services;
+using Wiz.Template.Integration.Tests.Mocks;
 using Xunit;
 
-namespace Wiz.Template.Tests.Integration.Services
+namespace Wiz.Template.Integration.Tests.Services
 {
-    public class ViaCEPIntegrationTest
+    public class ViaCEPServiceTest
     {
         private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
 
-        public ViaCEPIntegrationTest()
+        public ViaCEPServiceTest()
         {
             _httpMessageHandlerMock = new Mock<HttpMessageHandler>();
         }
@@ -34,7 +34,7 @@ namespace Wiz.Template.Tests.Integration.Services
                 .ReturnsAsync(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(ViaCEPMock.GetCEP()))
+                    Content = new StringContent(JsonConvert.SerializeObject(ViaCEPMock.ViaCEPModelFaker.Generate()))
                 });
 
             var httpClient = new HttpClient(_httpMessageHandlerMock.Object)

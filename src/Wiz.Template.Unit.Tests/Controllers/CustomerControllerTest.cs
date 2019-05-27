@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Wiz.Template.API.Controllers;
 using Wiz.Template.API.Services.Interfaces;
 using Wiz.Template.API.ViewModels.Customer;
-using Wiz.Template.Tests.Mocks.ViewModels;
+using Wiz.Template.Unit.Tests.Mocks;
 using Xunit;
 
-namespace Wiz.Template.Tests.Unit.Application
+namespace Wiz.Template.Unit.Tests.Controllers
 {
-    public class CustomerServiceApplicationUnitTest
+    public class CustomerControllerTest
     {
         private readonly Mock<ICustomerService> _customerServiceMock;
 
-        public CustomerServiceApplicationUnitTest()
+        public CustomerControllerTest()
         {
             _customerServiceMock = new Mock<ICustomerService>();
         }
@@ -24,7 +24,7 @@ namespace Wiz.Template.Tests.Unit.Application
         public async Task GetAll_SucessTestAsync()
         {
             _customerServiceMock.Setup(x => x.GetAllAsync())
-                .ReturnsAsync(CustomerViewModelMock.GetCustomersAddress());
+                .ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate(3));
 
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.List();
@@ -39,11 +39,10 @@ namespace Wiz.Template.Tests.Unit.Application
         [Fact]
         public async Task GetById_SucessTestAsync()
         {
-            var id = 1;
-            var customerId = CustomerViewModelMock.GetCustomerId(id);
+            var customerId = CustomerMock.CustomerIdViewModelFaker.Generate();
 
             _customerServiceMock.Setup(x => x.GetAddressByIdAsync(customerId))
-                .ReturnsAsync(CustomerViewModelMock.GetCustomerAddress());
+                .ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.Get(customerId);
@@ -58,11 +57,10 @@ namespace Wiz.Template.Tests.Unit.Application
         [Fact]
         public async Task GetByName_SucessTestAsync()
         {
-            var name = "Zier Zuveiku";
-            var customerName = CustomerViewModelMock.GetCustomerName(name);
+            var customerName = CustomerMock.CustomerNameViewModelFaker.Generate();
 
             _customerServiceMock.Setup(x => x.GetAddressByNameAsync(customerName))
-                .ReturnsAsync(CustomerViewModelMock.GetCustomerAddress());
+                .ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.Get(customerName);
@@ -77,10 +75,10 @@ namespace Wiz.Template.Tests.Unit.Application
         [Fact]
         public void Post_SucessTestAsync()
         {
-            var customer = CustomerViewModelMock.GetCustomer();
+            var customer = CustomerMock.CustomerViewModelFaker.Generate();
 
             _customerServiceMock.Setup(x => x.Add(customer))
-                .Returns(CustomerViewModelMock.GetCustomer());
+                .Returns(CustomerMock.CustomerViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = customerController.Post(customer);
@@ -98,7 +96,7 @@ namespace Wiz.Template.Tests.Unit.Application
             CustomerViewModel customer = null;
 
             _customerServiceMock.Setup(x => x.Add(customer))
-                .Returns(CustomerViewModelMock.GetCustomer());
+                .Returns(CustomerMock.CustomerViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = customerController.Post(customer);
@@ -127,13 +125,12 @@ namespace Wiz.Template.Tests.Unit.Application
         [Fact]
         public async Task Put_NotFoundTestAsync()
         {
-            var id = 1;
-            var customer = CustomerViewModelMock.GetCustomer();
+            var customer = CustomerMock.CustomerViewModelFaker.Generate();
 
             _customerServiceMock.Setup(x => x.Update(customer));
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.Put(id, customer);
+            var customerService = await customerController.Put(customer.Id, customer);
 
             var actionResult = Assert.IsType<NotFoundResult>(customerService);
 
@@ -143,9 +140,8 @@ namespace Wiz.Template.Tests.Unit.Application
         [Fact]
         public async Task Delete_SucessTestAsync()
         {
-            var id = 1;
-            var customerId = CustomerViewModelMock.GetCustomerId(id);
-            var customer = CustomerViewModelMock.GetCustomer();
+            var customerId = CustomerMock.CustomerIdViewModelFaker.Generate();
+            var customer = CustomerMock.CustomerViewModelFaker.Generate();
 
             _customerServiceMock.Setup(x => x.GetByIdAsync(customerId))
                 .ReturnsAsync(customer);
@@ -163,9 +159,7 @@ namespace Wiz.Template.Tests.Unit.Application
         [Fact]
         public async Task Delete_NotFoundTestAsync()
         {
-            var id = 1;
-            var customerId = CustomerViewModelMock.GetCustomerId(id);
-            var customer = CustomerViewModelMock.GetCustomer();
+            var customerId = CustomerMock.CustomerIdViewModelFaker.Generate();
 
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.Delete(customerId);

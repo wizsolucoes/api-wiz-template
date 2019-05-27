@@ -8,7 +8,7 @@ namespace Wiz.Template.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().SeedData().Run();
+            CreateWebHostBuilder(args).Build()/*.SeedData()*/.Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>

@@ -4,16 +4,16 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Wiz.Template.API;
-using Wiz.Template.Tests.Mocks.ViewModels;
+using Wiz.Template.Integration.Tests.Mocks;
 using Xunit;
 
-namespace Wiz.Template.Tests.Integration.API
+namespace Wiz.Template.Integration.Tests.API
 {
-    public class CustomerIntegrationAPITest : IClassFixture<WebApplicationFactory<Startup>>
+    public class CustomerControllerTest : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly HttpClient _httpClient;
 
-        public CustomerIntegrationAPITest(WebApplicationFactory<Startup> factory)
+        public CustomerControllerTest(WebApplicationFactory<Startup> factory)
         {
             _httpClient = factory.CreateClient();
         }
@@ -29,8 +29,7 @@ namespace Wiz.Template.Tests.Integration.API
         [Fact]
         public async Task GetById_HttpStatusCodeUnauthorizedTestAsync()
         {
-            var id = 1;
-            var customerId = CustomerViewModelMock.GetCustomerId(id);
+            var customerId = CustomerMock.CustomerIdViewModelFaker.Generate();
 
             var response = await _httpClient.GetAsync($"/api/v1/customers/{customerId}");
 
@@ -40,8 +39,7 @@ namespace Wiz.Template.Tests.Integration.API
         [Fact]
         public async Task GetByName_HttpStatusCodeUnauthorizedTestAsync()
         {
-            var name = "Diuor PleaBolosmakh";
-            var customerName = CustomerViewModelMock.GetCustomerName(name);
+            var customerName = CustomerMock.CustomerNameViewModelFaker.Generate();
 
             var response = await _httpClient.GetAsync($"/api/v1/customers/name/{customerName}");
 
@@ -51,7 +49,7 @@ namespace Wiz.Template.Tests.Integration.API
         [Fact]
         public async Task Post_HttpStatusCodeUnauthorizedTestAsync()
         {
-            var customer = CustomerViewModelMock.GetCustomer();
+            var customer = CustomerMock.CustomerViewModelFaker.Generate();
 
             var response = await _httpClient.PostAsync("/api/v1/customers", new StringContent(JsonConvert.SerializeObject(customer)));
 
@@ -62,7 +60,7 @@ namespace Wiz.Template.Tests.Integration.API
         public async Task Put_HttpStatusCodeUnauthorizedTestAsync()
         {
             var id = 1;
-            var customer = CustomerViewModelMock.GetCustomer();
+            var customer = CustomerMock.CustomerViewModelFaker.Generate();
 
             var response = await _httpClient.PutAsync($"/api/v1/customers/{id}", new StringContent(JsonConvert.SerializeObject(customer)));
 
