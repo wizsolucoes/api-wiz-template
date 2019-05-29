@@ -19,6 +19,7 @@ using NSwag.SwaggerGeneration.Processors.Security;
 using Polly;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
@@ -67,22 +68,27 @@ namespace Wiz.Template.API
              });
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "Bearer";
-            }).AddJwtBearer("Bearer", options =>
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
                 options.Authority = Configuration["WizID:Authority"];
+                options.Audience = Configuration["WizID:Audience"];
                 options.RequireHttpsMetadata = false;
                 options.Events = new JwtBearerEvents
                 {
-                    OnTokenValidated = async context =>
+                    //Remover warning caso há alguma validação do token assíncrona (async/await)
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+                    OnTokenValidated = async ctx =>
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
                     {
                         var claims = new List<Claim>
                         {
-                            new Claim(ClaimTypes.System, context.SecurityToken.Issuer)
+                            new Claim(ClaimTypes.Authentication, ((JwtSecurityToken)ctx.SecurityToken).RawData)
                         };
 
                         var claimsIdentity = new ClaimsIdentity(claims);
-                        context.Principal.AddIdentity(claimsIdentity);
+                        ctx.Principal.AddIdentity(claimsIdentity);
+                        ctx.Success();
                     }
                 };
             });
