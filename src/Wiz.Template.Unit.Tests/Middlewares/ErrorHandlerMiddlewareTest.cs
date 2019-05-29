@@ -9,23 +9,26 @@ using Wiz.Template.API.Middlewares;
 using Wiz.Template.API.Settings;
 using Xunit;
 
-namespace Wiz.Template.Tests.Unit.Middlewares
+namespace Wiz.Template.Unit.Tests.Middlewares
 {
-    public class ErrorHandlerMiddlewareUnitTest
+    public class ErrorHandlerMiddlewareTest
     {
         private readonly Mock<IOptions<ApplicationInsightsSettings>> _applicationInsightsMock;
         private readonly Mock<IHostingEnvironment> _hostingEnvironmentMock;
 
-        public ErrorHandlerMiddlewareUnitTest()
+        public ErrorHandlerMiddlewareTest()
         {
             _applicationInsightsMock = new Mock<IOptions<ApplicationInsightsSettings>>();
             _hostingEnvironmentMock = new Mock<IHostingEnvironment>();
         }
 
         [Fact]
-        public async Task InvokeErrorHandler_ExceptionTestAsync()
+        public async Task InvokeErrorHandler_ExceptionTest()
         {
-            var applicationInsightsMock = new ApplicationInsightsSettings("118047f1-b165-4bff-9471-e87fd3fe167c");
+            var applicationInsightsMock = new ApplicationInsightsSettings()
+            {
+                InstrumentationKey = "118047f1-b165-4bff-9471-e87fd3fe167c"
+            };
 
             _applicationInsightsMock.Setup(x => x.Value)
                 .Returns(applicationInsightsMock);
@@ -48,9 +51,12 @@ namespace Wiz.Template.Tests.Unit.Middlewares
         }
 
         [Fact]
-        public async Task InvokeErrorHandler_NotExceptionTestAsync()
+        public async Task InvokeErrorHandler_NotExceptionTest()
         {
-            var applicationInsightsMock = new ApplicationInsightsSettings("118047f1-b165-4bff-9471-e87fd3fe167c");
+            var applicationInsightsMock = new ApplicationInsightsSettings()
+            {
+                InstrumentationKey = "118047f1-b165-4bff-9471-e87fd3fe167c"
+            };
 
             _applicationInsightsMock.Setup(x => x.Value)
                 .Returns(applicationInsightsMock);
