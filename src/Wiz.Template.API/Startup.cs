@@ -105,7 +105,7 @@ namespace Wiz.Template.API
                 c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
-                    (int)response.StatusCode != (int)HttpStatusCode.OK)
+                    !response.IsSuccessStatusCode)
               .WaitAndRetryAsync(3, retry =>
                    TimeSpan.FromSeconds(Math.Pow(2, retry)) +
                    TimeSpan.FromMilliseconds(new Random().Next(0, 100))))
