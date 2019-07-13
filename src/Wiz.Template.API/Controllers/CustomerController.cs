@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Wiz.Template.API.Handler;
 using Wiz.Template.API.Services.Interfaces;
 using Wiz.Template.API.ViewModels.Customer;
 
 namespace Wiz.Template.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = TokenAuthenticationOptions.Bearer)]
+    [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiVersion("1.0")]
     [Produces("application/json")]
-    [ApiController]
     [Route("api/v{version:apiVersion}/customers")]
     public class CustomerController : ControllerBase
     {

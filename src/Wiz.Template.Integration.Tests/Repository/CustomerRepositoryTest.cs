@@ -2,23 +2,21 @@
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
-using System.Threading.Tasks;
-using Wiz.Template.Domain.Interfaces.Repository;
 using Wiz.Template.Infra.Context;
 using Wiz.Template.Infra.Repository;
 using Wiz.Template.Infra.UoW;
-using Wiz.Template.Tests.Mocks.Models;
+using Wiz.Template.Integration.Tests.Mocks;
 using Xunit;
 
-namespace Wiz.Template.Tests.Integration.Repository
+namespace Wiz.Template.Integration.Tests.Repository
 {
-    public class CustomerRepositoryIntegrationTest
+    public class CustomerRepositoryTest
     {
         private readonly Mock<IConfiguration> _configurationMock;
         private readonly Mock<DapperContext> _dapperContextMock;
         private readonly DbContextOptions<EntityContext> _entityOptions;
 
-        public CustomerRepositoryIntegrationTest()
+        public CustomerRepositoryTest()
         {
             _configurationMock = new Mock<IConfiguration>();
             _dapperContextMock = new Mock<DapperContext>();
@@ -30,7 +28,7 @@ namespace Wiz.Template.Tests.Integration.Repository
         [Fact]
         public void Crud_EntityTest()
         {
-            var customer = CustomerMock.GetCustomer();
+            var customer = CustomerMock.CustomerModelFaker.Generate();
 
             _configurationMock.Setup(x => x.GetSection(It.IsAny<string>()))
                 .Returns(new Mock<IConfigurationSection>().Object);

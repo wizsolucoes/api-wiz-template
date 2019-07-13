@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -17,12 +18,14 @@ using NSwag;
 using NSwag.SwaggerGeneration.Processors.Security;
 using Polly;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
-using Wiz.Template.API.Extensions;
+using System.Security.Claims;
 using Wiz.Template.API.Filters;
-using Wiz.Template.API.Handler;
 using Wiz.Template.API.Middlewares;
 using Wiz.Template.API.Services;
 using Wiz.Template.API.Services.Interfaces;
@@ -65,12 +68,32 @@ namespace Wiz.Template.API
              });
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = TokenAuthenticationOptions.Bearer;
-            }).AddBearerToken(null);
-            services.AddApiVersioning(options =>
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
-                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                options.Authority = Configuration["WizID:Authority"];
+                options.Audience = Configuration["WizID:Audience"];
+                options.RequireHttpsMetadata = false;
+                options.Events = new JwtBearerEvents
+                {
+                    //Remover warning caso há alguma validação do token assíncrona (async/await)
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+                    OnTokenValidated = async ctx =>
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+                    {
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Authentication, ((JwtSecurityToken)ctx.SecurityToken).RawData)
+                        };
+
+                        var claimsIdentity = new ClaimsIdentity(claims);
+                        ctx.Principal.AddIdentity(claimsIdentity);
+                        ctx.Success();
+                    }
+                };
             });
+
+            services.AddApiVersioning(x => x.ApiVersionReader = new HeaderApiVersionReader("api-version"));
             services.Configure<GzipCompressionProviderOptions>(x => x.Level = CompressionLevel.Optimal);
             services.AddResponseCompression(x =>
             {
@@ -82,7 +105,7 @@ namespace Wiz.Template.API
                 c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
-                   (int)response.StatusCode != (int)HttpStatusCode.OK)
+                    !response.IsSuccessStatusCode)
               .WaitAndRetryAsync(3, retry =>
                    TimeSpan.FromSeconds(Math.Pow(2, retry)) +
                    TimeSpan.FromMilliseconds(new Random().Next(0, 100))))
@@ -108,13 +131,13 @@ namespace Wiz.Template.API
                     document.Title = "Template API";
                     document.Description = "API de Template";
                     document.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT"));
-                    document.DocumentProcessors.Add(new SecurityDefinitionAppender("JWT", new SwaggerSecurityScheme
+                    document.AddSecurity("JWT", Enumerable.Empty<string>(), new SwaggerSecurityScheme
                     {
                         Type = SwaggerSecuritySchemeType.ApiKey,
                         Name = HeaderNames.Authorization,
                         Description = "Token de autenticação via SSO",
                         In = SwaggerSecurityApiKeyLocation.Header
-                    }));
+                    });
                 });
             }
 
