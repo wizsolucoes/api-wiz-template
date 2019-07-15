@@ -33,8 +33,35 @@
             "command": "dotnet",
             "type": "process",
             "args": [
+                "test"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "test integration",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
                 "test",
-                "${workspaceFolder}/src/Wiz.Template.Tests/Wiz.Template.Tests.csproj"
+                "${workspaceFolder}/test/Wiz.Template.Integration.Tests/Wiz.Template.Integration.Tests.csproj"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "test unit",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/test/Wiz.Template.Unit.Tests/Wiz.Template.Unit.Tests.csproj"
             ],
             "problemMatcher": "$msCompile",
             "group": {
@@ -50,9 +77,8 @@
                 "test",
                 "/p:CollectCoverage=true",
                 "/p:CoverletOutputFormat=lcov",
-                "/p:CoverletOutput=./lcov.info",
-                "/p:Exclude=[xunit*]*",
-                "${workspaceFolder}/src/Wiz.Template.Tests/Wiz.Template.Tests.csproj"
+                "/p:CoverletOutput=lcov.info",
+                "/p:Exclude=[xunit*]*"
             ],
             "problemMatcher": "$msCompile",
             "group": {

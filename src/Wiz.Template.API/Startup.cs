@@ -22,21 +22,23 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
+using Wiz.Template.API.Extensions;
 using Wiz.Template.API.Filters;
 using Wiz.Template.API.Middlewares;
 using Wiz.Template.API.Services;
 using Wiz.Template.API.Services.Interfaces;
 using Wiz.Template.API.Settings;
 using Wiz.Template.API.Swagger;
+using Wiz.Template.Domain.Interfaces.Identity;
 using Wiz.Template.Domain.Interfaces.Notifications;
 using Wiz.Template.Domain.Interfaces.Repository;
 using Wiz.Template.Domain.Interfaces.Services;
 using Wiz.Template.Domain.Interfaces.UoW;
 using Wiz.Template.Domain.Notifications;
 using Wiz.Template.Infra.Context;
+using Wiz.Template.Infra.Identity;
 using Wiz.Template.Infra.Repository;
 using Wiz.Template.Infra.Services;
 using Wiz.Template.Infra.UoW;
@@ -81,8 +83,12 @@ namespace Wiz.Template.API
                     OnTokenValidated = async ctx =>
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
                     {
+                        //Exemplo para recuperar informações do token JWT e utilizar no serviço: IIdentityService
+                        var jwtClaimScope = ctx.Principal.Claims.FirstOrDefault(x => x.Type == "scope")?.Value;
+
                         var claims = new List<Claim>
                         {
+                            new Claim(ClaimTypes.System, jwtClaimScope),
                             new Claim(ClaimTypes.Authentication, ((JwtSecurityToken)ctx.SecurityToken).RawData)
                         };
 
@@ -180,6 +186,9 @@ namespace Wiz.Template.API
                 app.UseSwaggerUi3();
             }
 
+            app.UseAuthentication();
+            app.UseLogMiddleware();
+
             app.UseExceptionHandler(new ExceptionHandlerOptions
             {
                 ExceptionHandler = new ErrorHandlerMiddleware(options, env).Invoke
@@ -194,7 +203,7 @@ namespace Wiz.Template.API
 
             #region Service
 
-            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddScoped<ICustomerService, CustomerService>();
 
             #endregion
 
@@ -211,7 +220,8 @@ namespace Wiz.Template.API
             services.AddScoped<DapperContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             #endregion
         }
