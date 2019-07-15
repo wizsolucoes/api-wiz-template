@@ -43,6 +43,25 @@ steps:
     arguments: '--configuration $(BuildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: test
+    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit*]*'
+    projects: '$(RestoreBuildProjects)'
+
+- script: |
+    dotnet tool install dotnet-reportgenerator-globaltool --tool-path .
+    ./reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage "-reporttypes:HtmlInline_AzurePipelines;HtmlInline_AzurePipelines_Dark;Cobertura"
+  displayName: Create Code coverage report
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/*.xml'
+    reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+
+- task: DotNetCoreCLI@2
   displayName: Publish
   inputs:
     command: publish

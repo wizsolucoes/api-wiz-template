@@ -147,7 +147,8 @@ Padrão das camadas do projeto:
 1. **Wiz.[NomeProjeto].Domain**: domínio da aplicação, responsável de manter as *regras de negócio* para a API;
 2. **Wiz.[NomeProjeto].Infra**: camada mais baixa, para acesso a dados, infraestrutura e serviços externos;
 3. **Wiz.[NomeProjeto].API**: responsável pela camada de *disponibilização* dos endpoints da API;
-4. **Wiz.[NomeProjeto].Tests**: responsável pela camada de *testes unitários e de integração* dos projetos.
+4. **Wiz.[NomeProjeto].Integration.Tests**: responsável pela camada de *testes de integração* dos projetos.
+5. **Wiz.[NomeProjeto].Unit.Tests**: responsável pela camada de *testes unitários* dos projetos.
 
 Formatação do projeto dentro do repositório:
 
@@ -157,8 +158,13 @@ Formatação do projeto dentro do repositório:
   ├── Wiz.[NomeProjeto].Infra (projeto)
   ├── Wiz.[NomeProjeto].API (projeto)
   ├── Wiz.[NomeProjeto].Tests (projeto)
+├── test
+  ├── Wiz.[NomeProjeto].Integration.Tests (projeto)
+  ├── Wiz.[NomeProjeto].Unit.Tests (projeto)
 ├── Wiz.[NomeProjeto] (solução)
 ```
+
+Há possibilidade de inclusão do projeto de testes do tipo **Aceitação (e2e)** caso necessidade, com o nome: **Wiz.[NomeProjeto].Acceptance.Tests**
 
 ## Dependências
 
@@ -167,7 +173,7 @@ Formatação do projeto dentro do repositório:
 
 ## Build e testes
 
-* Obrigatoriedade de **80%** de teste de cobertura.
+* Obrigatoriedade de **não diminuir** os testes de cobertura.
 
 ### **Visual Studio**
 
@@ -188,6 +194,36 @@ As funcionalidades **Live Unit Testing** e **Code Coverage** estão disponíveis
   + *test with coverage* - Executar projeto de testes com cobertura
 
 2. Ativar **Watch** na parte inferior do Visual Studio Code para habilitar cores nas classes que descrevem a cobertura. É necessário executar os testes no modo *test with coverage*.
+
+Comandos para geração de relatório de testes:
+
++ **PowerShell (Windows):**
+
+  1. Abrir pasta *scripts*;
+
+  2. Executar comando: 
+  
+  ```sh
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+  
+  ```
+  3. Executar testes e relatório de testes:
+  
+  ```sh
+  .\code_coverage.ps1
+  ```
+  
++ **Shell (Linux/Mac):**
+  
+  1. Abrir pasta *scripts*;
+
+  2. Executar testes e relatório de testes:
+  
+  ```sh
+  ./code_coverage.sh
+  ```
+
+O relatório dos testes são gerados na pasta **code_coverage** localizada na raiz do projeto.
 
 ## NuGet privado
 
