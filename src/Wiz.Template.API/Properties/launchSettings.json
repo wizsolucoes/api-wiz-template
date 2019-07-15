@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Wiz.CRM.API": {
+    "Wiz.Template.API": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
