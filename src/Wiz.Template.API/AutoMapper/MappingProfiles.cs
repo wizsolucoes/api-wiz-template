@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using AutoMapper;
+﻿using AutoMapper;
+using System.Diagnostics.CodeAnalysis;
 using Wiz.Template.API.ViewModels.Customer;
 using Wiz.Template.Domain.Models;
 using Wiz.Template.Domain.Models.Dapper;
