@@ -13,9 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{662F7144-A85
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{79E05ACF-1AD9-4B93-AF9F-D04C097545E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Integration.Tests", "src\Wiz.Template.Integration.Tests\Wiz.Template.Integration.Tests.csproj", "{3231A003-A869-4C2F-872C-215E3A1EECE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Integration.Tests", "test\Wiz.Template.Integration.Tests\Wiz.Template.Integration.Tests.csproj", "{3231A003-A869-4C2F-872C-215E3A1EECE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wiz.Template.Unit.Tests", "src\Wiz.Template.Unit.Tests\Wiz.Template.Unit.Tests.csproj", "{BDB38022-3FA4-44C7-9F30-0FDC40F1743C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wiz.Template.Unit.Tests", "test\Wiz.Template.Unit.Tests\Wiz.Template.Unit.Tests.csproj", "{BDB38022-3FA4-44C7-9F30-0FDC40F1743C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
