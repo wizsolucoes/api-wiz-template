@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -25,5 +25,10 @@
     <ProjectReference Include="..\Wiz.Template.Domain\Wiz.Template.Domain.csproj" />
     <ProjectReference Include="..\Wiz.Template.Infra\Wiz.Template.Infra.csproj" />
   </ItemGroup>
-  
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
 </Project>
