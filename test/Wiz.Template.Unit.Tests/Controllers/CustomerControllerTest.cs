@@ -27,7 +27,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
                 .ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate(3));
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.List();
+            var customerService = await customerController.GetAll();
 
             var actionResult = Assert.IsType<OkObjectResult>(customerService.Result);
             var actionValue = Assert.IsAssignableFrom<IEnumerable<CustomerAddressViewModel>>(actionResult.Value);
@@ -45,7 +45,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
                 .ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.Get(customerId);
+            var customerService = await customerController.GetById(customerId);
 
             var actionResult = Assert.IsType<OkObjectResult>(customerService.Result);
             var actionValue = Assert.IsType<CustomerAddressViewModel>(actionResult.Value);
@@ -63,7 +63,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
                 .ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.Get(customerName);
+            var customerService = await customerController.GetByName(customerName);
 
             var actionResult = Assert.IsType<OkObjectResult>(customerService.Result);
             var actionValue = Assert.IsType<CustomerAddressViewModel>(actionResult.Value);
@@ -81,7 +81,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
                 .Returns(CustomerMock.CustomerViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = customerController.Post(customer);
+            var customerService = customerController.PostCustomer(customer);
 
             var actionResult = Assert.IsType<CreatedResult>(customerService.Result);
             var actionValue = Assert.IsType<CustomerViewModel>(actionResult.Value);
@@ -99,7 +99,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
                 .Returns(CustomerMock.CustomerViewModelFaker.Generate());
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = customerController.Post(customer);
+            var customerService = customerController.PostCustomer(customer);
 
             var actionResult = Assert.IsType<NotFoundResult>(customerService.Result);
 
@@ -115,7 +115,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             _customerServiceMock.Setup(x => x.Update(customer));
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.Put(id, customer);
+            var customerService = await customerController.PutCustomer(id, customer);
 
             var actionResult = Assert.IsType<BadRequestResult>(customerService);
 
@@ -130,7 +130,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             _customerServiceMock.Setup(x => x.Update(customer));
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.Put(customer.Id, customer);
+            var customerService = await customerController.PutCustomer(customer.Id, customer);
 
             var actionResult = Assert.IsType<NotFoundResult>(customerService);
 
@@ -149,7 +149,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             _customerServiceMock.Setup(x => x.Remove(customer));
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.Delete(customerId);
+            var customerService = await customerController.DeleteCustomer(customerId);
 
             var actionResult = Assert.IsType<NoContentResult>(customerService);
 
@@ -162,7 +162,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerId = CustomerMock.CustomerIdViewModelFaker.Generate();
 
             var customerController = new CustomerController(_customerServiceMock.Object);
-            var customerService = await customerController.Delete(customerId);
+            var customerService = await customerController.DeleteCustomer(customerId);
 
             var actionResult = Assert.IsType<NotFoundResult>(customerService);
 
