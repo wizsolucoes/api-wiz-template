@@ -27,7 +27,7 @@ namespace Wiz.Template.API.Controllers
         /// </summary>
         /// <returns>Clientes.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerAddressViewModel>>> List()
+        public async Task<ActionResult<IEnumerable<CustomerAddressViewModel>>> GetAll()
         {
             return Ok(await _customerService.GetAllAsync());
         }
@@ -38,7 +38,7 @@ namespace Wiz.Template.API.Controllers
         /// <param name="customer">Parâmetro "id" do cliente.</param>
         /// <returns>Cliente.</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerAddressViewModel>> Get([FromQuery]CustomerIdViewModel customer)
+        public async Task<ActionResult<CustomerAddressViewModel>> GetById([FromQuery]CustomerIdViewModel customer)
         {
             var customerVM = await _customerService.GetAddressByIdAsync(customer);
 
@@ -56,7 +56,7 @@ namespace Wiz.Template.API.Controllers
         /// <param name="customer">Parâmetro "nome" do cliente.</param>
         /// <returns>Cliente.</returns>
         [HttpGet("name/{name}")]
-        public async Task<ActionResult<CustomerAddressViewModel>> Get([FromQuery]CustomerNameViewModel customer)
+        public async Task<ActionResult<CustomerAddressViewModel>> GetByName([FromQuery]CustomerNameViewModel customer)
         {
             var customerVM = await _customerService.GetAddressByNameAsync(customer);
 
@@ -74,14 +74,14 @@ namespace Wiz.Template.API.Controllers
         /// <param name="customer">Parâmetro "cliente".</param>
         /// <returns>Cliente criado.</returns>
         [HttpPost]
-        public ActionResult<CustomerViewModel> Post([FromBody]CustomerViewModel customer)
+        public ActionResult<CustomerViewModel> PostCustomer([FromBody]CustomerViewModel customer)
         {
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return Created(nameof(Get), _customerService.Add(customer));
+            return Created(nameof(GetByName), _customerService.Add(customer));
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Wiz.Template.API.Controllers
         /// <param name="customer">Parâmetro "cliente".</param>
         /// <returns>Cliente atualizado.</returns>
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody]CustomerViewModel customer)
+        public async Task<ActionResult> PutCustomer(int id, [FromBody]CustomerViewModel customer)
         {
             if (customer == null || customer.Id != id)
             {
@@ -113,10 +113,10 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Exclusão de cliente.
         /// </summary>
-        /// <param name="id">Parâmetro "id" do cliente.</param>
+        /// <param name="customer">Parâmetro "id" do cliente.</param>
         /// <returns>Cliente excluido.</returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromQuery]CustomerIdViewModel customer)
+        public async Task<ActionResult> DeleteCustomer([FromQuery]CustomerIdViewModel customer)
         {
             var customerVM = await _customerService.GetByIdAsync(customer);
 
