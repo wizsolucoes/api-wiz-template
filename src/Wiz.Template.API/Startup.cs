@@ -173,8 +173,7 @@ namespace Wiz.Template.API
                 {
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-                app.UseHealthChecksUI(setup =>
+                }).UseHealthChecksUI(setup =>
                 {
                     setup.UIPath = "/health-ui";
                 });
