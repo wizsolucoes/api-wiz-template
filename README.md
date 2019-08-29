@@ -71,7 +71,6 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
     "HealthCheckDatabaseConnectionString": "Data Source=%APPDATA%\\healthchecksdb"
   }
 }
-}
 ```
 
 6. *(Opcional)* Inserir chave do **Application Insights** conforme configurado no Azure no arquivo *appsettings.{ENVIRONMENT}.json*.
