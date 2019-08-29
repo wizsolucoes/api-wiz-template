@@ -67,9 +67,9 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
     ],
     "Webhooks": [],
     "EvaluationTimeOnSeconds": 30,
-    "MinimumSecondsBetweenFailureNotifications": 60
+    "MinimumSecondsBetweenFailureNotifications": 60,
+    "HealthCheckDatabaseConnectionString": "Data Source=%APPDATA%\\healthchecksdb"
   }
-}
 }
 ```
 
@@ -157,7 +157,6 @@ Formatação do projeto dentro do repositório:
   ├── Wiz.[NomeProjeto].Domain (projeto)
   ├── Wiz.[NomeProjeto].Infra (projeto)
   ├── Wiz.[NomeProjeto].API (projeto)
-  ├── Wiz.[NomeProjeto].Tests (projeto)
 ├── test
   ├── Wiz.[NomeProjeto].Integration.Tests (projeto)
   ├── Wiz.[NomeProjeto].Unit.Tests (projeto)
