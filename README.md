@@ -239,14 +239,15 @@ Tools -> NuGet Package Manager -> Package Sources
 
 1. Abrir *Prompt de Comando* de sua preferência (**CMD** ou **PowerShell**) ou utilizar o terminal do Visual Studio Code;
 
-1. Localizar *source (src)* do projeto desejado para instalar o NuGet;
+2. Executar script Powershell para adicionar permissão do NuGet na máquina local:
 
-2. Executar comando para instalar NuGet privado;
-  > *dotnet add package [NomePacote] -s https://pkgs.dev.azure.com/[NomeOrganizacao]/_packaging/[NomeProjeto]/nuget/v3/index.json --interactive*
+- https://github.com/microsoft/artifacts-credprovider/blob/master/helpers/installcredprovider.ps1 (Windows);
+- https://github.com/microsoft/artifacts-credprovider/blob/master/helpers/installcredprovider.sh (Linux/Mac)
 
-3. *(Opcional)* Na primeira instalação do NuGet privado irá aparecer no terminal um site com um código a ser inserido. Posteriormente, realizar login na conta desejada e o pacote já será instalado.
+3. Localizar *source (src)* do projeto desejado para instalar o NuGet;
 
-A instalação é realizada apenas uma vez até a expiração do token de autenticação (3 meses).
+4. Executar comando para instalar NuGet privado e seguir instruções;
+  > *dotnet add package [NomePacote] -s https://pkgs.dev.azure.com/[NomeOrganizacao]/_packaging/[NomeProjeto]/nuget/v3/index.json --interactive
 
 ## CI/CD
 
