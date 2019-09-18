@@ -125,6 +125,10 @@ namespace Wiz.Template.API
                 services.AddHealthChecksUI()
                     .AddHealthChecks()
                     .AddSqlServer(Configuration["ConnectionStrings:CustomerDB"])
+                    .AddAzureKeyVault(options =>
+                    {
+                        options.UseKeyVaultUrl($"{Configuration["Azure:KeyVaultUrl"]}");
+                    }, name: "azure-key-vault")
                     .AddApplicationInsightsPublisher();
             }
 

@@ -49,11 +49,15 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
   "ApplicationInsights": {
     "InstrumentationKey": "KEY_APPLICATION_INSIGHTS"
   },
+  "Azure": {
+    "KeyVaultUrl": "URL_KEY_VAULT"
+  },
   "ConnectionStrings": {
     "CustomerDB": "CONNECTION_DATABASE"
   },
-  "TokenValidationParameters": {
-    "ValidAudience": "URL_SSO"
+  "WizID": {
+    "Authority": "URL_SSO",
+    "Audience": "SSO_SCOPE"
   },
   "API": {
     "ViaCEP": "https://viacep.com.br/ws/"
