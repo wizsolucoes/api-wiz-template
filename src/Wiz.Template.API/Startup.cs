@@ -122,10 +122,19 @@ namespace Wiz.Template.API
 
             if (PlatformServices.Default.Application.ApplicationName != "testhost")
             {
-                services.AddHealthChecksUI()
-                    .AddHealthChecks()
-                    .AddSqlServer(Configuration["ConnectionStrings:CustomerDB"])
-                    .AddApplicationInsightsPublisher();
+                var healthCheck = services.AddHealthChecksUI().AddHealthChecks();
+
+                healthCheck.AddSqlServer(Configuration["ConnectionStrings:CustomerDB"]);
+
+                if (HostingEnvironment.IsProduction())
+                {
+                    healthCheck.AddAzureKeyVault(options =>
+                    {
+                        options.UseKeyVaultUrl($"{Configuration["Azure:KeyVaultUrl"]}");
+                    }, name: "azure-key-vault");
+                }
+
+                healthCheck.AddApplicationInsightsPublisher();
             }
 
             if (!HostingEnvironment.IsProduction())
