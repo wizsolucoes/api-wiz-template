@@ -19,7 +19,8 @@ namespace Wiz.Template.API
             WebHost.CreateDefaultBuilder(args)
                  .ConfigureAppConfiguration((context, config) =>
                  {
-                     if (PlatformServices.Default.Application.ApplicationName != "testhost")
+                     if (context.HostingEnvironment.IsProduction() &&
+                        PlatformServices.Default.Application.ApplicationName != "testhost")
                      {
                          var buildConfig = config.Build();
                          var vaultUrl = $"{buildConfig["Azure:KeyVaultUrl"]}";
