@@ -5,6 +5,8 @@ namespace Wiz.Template.Domain.Models.Services
     [DataContract(Name = "endereco")]
     public class ViaCEP
     {
+        public ViaCEP() { }
+
         public ViaCEP(string cep, string street, string streetFull, string uf)
         {
             CEP = cep;

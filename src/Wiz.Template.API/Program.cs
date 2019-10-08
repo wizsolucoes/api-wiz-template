@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;
-using Wiz.Template.API.Extensions;
 
 namespace Wiz.Template.API
 {
@@ -12,24 +10,26 @@ namespace Wiz.Template.API
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build()/*.SeedData()*/.Run();
+            CreateHostBuilder(args).Build()/*.SeedData()*/.Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                 .ConfigureAppConfiguration((context, config) =>
-                 {
-                     if (context.HostingEnvironment.IsProduction())
-                     {
-                         var buildConfig = config.Build();
-                         var vaultUrl = $"{buildConfig["Azure:KeyVaultUrl"]}";
-                         var clientId = $"{buildConfig["{CLIENT_ID}"]}";
-                         var clientSecret = $"{buildConfig["{CLIENT_SECRET}"]}";
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                if (context.HostingEnvironment.IsProduction())
+                {
+                    var buildConfig = config.Build();
+                    var vaultUrl = $"{buildConfig["Azure:KeyVaultUrl"]}";
+                    var clientId = $"{buildConfig["{CLIENT_ID}"]}";
+                    var clientSecret = $"{buildConfig["{CLIENT_SECRET}"]}";
 
-                         config.AddAzureKeyVault(vaultUrl, clientId, clientSecret);
-                     }
-                 })
-                .UseApplicationInsights()
-                .UseStartup<Startup>();
+                    config.AddAzureKeyVault(vaultUrl, clientId, clientSecret);
+                }
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

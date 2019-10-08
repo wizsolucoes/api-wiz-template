@@ -5,15 +5,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
 using NSwag;
 using NSwag.SwaggerGeneration.Processors.Security;
 using Polly;
@@ -48,26 +47,26 @@ namespace Wiz.Template.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
-            HostingEnvironment = hostingEnvironment;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
             services.AddMvc(options =>
             {
                 options.Filters.Add<DomainNotificationFilter>();
                 options.EnableEndpointRouting = false;
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddJsonOptions(options =>
-             {
-                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-             });
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -99,7 +98,6 @@ namespace Wiz.Template.API
                 };
             });
 
-            services.AddApiVersioning(x => x.ApiVersionReader = new HeaderApiVersionReader("api-version"));
             services.Configure<GzipCompressionProviderOptions>(x => x.Level = CompressionLevel.Optimal);
             services.AddResponseCompression(x =>
             {
@@ -126,7 +124,7 @@ namespace Wiz.Template.API
 
                 healthCheck.AddSqlServer(Configuration["ConnectionStrings:CustomerDB"]);
 
-                if (HostingEnvironment.IsProduction())
+                if (WebHostEnvironment.IsProduction())
                 {
                     healthCheck.AddAzureKeyVault(options =>
                     {
@@ -137,9 +135,9 @@ namespace Wiz.Template.API
                 healthCheck.AddApplicationInsightsPublisher();
             }
 
-            if (!HostingEnvironment.IsProduction())
+            if (!WebHostEnvironment.IsProduction())
             {
-                services.AddOpenApiDocument(document =>
+                services.AddSwaggerDocument(document =>
                 {
                     document.DocumentName = "v1";
                     document.Version = "v1";
@@ -162,7 +160,7 @@ namespace Wiz.Template.API
             RegisterServices(services);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IOptions<ApplicationInsightsSettings> options)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationInsightsSettings> options)
         {
             if (!env.IsProduction())
             {
@@ -173,6 +171,7 @@ namespace Wiz.Template.API
                 app.UseHsts();
             }
 
+            app.UseRouting();
             app.UseHttpsRedirection();
             app.UseResponseCompression();
 
@@ -194,6 +193,7 @@ namespace Wiz.Template.API
                 app.UseSwaggerUi3();
             }
 
+            app.UseAuthorization();
             app.UseAuthentication();
             app.UseLogMiddleware();
 
@@ -202,7 +202,10 @@ namespace Wiz.Template.API
                 ExceptionHandler = new ErrorHandlerMiddleware(options, env).Invoke
             });
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
 
         private void RegisterServices(IServiceCollection services)
