@@ -14,12 +14,12 @@ namespace Wiz.Template.Unit.Tests.Middlewares
     public class ErrorHandlerMiddlewareTest
     {
         private readonly Mock<IOptions<ApplicationInsightsSettings>> _applicationInsightsMock;
-        private readonly Mock<IHostingEnvironment> _hostingEnvironmentMock;
+        private readonly Mock<IWebHostEnvironment> _webHostEnvironmentMock;
 
         public ErrorHandlerMiddlewareTest()
         {
             _applicationInsightsMock = new Mock<IOptions<ApplicationInsightsSettings>>();
-            _hostingEnvironmentMock = new Mock<IHostingEnvironment>();
+            _webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace Wiz.Template.Unit.Tests.Middlewares
             _applicationInsightsMock.Setup(x => x.Value)
                 .Returns(applicationInsightsMock);
 
-            _hostingEnvironmentMock.Setup(x => x.EnvironmentName)
+            _webHostEnvironmentMock.Setup(x => x.EnvironmentName)
                 .Returns("Development");
 
             var httpContext = new DefaultHttpContext().Request.HttpContext;
@@ -44,7 +44,7 @@ namespace Wiz.Template.Unit.Tests.Middlewares
 
             httpContext.Features.Set<IExceptionHandlerFeature>(exceptionHandlerFeature);
 
-            var errorHandlerMiddleware = new ErrorHandlerMiddleware(_applicationInsightsMock.Object, _hostingEnvironmentMock.Object);
+            var errorHandlerMiddleware = new ErrorHandlerMiddleware(_applicationInsightsMock.Object, _webHostEnvironmentMock.Object);
             await errorHandlerMiddleware.Invoke(httpContext);
 
             Assert.NotNull(errorHandlerMiddleware);
@@ -61,12 +61,12 @@ namespace Wiz.Template.Unit.Tests.Middlewares
             _applicationInsightsMock.Setup(x => x.Value)
                 .Returns(applicationInsightsMock);
 
-            _hostingEnvironmentMock.Setup(x => x.EnvironmentName)
+            _webHostEnvironmentMock.Setup(x => x.EnvironmentName)
                 .Returns("Development");
 
             var httpContext = new DefaultHttpContext().Request.HttpContext;
 
-            var errorHandlerMiddleware = new ErrorHandlerMiddleware(_applicationInsightsMock.Object, _hostingEnvironmentMock.Object);
+            var errorHandlerMiddleware = new ErrorHandlerMiddleware(_applicationInsightsMock.Object, _webHostEnvironmentMock.Object);
             await errorHandlerMiddleware.Invoke(httpContext);
 
             Assert.NotNull(errorHandlerMiddleware);

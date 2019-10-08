@@ -13,13 +13,11 @@ namespace Wiz.Template.Integration.Tests.Repository
     public class CustomerRepositoryTest
     {
         private readonly Mock<IConfiguration> _configurationMock;
-        private readonly Mock<DapperContext> _dapperContextMock;
         private readonly DbContextOptions<EntityContext> _entityOptions;
 
         public CustomerRepositoryTest()
         {
             _configurationMock = new Mock<IConfiguration>();
-            _dapperContextMock = new Mock<DapperContext>();
             _entityOptions = new DbContextOptionsBuilder<EntityContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;

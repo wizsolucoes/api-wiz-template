@@ -1,12 +1,13 @@
 ﻿using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
-using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Wiz.Template.API.Settings;
 
@@ -15,20 +16,17 @@ namespace Wiz.Template.API.Middlewares
     public class ErrorHandlerMiddleware
     {
         private readonly ApplicationInsightsSettings _applicationInsights;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ErrorHandlerMiddleware(IOptions<ApplicationInsightsSettings> options, IHostingEnvironment hostingEnvironment)
+        public ErrorHandlerMiddleware(IOptions<ApplicationInsightsSettings> options, IWebHostEnvironment webHostEnvironment)
         {
             _applicationInsights = options.Value;
-            _hostingEnvironment = hostingEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task Invoke(HttpContext context)
         {
-            var telemetry = new TelemetryClient
-            {
-                InstrumentationKey = _applicationInsights.InstrumentationKey
-            };
+            var telemetry = new TelemetryClient(new TelemetryConfiguration(_applicationInsights.InstrumentationKey));
 
             telemetry.Context.Operation.Id = Guid.NewGuid().ToString();
 
@@ -49,7 +47,7 @@ namespace Wiz.Template.API.Middlewares
                 Detail = ex.Message
             };
 
-            if (_hostingEnvironment.IsDevelopment())
+            if (_webHostEnvironment.IsDevelopment())
             {
                 problemDetails.Detail += $": {ex.StackTrace}";
             }
@@ -57,11 +55,9 @@ namespace Wiz.Template.API.Middlewares
             context.Response.StatusCode = problemDetails.Status.Value;
             context.Response.ContentType = "application/problem+json";
 
-            using (var writer = new StreamWriter(context.Response.Body))
-            {
-                new JsonSerializer().Serialize(writer, problemDetails);
-                await writer.FlushAsync();
-            }
+            using var writer = new Utf8JsonWriter(context.Response.Body);
+            JsonSerializer.Serialize(writer, problemDetails);
+            await writer.FlushAsync();
         }
     }
 }

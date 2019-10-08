@@ -1,7 +1,7 @@
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Options;
 using System.IO;
 using System.Text;
@@ -25,10 +25,7 @@ namespace Wiz.CRM.API.Middlewares
         public async Task Invoke(HttpContext context, IIdentityService identityService)
         {
             var method = context.Request.Method;
-            var telemetry = new TelemetryClient
-            {
-                InstrumentationKey = _applicationInsights.InstrumentationKey
-            };
+            var telemetry = new TelemetryClient(new TelemetryConfiguration(_applicationInsights.InstrumentationKey));
 
             telemetry.TrackTrace(new TraceTelemetry(identityService.GetScope(), SeverityLevel.Information));
 
@@ -46,7 +43,7 @@ namespace Wiz.CRM.API.Middlewares
         {
             var body = string.Empty;
 
-            request.EnableRewind();
+            request.EnableBuffering(bufferThreshold: 1024 * 45, bufferLimit: 1024 * 100);
 
             using (var reader = new StreamReader(request.Body, Encoding.UTF8, true, 1024, true))
             {

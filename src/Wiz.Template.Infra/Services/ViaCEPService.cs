@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Wiz.Template.Domain.Interfaces.Services;
 using Wiz.Template.Domain.Models.Services;
@@ -20,7 +20,7 @@ namespace Wiz.Template.Infra.Services
             var response = await _httpClient.GetAsync($"{cep}/json");
             var stringResponse = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<ViaCEP>(stringResponse);
+            return JsonSerializer.Deserialize<ViaCEP>(stringResponse);
         }
     }
 }
