@@ -29,6 +29,13 @@ resources:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: '.NET Core SDK'
+  inputs:
+    packageType: sdk
+    version: 3.x
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
   displayName: Restore
   inputs:
     command: restore

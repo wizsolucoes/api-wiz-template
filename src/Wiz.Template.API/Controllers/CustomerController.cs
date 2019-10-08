@@ -10,9 +10,8 @@ namespace Wiz.Template.API.Controllers
 {
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ApiVersion("1.0")]
     [Produces("application/json")]
-    [Route("api/v{version:apiVersion}/customers")]
+    [Route("api/v1/customers")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;

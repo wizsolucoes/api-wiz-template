@@ -1,9 +1,9 @@
 ﻿using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Wiz.Template.Domain.Models.Services;
@@ -34,7 +34,7 @@ namespace Wiz.Template.Integration.Tests.Services
                 .ReturnsAsync(new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(JsonConvert.SerializeObject(ViaCEPMock.ViaCEPModelFaker.Generate()))
+                    Content = new StringContent(JsonSerializer.Serialize(ViaCEPMock.ViaCEPModelFaker.Generate()))
                 });
 
             var httpClient = new HttpClient(_httpMessageHandlerMock.Object)
