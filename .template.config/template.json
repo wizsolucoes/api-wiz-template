@@ -7,8 +7,8 @@
     "Test",
     "xUnit"
   ],
-  "name": "Wiz Template - Web API .NET Core 2.2",
-  "generatorVersions": "[1.0.0.0-*)",
+  "name": "Wiz Template - Web API .NET Core 3.0",
+  "generatorVersions": "[2.0.0.0-*)",
   "identity": "Wiz.Template.API",
   "groupIdentity": "Wiz.Template.API.v1",
   "shortName": "wizapi",
@@ -25,16 +25,12 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "netcoreapp2.1",
-          "description": "Target netcoreapp2.1"
-        },
-        {
-          "choice": "netcoreapp2.2",
-          "description": "Target netcoreapp2.2"
+          "choice": "netcoreapp3.0",
+          "description": "Target netcoreapp3.0"
         }
       ],
-      "replaces": "netcoreapp2.2",
-      "defaultValue": "netcoreapp2.2"
+      "replaces": "netcoreapp3.0",
+      "defaultValue": "netcoreapp3.0"
     },
     "copyrightYear": {
       "type": "generated",
@@ -61,13 +57,13 @@
       "source": ".",
       "target": ".",
       "exclude": [
-        "**/[Bb]in/**", 
-        "**/[Oo]bj/**", 
-        ".template.config/**/*", 
-        "**/*.filelist", 
-        "**/*.user", 
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        ".template.config/**/*",
+        "**/*.filelist",
+        "**/*.user",
         "**/*.lock.json",
-        "README.md", 
+        "README.md",
         "LICENSE",
         ".git/**/*"
       ],
