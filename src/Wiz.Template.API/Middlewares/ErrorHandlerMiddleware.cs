@@ -44,7 +44,9 @@ namespace Wiz.Template.API.Middlewares
                 Title = "Internal Server Error",
                 Status = StatusCodes.Status500InternalServerError,
                 Instance = context.Request.Path.Value,
-                Detail = ex.Message
+                Detail = ex.InnerException is null ?
+                    $"{ex.Message}" :
+                    $"{ex.Message} | {ex.InnerException}"
             };
 
             if (_webHostEnvironment.IsDevelopment())
