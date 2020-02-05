@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using Wiz.Template.API.Extensions;
@@ -120,7 +121,7 @@ namespace Wiz.Template.API
                 c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
                 c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
-                    !response.IsSuccessStatusCode)
+                    (int)response.StatusCode == (int)HttpStatusCode.InternalServerError)
               .WaitAndRetryAsync(3, retry =>
                    TimeSpan.FromSeconds(Math.Pow(2, retry)) +
                    TimeSpan.FromMilliseconds(new Random().Next(0, 100))))
