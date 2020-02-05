@@ -28,11 +28,12 @@ resources:
 - repo: self
 
 steps:
-- task: DotNetCoreCLI@2
+- task: UseDotNet@2
   displayName: '.NET Core SDK'
   inputs:
     packageType: sdk
-    version: 3.x
+    # Alterar versão caso atualização do .NET Core no projeto
+    version: 3.1.x 
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - task: DotNetCoreCLI@2
