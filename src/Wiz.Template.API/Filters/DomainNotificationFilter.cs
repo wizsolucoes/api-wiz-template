@@ -41,11 +41,9 @@ namespace Wiz.Template.API.Filters
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 context.HttpContext.Response.ContentType = "application/problem+json";
 
-                using (var writer = new StreamWriter(context.HttpContext.Response.Body))
-                {
-                    new JsonSerializer().Serialize(writer, problemDetails);
-                    await writer.FlushAsync();
-                }
+                using var writer = new StreamWriter(context.HttpContext.Response.Body);
+                new JsonSerializer().Serialize(writer, problemDetails);
+                await writer.FlushAsync();
 
                 return;
             }
