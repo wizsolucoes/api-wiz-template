@@ -44,6 +44,19 @@ steps:
     # Necessário caso há Wiz.Common (Nuget)
     #feedRestore: '$(wizCrossFeed)'
 
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'sonarcloudwiz'
+    organization: 'wizdevops'
+    scannerMode: 'MSBuild'
+    projectKey: '$(Build.Repository.Name)'
+    projectName: '$(Build.Repository.Name)'
+    extraProperties:
+      sonar.exclusions=**/obj/**,**/*.dll
+      sonar.cs.opencover.reportsPaths=**/coverage.*.xml
+      sonar.coverage.exclusions=**Tests*.cs
+      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
@@ -54,12 +67,18 @@ steps:
   displayName: Test
   inputs:
     command: test
-    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit*]*'
+    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit*]*'
     projects: '$(RestoreBuildProjects)'
+
+- task: SonarCloudAnalyze@1
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
 
 - script: |
     dotnet tool install dotnet-reportgenerator-globaltool --tool-path .
-    ./reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage "-reporttypes:HtmlInline_AzurePipelines;HtmlInline_AzurePipelines_Dark;Cobertura"
+    ./reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.*.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage "-reporttypes:HtmlInline_AzurePipelines;HtmlInline_AzurePipelines_Dark;Cobertura"
   displayName: Create Code coverage report
 
 - task: PublishCodeCoverageResults@1
