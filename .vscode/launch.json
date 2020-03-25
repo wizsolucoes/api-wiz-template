@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Wiz.Template.API/bin/Debug/netcoreapp2.2/Wiz.Template.API.dll",
+            "program": "${workspaceFolder}/src/Wiz.Template.API/bin/Debug/netcoreapp3.1/Wiz.Template.API.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Wiz.Template.API",
             "stopAtEntry": false,
