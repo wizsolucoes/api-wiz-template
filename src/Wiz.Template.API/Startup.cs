@@ -168,6 +168,7 @@ namespace Wiz.Template.API
 
             services.AddAutoMapper(typeof(Startup));
             services.AddHttpContextAccessor();
+            services.AddApplicationInsightsTelemetry();
 
             RegisterServices(services);
         }
