@@ -1,5 +1,7 @@
 # Wiz - API
 
+![](https://github.com/wizsolucoes/api-wiz-template/workflows/.NET%20Core/badge.svg)
+
 - [Desenvolvimento, por onde começar](#desenvolvimento-por-onde-começar)
 - [Execução do projeto](#execução-do-projeto)
 - [Estrutura](#estrutura)
@@ -26,15 +28,7 @@ Passos para execução do projeto:
 
 5. Incluir configurações de *varíaveis de ambiente* no caminho abaixo:
 
-### **Visual Studio**
-
-```
-├── Wiz.[NomeProjeto] (solução)
-  ├── Wiz.[NomeProjeto].API (projeto)
-    ├── appsettings.{ENVIRONMENT}.json
-```
-
-### **Visual Studio Code**
+### **Local**
 
 ```
 ├── src (pasta física)
@@ -80,6 +74,22 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
 6. *(Opcional)* Inserir chave do **Application Insights** conforme configurado no Azure no arquivo *appsettings.{ENVIRONMENT}.json*.
 
 Caso não há chave de configuração no Azure, não é necessário inserir para executar o projeto local.
+
+### **Docker**
+
+```
+├── Dockerfile
+```
+
+Dentro do arquivo *Dockerfile*, há o conteúdo para modificação das variáveis:
+
+```docker
+ENV ApplicationInsights:InstrumentationKey=KEY_APPLICATION_INSIGHTS
+ENV Azure:KeyVaultUrl=URL_KEY_VAULT
+ENV ConnectionStrings:CustomerDB=URL_DB
+ENV WizID:Authority=URL_SSO
+ENV WizID:Audience=SSO_SCOPE
+```
 
 ## Execução do projeto
 
@@ -143,6 +153,20 @@ Terminal -> Run Task
   + *build* - Compilar pacotes da solução
   + *test* - Executar projeto de testes
   + *test with coverage* - Executar projeto de testes com cobertura
+
+### **Docker**
+
+1. Executar comando na **raiz** do projeto:
+
+> *docker-compose up -d*
+
+2. logs de execução:
+
+> *docker-compose logs*
+
+3. Parar e remover container:
+
+> *docker-compose down*
 
 ## Estrutura
 
@@ -227,6 +251,18 @@ Comandos para geração de relatório de testes:
   ```
 
 O relatório dos testes são gerados na pasta **code_coverage** localizada na raiz do projeto.
+
+### **Sonar**
+
+1. Dentro do arquivo dos projetos **(.csproj)** no campo **PropertyGroup**, é necessário adicionar um GUID no formato abaixo:
+
+```
+<PropertyGroup>
+  <ProjectGuid>{b5c970c2-a7cc-4052-b07b-b599b83fc621}</ProjectGuid>
+</PropertyGroup>
+```
+
+2. O GUID pode ser coletado no arquivo da solution ou criado pelo site: https://www.guidgenerator.com/.
 
 ## NuGet privado
 

@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  api:
+    container_name: api_wiz_template
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - '.:/app'
+    ports:
+      - '5000:5000'
+      - '5001:5001'
