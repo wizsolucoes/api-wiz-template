@@ -21,84 +21,81 @@ variables:
   BuildConfiguration: 'Release'
   RestoreBuildProjects: '**/*.csproj'
   RestoreBuildProjectsTest: '**/*[Tt]ests/*.csproj'
+  projectKey: '$(Build.Repository.Name)'
   # Necessário caso há Wiz.Common (Nuget)
   #wizCrossFeed: '09b2821a-2950-4eff-a722-dbc8adf4da55'
 
 resources:
 - repo: self
 
-steps:
-- task: UseDotNet@2
-  displayName: '.NET Core SDK'
-  inputs:
-    packageType: sdk
-    # Alterar versão caso atualização do .NET Core no projeto
-    version: 3.1.x 
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+stages:
+- stage: build
+  jobs:
+    - job:
+      steps:
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'sonarcloudwiz'
+          organization: 'wizdevops'
+          scannerMode: 'MSBuild'
+          projectKey: '$(projectKey)'
+          projectName: '$(projectKey)'
+          extraProperties: |
+            sonar.exclusions=**/obj/**,**/*.dll
+            sonar.cs.opencover.reportsPaths=**/coverage.*.xml
+            sonar.coverage.exclusions=**Tests*.cs
+            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
 
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: restore
-    projects: '$(RestoreBuildProjects)'
-    # Necessário caso há Wiz.Common (Nuget)
-    #feedRestore: '$(wizCrossFeed)'
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: restore
+          projects: '$(RestoreBuildProjects)'
+          # Necessário caso há Wiz.Common (Nuget)
+          #feedRestore: '$(wizCrossFeed)'
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'sonarcloudwiz'
-    organization: 'wizdevops'
-    scannerMode: 'MSBuild'
-    projectKey: '$(Build.Repository.Name)'
-    projectName: '$(Build.Repository.Name)'
-    extraProperties:
-      sonar.exclusions=**/obj/**,**/*.dll
-      sonar.cs.opencover.reportsPaths=**/coverage.*.xml
-      sonar.coverage.exclusions=**Tests*.cs
-      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: '$(RestoreBuildProjects)'
+          arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    projects: '$(RestoreBuildProjects)'
-    arguments: '--configuration $(BuildConfiguration)'
+      - task: DotNetCoreCLI@2
+        displayName: Test
+        inputs:
+          command: test
+          arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit*]*'
+          projects: '$(RestoreBuildProjectsTest)'
 
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit*]*'
-    projects: '$(RestoreBuildProjects)'
+      - task: SonarCloudAnalyze@1
 
-- task: SonarCloudAnalyze@1
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
 
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
+      - script: |
+          dotnet tool install dotnet-reportgenerator-globaltool --tool-path .
+          ./reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.*.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage "-reporttypes:HtmlInline_AzurePipelines;HtmlInline_AzurePipelines_Dark;Cobertura"
+        displayName: Create Code coverage report
 
-- script: |
-    dotnet tool install dotnet-reportgenerator-globaltool --tool-path .
-    ./reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.*.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage "-reporttypes:HtmlInline_AzurePipelines;HtmlInline_AzurePipelines_Dark;Cobertura"
-  displayName: Create Code coverage report
+      - task: PublishCodeCoverageResults@1
+        displayName: 'Publish code coverage'
+        inputs:
+          codeCoverageTool: Cobertura
+          summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/*.xml'
+          reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
 
-- task: PublishCodeCoverageResults@1
-  displayName: 'Publish code coverage'
-  inputs:
-    codeCoverageTool: Cobertura
-    summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/*.xml'
-    reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+      - task: DotNetCoreCLI@2
+        displayName: Publish
+        inputs:
+          command: publish
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+          projects: '$(RestoreBuildProjects)'
+          publishWebProjects: false
+          modifyOutputPath: true
+          zipAfterPublish: true
 
-- task: DotNetCoreCLI@2
-  displayName: Publish
-  inputs:
-    command: publish
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    projects: '$(RestoreBuildProjects)'
-    publishWebProjects: false
-    modifyOutputPath: true
-    zipAfterPublish: true
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact'
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact'
+        inputs:
+          pathtoPublish: '$(Build.ArtifactStagingDirectory)'
