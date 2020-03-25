@@ -230,6 +230,18 @@ Comandos para geração de relatório de testes:
 
 O relatório dos testes são gerados na pasta **code_coverage** localizada na raiz do projeto.
 
+### **Sonar**
+
+1. Dentro do arquivo dos projetos **(.csproj)** no campo **PropertyGroup**, é necessário adicionar um GUID no formato abaixo:
+
+```
+<PropertyGroup>
+  <ProjectGuid>{b5c970c2-a7cc-4052-b07b-b599b83fc621}</ProjectGuid>
+</PropertyGroup>
+```
+
+2. O GUID pode ser coletado no arquivo da solution ou criado pelo site: https://www.guidgenerator.com/.
+
 ## NuGet privado
 
 ### **Visual Studio**
