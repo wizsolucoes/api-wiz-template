@@ -7,10 +7,10 @@
     "Test",
     "xUnit"
   ],
-  "name": "Wiz Template - Web API .NET Core 3.0",
+  "name": "Wiz Template - Web API .NET Core 3",
   "generatorVersions": "[1.0.0.0-*)",
   "identity": "Wiz.Template.API",
-  "groupIdentity": "Wiz.Template.API.v1",
+  "groupIdentity": "Wiz.Template.API.v3",
   "shortName": "wizapi",
   "tags": {
     "language": "C#",
@@ -25,20 +25,12 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "netcoreapp2.1",
-          "description": "Target netcoreapp2.1"
+          "choice": "netcoreapp3.1",
+          "description": "Target netcoreapp3.1"
         },
-        {
-          "choice": "netcoreapp2.2",
-          "description": "Target netcoreapp2.2"
-        },
-        {
-          "choice": "netcoreapp3.0",
-          "description": "Target netcoreapp3.0"
-        }
       ],
-      "replaces": "netcoreapp3.0",
-      "defaultValue": "netcoreapp3.0"
+      "replaces": "netcoreapp3.1",
+      "defaultValue": "netcoreapp3.1"
     },
     "copyrightYear": {
       "type": "generated",
