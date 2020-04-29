@@ -34,4 +34,7 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
+  <Target Name="InstallNpm" BeforeTargets="_GenerateRestoreProjectSpec">
+    <Exec Command="npm install" ConsoleToMsBuild="true" />
+  </Target>
 </Project>
