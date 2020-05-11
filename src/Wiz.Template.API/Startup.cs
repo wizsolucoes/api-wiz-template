@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -20,6 +21,7 @@ using Polly;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
@@ -132,17 +134,47 @@ namespace Wiz.Template.API
 
             if (PlatformServices.Default.Application.ApplicationName != "testhost")
             {
-                var healthCheck = services.AddHealthChecksUI().AddHealthChecks();
-
-                healthCheck.AddSqlServer(Configuration["ConnectionStrings:CustomerDB"]);
-
-                if (WebHostEnvironment.IsProduction())
+                var healthCheck = services.AddHealthChecksUI(setupSettings: setup =>
                 {
-                    healthCheck.AddAzureKeyVault(options =>
-                    {
-                        options.UseKeyVaultUrl($"{Configuration["Azure:KeyVaultUrl"]}");
-                    }, name: "azure-key-vault");
-                }
+                    //Manter a url como localhost, é extremamente importantante para sua aplicação poder funcionar no AKS
+                    setup.AddHealthCheckEndpoint("liveness", "/health");
+                    setup.AddHealthCheckEndpoint("readness", "/ready");
+                    //Para cada sistema de terceiro ou API da Wiz
+                    //setup.AddHealthCheckEndpoint("{sistema}", "URL liveness");
+
+                    setup.AddWebhookNotification("Teams", Configuration["Webhook:Teams"],
+                        payload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceDown.json")),
+                        restorePayload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceRestore.json")),
+                        customMessageFunc: report =>
+                            {
+                                var failing = report.Entries.Where(e => e.Value.Status == UIHealthStatus.Unhealthy);
+                                return $"{AppDomain.CurrentDomain.FriendlyName}: {failing.Count()} healthchecks are failing";
+                            }
+                        );
+                }).AddHealthChecks();
+
+                //500 mb
+                healthCheck.AddProcessAllocatedMemoryHealthCheck(500 * 1024 * 1024, "Process Memory", tags: new[] { "self" });
+                //500 mb
+                healthCheck.AddPrivateMemoryHealthCheck(1500 * 1024 * 1024, "Private memory", tags: new[] { "self" });
+                //healthCheck.AddVirtualMemorySizeHealthCheck(int.MaxValue, "Virtual Memory", tags: new[] { "self" });
+
+                healthCheck.AddSqlServer(Configuration["ConnectionStrings:CustomerDB"], tags: new[] { "services" });
+
+                //dotnet add <Project> package AspNetCore.HealthChecks.Redis
+                //healthCheck.AddRedis(Configuration["Data:ConnectionStrings:Redis"], tags: new[] {"services"});
+
+                //dotnet add <Project> package AspNetCore.HealthChecks.OpenIdConnectServer
+                healthCheck.AddIdentityServer(new Uri(Configuration["WizID:Authority"]), "SSO Wiz", tags: new[] { "services" });
+
+                //if (WebHostEnvironment.IsProduction())
+                //{
+                    //dotnet add <Project> package AspNetCore.HealthChecks.AzureKeyVault
+                    //healthChecks.AddAzureKeyVault(options =>
+                    //{
+                    //    options.UseKeyVaultUrl($"{Configuration["Azure:KeyVaultUrl"]}");
+                    //}, name: "azure-key-vault",tags: new[] {"services"});
+                //}
 
                 healthCheck.AddApplicationInsightsPublisher();
             }
@@ -192,11 +224,14 @@ namespace Wiz.Template.API
             {
                 app.UseHealthChecks("/health", new HealthCheckOptions()
                 {
-                    Predicate = _ => true,
+                    Predicate = r => r.Tags.Contains("self"),
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                }).UseHealthChecksUI(setup =>
+                });
+
+                app.UseHealthChecks("/ready", new HealthCheckOptions
                 {
-                    setup.UIPath = "/health-ui";
+                    Predicate = r => r.Tags.Contains("services"),
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
             }
 
@@ -217,6 +252,11 @@ namespace Wiz.Template.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecksUI(opt =>
+                {
+                    opt.UIPath = "/health-ui";
+                });
+
                 endpoints.MapControllers();
             });
         }

@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.AzureKeyVault" Version="3.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="3.1.1" />
     <PackageReference Include="AspNetCore.HealthChecks.Publisher.ApplicationInsights" Version="3.0.3" />
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="3.0.0" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="3.0.9" />
+    <PackageReference Include="AspNetCore.HealthChecks.System" Version="3.1.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="3.1.0" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
