@@ -1,0 +1,27 @@
+{
+  "@type": "MessageCard",
+  "@context": "http://schema.org/extensions",
+  "themeColor": "D00C3D",
+  "summary": "[[LIVENESS]] is down",
+  "sections": [
+    {
+      "activityTitle": "[[LIVENESS]] is down",
+      "activitySubtitle": "[[FAILURE]]",
+      "facts": [
+        {
+          "name": "Service",
+          "value": "[[LIVENESS]]"
+        },
+        {
+          "name": "Failure message",
+          "value": "[[FAILURE]]"
+        },
+        {
+          "name": "Description",
+          "value": "[[DESCRIPTIONS]]"
+        }
+      ],
+      "markdown": true
+    }
+  ]
+}

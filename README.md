@@ -56,17 +56,15 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
   "API": {
     "ViaCEP": "https://viacep.com.br/ws/"
   },
+  "Webhook": {
+    "Teams": "{URL Webhook do Teams}"
+  },
   "HealthChecks-UI": {
     "HealthChecks": [
-      {
-        "Name": "Customer DB Health",
-        "Uri": "https://localhost:5001/health"
-      }
     ],
     "Webhooks": [],
     "EvaluationTimeOnSeconds": 30,
-    "MinimumSecondsBetweenFailureNotifications": 60,
-    "HealthCheckDatabaseConnectionString": "Data Source=%APPDATA%\\healthchecksdb"
+    "MinimumSecondsBetweenFailureNotifications": 60
   }
 }
 ```
