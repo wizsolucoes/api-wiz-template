@@ -2,12 +2,12 @@
 using Microsoft.Extensions.Options;
 using Moq;
 using System.Threading.Tasks;
-using Wiz.CRM.API.Middlewares;
+using Wiz.Template.API.Middlewares;
 using Wiz.Template.API.Settings;
 using Wiz.Template.Domain.Interfaces.Identity;
 using Xunit;
 
-namespace Wiz.CRM.Unit.Tests.Middlewares
+namespace Wiz.Template.Unit.Tests.Middlewares
 {
     public class LogMiddlewareTest
     {
