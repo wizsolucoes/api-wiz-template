@@ -53,6 +53,7 @@ stages:
           projects: '$(RestoreBuildProjects)'
           # Necessário caso há Wiz.Common (Nuget)
           #feedRestore: '$(wizCrossFeed)'
+        condition: succeededOrFailed()
 
       - task: DotNetCoreCLI@2
         displayName: Build
@@ -72,6 +73,7 @@ stages:
       - task: SonarCloudPublish@1
         inputs:
           pollingTimeoutSec: '300'
+        condition: succeededOrFailed()
 
       - script: |
           dotnet tool install dotnet-reportgenerator-globaltool --tool-path .
@@ -84,6 +86,7 @@ stages:
           codeCoverageTool: Cobertura
           summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/*.xml'
           reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
+        condition: succeededOrFailed()
 
       - task: DotNetCoreCLI@2
         displayName: Publish
