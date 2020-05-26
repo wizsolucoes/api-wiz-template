@@ -56,16 +56,23 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
   "API": {
     "ViaCEP": "https://viacep.com.br/ws/"
   },
+  "Webhook": {
+    "Teams": "{URL Webhook do Teams}"
+  },
   "HealthChecks-UI": {
     "HealthChecks": [
       {
-        "Name": "Customer DB Health",
-        "Uri": "https://localhost:5001/health"
+        "Name": "liveness",
+        "Uri": "http://localhost:5000/health"
+      },
+      {
+        "Name": "readness",
+        "Uri": "http://localhost:5000/ready"
       }
     ],
     "Webhooks": [],
     "EvaluationTimeOnSeconds": 30,
-    "MinimumSecondsBetweenFailureNotifications": 60,
+    "MinimumSecondsBetweenFailureNotifications": 300,
     "HealthCheckDatabaseConnectionString": "Data Source=%APPDATA%\\healthchecksdb"
   }
 }
@@ -81,14 +88,24 @@ Caso não há chave de configuração no Azure, não é necessário inserir para
 ├── Dockerfile
 ```
 
-Dentro do arquivo *Dockerfile*, há o conteúdo para modificação das variáveis:
+Para utilizar o Nuget privado (Wiz Common) é necessário realizar autenticação no Azure DevOps via **PAT (Personal Access Tokens)**.
+
+Para gerar o token é necessário seguir os seguintes passos:
+
+1. Entrar em configurações de token do [Azure DevOps](https://dev.azure.com/wizsolucoes/_usersSettings/tokens)
+
+2. Clicar na opção **New Token**
+
+3. Inserir um nome desejado do token
+
+4. Inserir a data de inspiração desejada (recomendado 90 dias)
+
+5. Em **Scopes** selecionar em **Packaging** a opção **Read & write**
+
+No arquivo **Dockerfile** substitua com o token gerado:
 
 ```docker
-ENV ApplicationInsights:InstrumentationKey=KEY_APPLICATION_INSIGHTS
-ENV Azure:KeyVaultUrl=URL_KEY_VAULT
-ENV ConnectionStrings:CustomerDB=URL_DB
-ENV WizID:Authority=URL_SSO
-ENV WizID:Audience=SSO_SCOPE
+ARG nuget_pat={PAT_TOKEN}
 ```
 
 ## Execução do projeto

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Wiz.Template.API.Settings;
 using Wiz.Template.Domain.Interfaces.Identity;
 
-namespace Wiz.CRM.API.Middlewares
+namespace Wiz.Template.API.Middlewares
 {
     public class LogMiddleware
     {

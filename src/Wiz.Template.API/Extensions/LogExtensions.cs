@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Wiz.CRM.API.Middlewares;
+using Wiz.Template.API.Middlewares;
 
 namespace Wiz.Template.API.Extensions
 {

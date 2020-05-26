@@ -3,13 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <ProjectGuid>{dc7fde71-e38e-4dbd-8a85-effa3bf95118}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.AzureKeyVault" Version="3.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="3.1.1" />
     <PackageReference Include="AspNetCore.HealthChecks.Publisher.ApplicationInsights" Version="3.0.3" />
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="3.0.0" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="3.0.9" />
+    <PackageReference Include="AspNetCore.HealthChecks.System" Version="3.1.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="3.1.0" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.13.1" />
@@ -33,4 +36,7 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
+  <Target Name="InstallNpm" BeforeTargets="_GenerateRestoreProjectSpec">
+    <Exec Command="npm install" ConsoleToMsBuild="true" />
+  </Target>
 </Project>
