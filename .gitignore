@@ -335,6 +335,3 @@ ASALocalRun/
 code_coverage/
 tools/
 *.info
-
-# GitHub Action
-.github/workflows/main.yml
