@@ -335,3 +335,6 @@ ASALocalRun/
 code_coverage/
 tools/
 *.info
+
+# GitHub Actions
+.github/

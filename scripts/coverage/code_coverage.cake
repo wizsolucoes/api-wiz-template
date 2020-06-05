@@ -1,37 +1,35 @@
-var target = Argument("target", "Report");
+#tool nuget:?package=ReportGenerator&version=4.6.1
+#addin nuget:?package=Cake.Coverlet&version=2.4.2
 
-#addin nuget:?package=Cake.Coverlet&version=2.1.2
-#tool nuget:?package=ReportGenerator&version=4.0.4
+var target = Argument("target", "Default");
 
 var testProjectsRelativePaths = new string[]
 {
-    "../test/Wiz.Template.Integration.Tests/Wiz.Template.Integration.Tests.csproj",
-    "../test/Wiz.Template.Unit.Tests/Wiz.Template.Unit.Tests.csproj"
+    "../../test/Wiz.Template.Integration.Tests/Wiz.Template.Integration.Tests.csproj",
+    "../../test/Wiz.Template.Unit.Tests/Wiz.Template.Unit.Tests.csproj"
 };
 
-var parentDirectory = Directory("..");
-var coverageDirectory = parentDirectory + Directory("code_coverage");
-var cuberturaFileName = "results";
-var cuberturaFileExtension = ".cobertura.xml";
-var reportTypes = "HtmlInline_AzurePipelines";
-var coverageFilePath = coverageDirectory + File(cuberturaFileName + cuberturaFileExtension);
-var jsonFilePath = coverageDirectory + File(cuberturaFileName + ".json");
+var coverageDirectory = Directory("../../code_coverage");
+var coverageFileName = "results";
+var coverageFilePath = coverageDirectory + File(coverageFileName + ".cobertura.xml");
+var jsonFilePath = coverageDirectory + File(coverageFileName + ".json");
 
-Task("Clean")
+Task("CoverageDirectory")
     .Does(() =>
 {
     if (!DirectoryExists(coverageDirectory)) 
     {
         CreateDirectory(coverageDirectory);
+        Information("Directory code_coverage create");
     }
     else 
     {
         CleanDirectory(coverageDirectory);
+        Information("Directory code_coverage exists");
     }
 });
 
-Task("Test")
-    .IsDependentOn("Clean")
+Task("CoverageTest")
     .Does(() =>
 {
     var testSettings = new DotNetCoreTestSettings
@@ -44,7 +42,7 @@ Task("Test")
     {
         CollectCoverage = true,
         CoverletOutputDirectory = coverageDirectory,
-        CoverletOutputName = cuberturaFileName
+        CoverletOutputName = coverageFileName
     };
 
     if (testProjectsRelativePaths.Length == 1)
@@ -72,15 +70,23 @@ Task("Test")
 });
 
 Task("Report")
-    .IsDependentOn("Test")
     .Does(() =>
 {
     var reportSettings = new ReportGeneratorSettings
     {
-        ArgumentCustomization = args => args.Append($"-reportTypes:{reportTypes}")
+        ArgumentCustomization = args => args.Append($"-reportTypes:HtmlInline_AzurePipelines")
     };
 
     ReportGenerator(coverageFilePath, coverageDirectory, reportSettings);
+});
+
+Task("Default")
+    .IsDependentOn("CoverageDirectory")
+    .IsDependentOn("CoverageTest")
+    .IsDependentOn("Report")
+	.Does(()=>
+{ 
+    Information("Code coverage done!");
 });
 
 RunTarget(target);

@@ -37,7 +37,7 @@ CMD dotnet run --project src/Wiz.Template.API/Wiz.Template.API.csproj
 FROM development AS build
 WORKDIR /app
 COPY . .
-RUN dotnet restore . -s "https://pkgs.dev.azure.com/wizsolucoes/_packaging/WizCross/nuget/v3/index.json" -s "https://api.nuget.org/v3/index.json"
+RUN dotnet restore . -s $nuget_endpoint -s "https://api.nuget.org/v3/index.json"
 RUN dotnet build "./src/Wiz.Template.API/Wiz.Template.API.csproj" -c Release
 
 FROM build AS publish

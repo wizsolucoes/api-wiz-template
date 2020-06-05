@@ -37,7 +37,7 @@ https://cakebuild.net
 
 [CmdletBinding()]
 Param(
-    [string]$Script = "code_coverage.cake",
+    [string]$Script = "sonar_lint.cake",
     [string]$Target,
     [string]$Configuration,
     [ValidateSet("Quiet", "Minimal", "Normal", "Verbose", "Diagnostic")]
@@ -46,7 +46,7 @@ Param(
     [Alias("WhatIf", "Noop")]
     [switch]$DryRun,
     [switch]$SkipToolPackageRestore,
-    [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
+    [Parameter(Position = 0, Mandatory = $false, ValueFromRemainingArguments = $true)]
     [string[]]$ScriptArgs
 )
 
@@ -63,37 +63,32 @@ try {
     if (-not $IsCoreCLR) {
         [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48
     }
-  } catch {
+}
+catch {
     Write-Output 'Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to upgrade to .NET Framework 4.5+ and PowerShell v3'
-  }
+}
 
 [Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
-function MD5HashFile([string] $filePath)
-{
-    if ([string]::IsNullOrEmpty($filePath) -or !(Test-Path $filePath -PathType Leaf))
-    {
+function MD5HashFile([string] $filePath) {
+    if ([string]::IsNullOrEmpty($filePath) -or !(Test-Path $filePath -PathType Leaf)) {
         return $null
     }
 
     [System.IO.Stream] $file = $null;
     [System.Security.Cryptography.MD5] $md5 = $null;
-    try
-    {
+    try {
         $md5 = [System.Security.Cryptography.MD5]::Create()
         $file = [System.IO.File]::OpenRead($filePath)
         return [System.BitConverter]::ToString($md5.ComputeHash($file))
     }
-    finally
-    {
-        if ($file -ne $null)
-        {
+    finally {
+        if ($file -ne $null) {
             $file.Dispose()
         }
     }
 }
 
-function GetProxyEnabledWebClient
-{
+function GetProxyEnabledWebClient {
     $wc = New-Object System.Net.WebClient
     $proxy = [System.Net.WebRequest]::GetSystemWebProxy()
     $proxy.Credentials = [System.Net.CredentialCache]::DefaultCredentials
@@ -103,7 +98,7 @@ function GetProxyEnabledWebClient
 
 Write-Host "Preparing to run build script..."
 
-if(!$PSScriptRoot){
+if (!$PSScriptRoot) {
     $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 }
 
@@ -130,7 +125,8 @@ if (!(Test-Path $PACKAGES_CONFIG)) {
     try {
         $wc = GetProxyEnabledWebClient
         $wc.DownloadFile("https://cakebuild.net/download/bootstrapper/packages", $PACKAGES_CONFIG)
-    } catch {
+    }
+    catch {
         Throw "Could not download packages.config."
     }
 }
@@ -152,7 +148,8 @@ if (!(Test-Path $NUGET_EXE)) {
     try {
         $wc = GetProxyEnabledWebClient
         $wc.DownloadFile($NUGET_URL, $NUGET_EXE)
-    } catch {
+    }
+    catch {
         Throw "Could not download NuGet.exe."
     }
 }
@@ -161,21 +158,22 @@ if (!(Test-Path $NUGET_EXE)) {
 $env:NUGET_EXE = $NUGET_EXE
 $env:NUGET_EXE_INVOCATION = if ($IsLinux -or $IsMacOS) {
     "mono `"$NUGET_EXE`""
-} else {
+}
+else {
     "`"$NUGET_EXE`""
 }
 
 # Restore tools from NuGet?
-if(-Not $SkipToolPackageRestore.IsPresent) {
+if (-Not $SkipToolPackageRestore.IsPresent) {
     Push-Location
     Set-Location $TOOLS_DIR
 
     # Check for changes in packages.config and remove installed tools if true.
     [string] $md5Hash = MD5HashFile $PACKAGES_CONFIG
-    if((!(Test-Path $PACKAGES_CONFIG_MD5)) -Or
-    ($md5Hash -ne (Get-Content $PACKAGES_CONFIG_MD5 ))) {
+    if ((!(Test-Path $PACKAGES_CONFIG_MD5)) -Or
+        ($md5Hash -ne (Get-Content $PACKAGES_CONFIG_MD5 ))) {
         Write-Verbose -Message "Missing or changed package.config hash..."
-        Get-ChildItem -Exclude packages.config,nuget.exe,Cake.Bakery |
+        Get-ChildItem -Exclude packages.config, nuget.exe, Cake.Bakery |
         Remove-Item -Recurse
     }
 
@@ -186,8 +184,7 @@ if(-Not $SkipToolPackageRestore.IsPresent) {
     if ($LASTEXITCODE -ne 0) {
         Throw "An error occurred while restoring NuGet tools."
     }
-    else
-    {
+    else {
         $md5Hash | Out-File $PACKAGES_CONFIG_MD5 -Encoding "ASCII"
     }
     Write-Verbose -Message ($NuGetOutput | Out-String)
@@ -236,7 +233,8 @@ if (!(Test-Path $CAKE_EXE)) {
 
 $CAKE_EXE_INVOCATION = if ($IsLinux -or $IsMacOS) {
     "mono `"$CAKE_EXE`""
-} else {
+}
+else {
     "`"$CAKE_EXE`""
 }
 
