@@ -239,11 +239,13 @@ As funcionalidades **Live Unit Testing** e **Code Coverage** estão disponíveis
 
 2. Ativar **Watch** na parte inferior do Visual Studio Code para habilitar cores nas classes que descrevem a cobertura. É necessário executar os testes no modo *test with coverage*.
 
+### **Code Coverage**
+
 Comandos para geração de relatório de testes:
 
 + **PowerShell (Windows):**
 
-  1. Abrir pasta *scripts*;
+  1. Abrir pasta *scripts/coverage*;
 
   2. Executar comando: 
   
@@ -259,12 +261,12 @@ Comandos para geração de relatório de testes:
   
 + **Shell (Linux/Mac):**
   
-  1. Abrir pasta *scripts*;
+  1. Abrir pasta *scripts/coverage*;
 
   2. Executar testes e relatório de testes:
   
   ```sh
-  ./code_coverage.sh
+  sh code_coverage.sh
   ```
 
 O relatório dos testes são gerados na pasta **code_coverage** localizada na raiz do projeto.
@@ -280,6 +282,36 @@ O relatório dos testes são gerados na pasta **code_coverage** localizada na ra
 ```
 
 2. O GUID pode ser coletado no arquivo da solution ou criado pelo site: https://www.guidgenerator.com/.
+
+Comandos para executar lint no **Visual Studio Code**:
+
++ Realizar configuração local [README-SONAR](./scripts/sonar/README-SONAR.md)
+
++ **PowerShell (Windows):**
+
+  1. Abrir pasta *scripts/sonar*;
+
+  2. Executar comando (caso não executado no passo do **Code Coverage**): 
+  
+  ```sh
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+  
+  ```
+  3. Executar lint:
+  
+  ```sh
+  .\sonar_lint.ps1
+  ```
+  
++ **Shell (Linux/Mac):**
+  
+  1. Abrir pasta *scripts/sonar*;
+
+  2. Executar lint:
+  
+  ```sh
+  sh sonar_lint.sh
+  ```
 
 ## NuGet privado
 

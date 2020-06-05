@@ -76,8 +76,7 @@
             "args": [
                 "test",
                 "/p:CollectCoverage=true",
-                "/p:CoverletOutputFormat=lcov",
-                "/p:CoverletOutput=lcov.info",
+                "/p:CoverletOutputFormat=opencover",
                 "/p:Exclude=[xunit*]*"
             ],
             "problemMatcher": "$msCompile",

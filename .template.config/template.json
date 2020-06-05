@@ -27,7 +27,7 @@
         {
           "choice": "netcoreapp3.1",
           "description": "Target netcoreapp3.1"
-        },
+        }
       ],
       "replaces": "netcoreapp3.1",
       "defaultValue": "netcoreapp3.1"
@@ -65,7 +65,8 @@
         "**/*.lock.json",
         "README.md",
         "LICENSE",
-        ".git/**/*"
+        ".git/**/*",
+        ".github/**/*"
       ],
       "rename": {
         "README-TEMPLATE.md": "README.md"
