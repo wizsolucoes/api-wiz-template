@@ -34,34 +34,6 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
-        },
-        {
-            "name": ".NET Core Launch (Cake - Sonar)",
-            "type": "coreclr",
-            "request": "launch",
-            "program": "${workspaceRoot}/tools/Cake.CoreCLR/Cake.dll",
-            "args": [
-                "${workspaceRoot}/scripts/sonar/sonar_lint.cake",
-                "--debug",
-                "--verbosity=diagnostic"
-            ],
-            "cwd": "${workspaceRoot}",
-            "stopAtEntry": true,
-            "externalConsole": false
-        },
-        {
-            "name": ".NET Core Launch (Cake - Coverage)",
-            "type": "coreclr",
-            "request": "launch",
-            "program": "${workspaceRoot}/tools/Cake.CoreCLR/Cake.dll",
-            "args": [
-                "${workspaceRoot}/scripts/coverage/code_coverage.cake",
-                "--debug",
-                "--verbosity=diagnostic"
-            ],
-            "cwd": "${workspaceRoot}",
-            "stopAtEntry": true,
-            "externalConsole": false
         }
     ]
 }
