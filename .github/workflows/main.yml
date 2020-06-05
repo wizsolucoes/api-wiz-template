@@ -1,6 +1,11 @@
 name: .NET Core
 
-on: [push]
+on:
+  push:
+    tags-ignore:
+      - '**'
+    branches:
+      - master
 
 jobs:
   build:
