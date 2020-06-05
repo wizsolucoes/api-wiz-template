@@ -337,5 +337,4 @@ tools/
 *.info
 
 # GitHub Action
-
-.github/
+.github/workflows/main.yml
