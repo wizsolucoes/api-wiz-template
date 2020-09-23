@@ -136,12 +136,6 @@ namespace Wiz.Template.API
             {
                 var healthCheck = services.AddHealthChecksUI(setupSettings: setup =>
                 {
-                    //Manter a url como localhost, é extremamente importantante para sua aplicação poder funcionar no AKS
-                    setup.AddHealthCheckEndpoint("liveness", "/health");
-                    setup.AddHealthCheckEndpoint("readness", "/ready");
-                    //Para cada sistema de terceiro ou API da Wiz
-                    //setup.AddHealthCheckEndpoint("{sistema}", "URL liveness");
-
                     setup.AddWebhookNotification("Teams", Configuration["Webhook:Teams"],
                         payload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceDown.json")),
                         restorePayload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceRestore.json")),
@@ -169,11 +163,11 @@ namespace Wiz.Template.API
 
                 //if (WebHostEnvironment.IsProduction())
                 //{
-                    //dotnet add <Project> package AspNetCore.HealthChecks.AzureKeyVault
-                    //healthChecks.AddAzureKeyVault(options =>
-                    //{
-                    //    options.UseKeyVaultUrl($"{Configuration["Azure:KeyVaultUrl"]}");
-                    //}, name: "azure-key-vault",tags: new[] {"services"});
+                //dotnet add <Project> package AspNetCore.HealthChecks.AzureKeyVault
+                //healthChecks.AddAzureKeyVault(options =>
+                //{
+                //    options.UseKeyVaultUrl($"{Configuration["Azure:KeyVaultUrl"]}");
+                //}, name: "azure-key-vault",tags: new[] {"services"});
                 //}
 
                 healthCheck.AddApplicationInsightsPublisher();
@@ -220,21 +214,6 @@ namespace Wiz.Template.API
             app.UseHttpsRedirection();
             app.UseResponseCompression();
 
-            if (PlatformServices.Default.Application.ApplicationName != "testhost")
-            {
-                app.UseHealthChecks("/health", new HealthCheckOptions()
-                {
-                    Predicate = r => r.Tags.Contains("self"),
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-
-                app.UseHealthChecks("/ready", new HealthCheckOptions
-                {
-                    Predicate = r => r.Tags.Contains("services"),
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
-            }
-
             if (!env.IsProduction())
             {
                 app.UseSwagger();
@@ -252,10 +231,25 @@ namespace Wiz.Template.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecksUI(opt =>
+                if (PlatformServices.Default.Application.ApplicationName != "testhost")
                 {
-                    opt.UIPath = "/health-ui";
-                });
+                    //Para cada sistema de terceiro ou API da Wiz (incluir URL em appsettings.json)
+                    //endpoints.MapHealthChecks("{sistema}", ...);
+                    endpoints.MapHealthChecks("/health", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("self"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+                    endpoints.MapHealthChecks("/ready", new HealthCheckOptions
+                    {
+                        Predicate = r => r.Tags.Contains("services"),
+                        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                    });
+                    endpoints.MapHealthChecksUI(setup =>
+                    {
+                        setup.UIPath = "/health-ui";
+                    });
+                }
 
                 endpoints.MapControllers();
             });

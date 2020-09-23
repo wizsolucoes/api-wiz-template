@@ -61,10 +61,19 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
   },
   "HealthChecks-UI": {
     "HealthChecks": [
+      {
+        "Name": "liveness",
+        "Uri": "http://localhost:5000/health"
+      },
+      {
+        "Name": "readness",
+        "Uri": "http://localhost:5000/ready"
+      }
     ],
     "Webhooks": [],
     "EvaluationTimeOnSeconds": 30,
-    "MinimumSecondsBetweenFailureNotifications": 60
+    "MinimumSecondsBetweenFailureNotifications": 300,
+    "HealthCheckDatabaseConnectionString": "Data Source=%APPDATA%\\healthchecksdb"
   }
 }
 ```
@@ -79,14 +88,24 @@ Caso não há chave de configuração no Azure, não é necessário inserir para
 ├── Dockerfile
 ```
 
-Dentro do arquivo *Dockerfile*, há o conteúdo para modificação das variáveis:
+Para utilizar o Nuget privado (Wiz Common) é necessário realizar autenticação no Azure DevOps via **PAT (Personal Access Tokens)**.
+
+Para gerar o token é necessário seguir os seguintes passos:
+
+1. Entrar em configurações de token do [Azure DevOps](https://dev.azure.com/wizsolucoes/_usersSettings/tokens)
+
+2. Clicar na opção **New Token**
+
+3. Inserir um nome desejado do token
+
+4. Inserir a data de inspiração desejada (recomendado 90 dias)
+
+5. Em **Scopes** selecionar em **Packaging** a opção **Read & write**
+
+No arquivo **Dockerfile** substitua com o token gerado:
 
 ```docker
-ENV ApplicationInsights:InstrumentationKey=KEY_APPLICATION_INSIGHTS
-ENV Azure:KeyVaultUrl=URL_KEY_VAULT
-ENV ConnectionStrings:CustomerDB=URL_DB
-ENV WizID:Authority=URL_SSO
-ENV WizID:Audience=SSO_SCOPE
+ARG nuget_pat={PAT_TOKEN}
 ```
 
 ## Execução do projeto
@@ -220,11 +239,13 @@ As funcionalidades **Live Unit Testing** e **Code Coverage** estão disponíveis
 
 2. Ativar **Watch** na parte inferior do Visual Studio Code para habilitar cores nas classes que descrevem a cobertura. É necessário executar os testes no modo *test with coverage*.
 
+### **Code Coverage**
+
 Comandos para geração de relatório de testes:
 
 + **PowerShell (Windows):**
 
-  1. Abrir pasta *scripts*;
+  1. Abrir pasta *scripts/coverage*;
 
   2. Executar comando: 
   
@@ -240,12 +261,12 @@ Comandos para geração de relatório de testes:
   
 + **Shell (Linux/Mac):**
   
-  1. Abrir pasta *scripts*;
+  1. Abrir pasta *scripts/coverage*;
 
   2. Executar testes e relatório de testes:
   
   ```sh
-  ./code_coverage.sh
+  sh code_coverage.sh
   ```
 
 O relatório dos testes são gerados na pasta **code_coverage** localizada na raiz do projeto.
@@ -261,6 +282,36 @@ O relatório dos testes são gerados na pasta **code_coverage** localizada na ra
 ```
 
 2. O GUID pode ser coletado no arquivo da solution ou criado pelo site: https://www.guidgenerator.com/.
+
+Comandos para executar lint no **Visual Studio Code**:
+
++ Realizar configuração local [README-SONAR](./scripts/sonar/README-SONAR.md)
+
++ **PowerShell (Windows):**
+
+  1. Abrir pasta *scripts/sonar*;
+
+  2. Executar comando (caso não executado no passo do **Code Coverage**): 
+  
+  ```sh
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+  
+  ```
+  3. Executar lint:
+  
+  ```sh
+  .\sonar_lint.ps1
+  ```
+  
++ **Shell (Linux/Mac):**
+  
+  1. Abrir pasta *scripts/sonar*;
+
+  2. Executar lint:
+  
+  ```sh
+  sh sonar_lint.sh
+  ```
 
 ## NuGet privado
 
