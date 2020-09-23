@@ -34,12 +34,14 @@ using Wiz.Template.API.Services;
 using Wiz.Template.API.Services.Interfaces;
 using Wiz.Template.API.Settings;
 using Wiz.Template.API.Swagger;
+using Wiz.Template.Domain.Interfaces.Bot;
 using Wiz.Template.Domain.Interfaces.Identity;
 using Wiz.Template.Domain.Interfaces.Notifications;
 using Wiz.Template.Domain.Interfaces.Repository;
 using Wiz.Template.Domain.Interfaces.Services;
 using Wiz.Template.Domain.Interfaces.UoW;
 using Wiz.Template.Domain.Notifications;
+using Wiz.Template.Infra.Bot;
 using Wiz.Template.Infra.Context;
 using Wiz.Template.Infra.Identity;
 using Wiz.Template.Infra.Repository;
@@ -118,19 +120,7 @@ namespace Wiz.Template.API
                 options.AllowSynchronousIO = true;
             });
 
-            services.AddHttpClient<IViaCEPService, ViaCEPService>((s, c) =>
-            {
-                c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
-                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
-                    (int)response.StatusCode == (int)HttpStatusCode.InternalServerError)
-              .WaitAndRetryAsync(3, retry =>
-                   TimeSpan.FromSeconds(Math.Pow(2, retry)) +
-                   TimeSpan.FromMilliseconds(new Random().Next(0, 100))))
-              .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.CircuitBreakerAsync(
-                   handledEventsAllowedBeforeBreaking: 3,
-                   durationOfBreak: TimeSpan.FromSeconds(30)
-            ));
+            this.RegisterHttpClient(services);
 
             if (PlatformServices.Default.Application.ApplicationName != "testhost")
             {
@@ -196,7 +186,7 @@ namespace Wiz.Template.API
             services.AddHttpContextAccessor();
             services.AddApplicationInsightsTelemetry();
 
-            RegisterServices(services);
+            this.RegisterServices(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationInsightsSettings> options)
@@ -255,12 +245,49 @@ namespace Wiz.Template.API
             });
         }
 
+
+        private void RegisterHttpClient(IServiceCollection services)
+        {
+            services.AddHttpClient<IViaCEPService, ViaCEPService>((s, c) =>
+                        {
+                            c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
+                            c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
+                                (int)response.StatusCode == (int)HttpStatusCode.InternalServerError)
+                          .WaitAndRetryAsync(3, retry =>
+                               TimeSpan.FromSeconds(Math.Pow(2, retry)) +
+                               TimeSpan.FromMilliseconds(new Random(9876).Next(0, 100))))
+                          .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.CircuitBreakerAsync(
+                               handledEventsAllowedBeforeBreaking: 3,
+                               durationOfBreak: TimeSpan.FromSeconds(30)
+                        ));
+
+            services.AddHttpClient<IBlipService, BlipService>((s, c) =>
+            {
+                c.BaseAddress = new Uri(Configuration["API:Blip:Url"]);
+                c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Key", Configuration["API:Blip:Key"]);
+                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
+                    !response.IsSuccessStatusCode)
+              .WaitAndRetryAsync(3, retry =>
+                   TimeSpan.FromSeconds(Math.Pow(2, retry)) +
+                   TimeSpan.FromMilliseconds(new Random(9876).Next(0, 100))))
+              .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.CircuitBreakerAsync(
+                   handledEventsAllowedBeforeBreaking: 3,
+                   durationOfBreak: TimeSpan.FromSeconds(30)
+            ));
+        }
+
         private void RegisterServices(IServiceCollection services)
         {
             services.Configure<ApplicationInsightsSettings>(Configuration.GetSection("ApplicationInsights"));
 
-            #region Service
+            //Para trabalhar com Bot e IBM Watson
+            services.AddScoped<IWatsonBot, WatsonBot>();
 
+            #region Service
+            //Para trabalhar com Bot e IBM Watson
+            services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ICustomerService, CustomerService>();
 
             #endregion
