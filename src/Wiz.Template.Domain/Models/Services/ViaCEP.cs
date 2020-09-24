@@ -1,8 +1,7 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Wiz.Template.Domain.Models.Services
 {
-    [DataContract(Name = "endereco")]
     public class ViaCEP
     {
         public ViaCEP() { }
@@ -15,13 +14,13 @@ namespace Wiz.Template.Domain.Models.Services
             UF = uf;
         }
 
-        [DataMember(Name = "cep")]
+        [JsonPropertyName("cep")]
         public string CEP { get; set; }
-        [DataMember(Name = "logradouro")]
+        [JsonPropertyName("logradouro")]
         public string Street { get; set; }
-        [DataMember(Name = "complemento")]
+        [JsonPropertyName("complemento")]
         public string StreetFull { get; set; }
-        [DataMember(Name = "uf")]
+        [JsonPropertyName("uf")]
         public string UF { get; set; }
     }
 }
