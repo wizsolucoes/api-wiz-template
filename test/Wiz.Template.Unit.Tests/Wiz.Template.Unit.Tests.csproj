@@ -28,4 +28,9 @@
     <ProjectReference Include="..\..\src\Wiz.Template.Infra\Wiz.Template.Infra.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

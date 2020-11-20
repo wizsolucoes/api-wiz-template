@@ -1,101 +1,20 @@
-# ASP.NET Core
-# Build a Web project that uses ASP.NET Core.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-# YAML reference:
-# https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema
-
-trigger:
-  branches:
-    include:
-    - master
-    - releases/*
-  paths:
-    exclude:
-    - README.md
-
-pool:
-  vmImage: 'Ubuntu-16.04'
-
-variables:
-  BuildConfiguration: 'Release'
-  RestoreBuildProjects: '**/*.csproj'
-  RestoreBuildProjectsTest: '**/*[Tt]ests/*.csproj'
-  projectKey: '$(Build.Repository.Name)'
-  # Necessário caso há Wiz.Common (Nuget)
-  #wizCrossFeed: '09b2821a-2950-4eff-a722-dbc8adf4da55'
-
 resources:
-- repo: self
+  repositories:
+    - repository: coretemplate
+      type: git
+      name: WizPipelines/core-template
 
-stages:
-- stage: build
-  jobs:
-    - job:
-      steps:
-      - task: SonarCloudPrepare@1
-        inputs:
-          SonarCloud: 'sonarcloudwiz'
-          organization: 'wizdevops'
-          scannerMode: 'MSBuild'
-          projectKey: '$(projectKey)'
-          projectName: '$(projectKey)'
-          extraProperties: |
-            sonar.exclusions=**/obj/**,**/*.dll
-            sonar.cs.opencover.reportsPaths=**/coverage.*.xml
-            sonar.coverage.exclusions=**Tests*.cs
-            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-
-      - task: DotNetCoreCLI@2
-        displayName: Restore
-        inputs:
-          command: restore
-          projects: '$(RestoreBuildProjects)'
-          # Necessário caso há Wiz.Common (Nuget)
-          #feedRestore: '$(wizCrossFeed)'
-
-      - task: DotNetCoreCLI@2
-        displayName: Build
-        inputs:
-          projects: '$(RestoreBuildProjects)'
-          arguments: '--configuration $(BuildConfiguration)'
-
-      - task: DotNetCoreCLI@2
-        displayName: Test
-        inputs:
-          command: test
-          arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude=[xunit*]*'
-          projects: '$(RestoreBuildProjectsTest)'
-
-      - task: SonarCloudAnalyze@1
-
-      - task: SonarCloudPublish@1
-        inputs:
-          pollingTimeoutSec: '300'
-
-      - script: |
-          dotnet tool install dotnet-reportgenerator-globaltool --tool-path .
-          ./reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.*.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage "-reporttypes:HtmlInline_AzurePipelines;HtmlInline_AzurePipelines_Dark;Cobertura"
-        displayName: Create Code coverage report
-
-      - task: PublishCodeCoverageResults@1
-        displayName: 'Publish code coverage'
-        inputs:
-          codeCoverageTool: Cobertura
-          summaryFileLocation: '$(Build.SourcesDirectory)/CodeCoverage/*.xml'
-          reportDirectory: '$(Build.SourcesDirectory)/CodeCoverage'
-
-      - task: DotNetCoreCLI@2
-        displayName: Publish
-        inputs:
-          command: publish
-          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-          projects: '$(RestoreBuildProjects)'
-          publishWebProjects: false
-          modifyOutputPath: true
-          zipAfterPublish: true
-
-      - task: PublishBuildArtifacts@1
-        displayName: 'Publish Artifact'
-        inputs:
-          pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+extends:
+  template: main.yml@coretemplate
+  parameters:
+    technology: 'dotnetcore'
+    azResourceName: 'TO DO eg. customer'
+    azWebAppNameUAT: 'TO DO eg. api-customer-hml'
+    azWebAppNamePRD: 'TO DO eg. api-customer-prd'
+    azSubscriptionUAT: 'TO DO'
+    azSubscriptionPRD: 'TO DO'
+    dotnetcoreDotNetVersion: '3.x'
+    dotnetcoreBuildProject: '**/*[API].csproj'
+    dotnetcoreBuildConfiguration: Release
+    dotnetcoreTestProject: '**/*[Tt]ests/*.csproj'
+    dotnetcoreNugetFeed: 00000000-0000-0000-0000-000000000000

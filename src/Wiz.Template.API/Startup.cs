@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -118,19 +117,7 @@ namespace Wiz.Template.API
                 options.AllowSynchronousIO = true;
             });
 
-            services.AddHttpClient<IViaCEPService, ViaCEPService>((s, c) =>
-            {
-                c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
-                c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
-                    (int)response.StatusCode == (int)HttpStatusCode.InternalServerError)
-              .WaitAndRetryAsync(3, retry =>
-                   TimeSpan.FromSeconds(Math.Pow(2, retry)) +
-                   TimeSpan.FromMilliseconds(new Random().Next(0, 100))))
-              .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.CircuitBreakerAsync(
-                   handledEventsAllowedBeforeBreaking: 3,
-                   durationOfBreak: TimeSpan.FromSeconds(30)
-            ));
+            this.RegisterHttpClient(services);
 
             if (PlatformServices.Default.Application.ApplicationName != "testhost")
             {
@@ -196,7 +183,7 @@ namespace Wiz.Template.API
             services.AddHttpContextAccessor();
             services.AddApplicationInsightsTelemetry();
 
-            RegisterServices(services);
+            this.RegisterServices(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationInsightsSettings> options)
@@ -255,12 +242,29 @@ namespace Wiz.Template.API
             });
         }
 
+
+        private void RegisterHttpClient(IServiceCollection services)
+        {
+            services.AddHttpClient<IViaCEPService, ViaCEPService>((s, c) =>
+                        {
+                            c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
+                            c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
+                                (int)response.StatusCode == (int)HttpStatusCode.InternalServerError)
+                          .WaitAndRetryAsync(3, retry =>
+                               TimeSpan.FromSeconds(Math.Pow(2, retry)) +
+                               TimeSpan.FromMilliseconds(new Random(9876).Next(0, 100))))
+                          .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.CircuitBreakerAsync(
+                               handledEventsAllowedBeforeBreaking: 3,
+                               durationOfBreak: TimeSpan.FromSeconds(30)
+                        ));
+        }
+
         private void RegisterServices(IServiceCollection services)
         {
             services.Configure<ApplicationInsightsSettings>(Configuration.GetSection("ApplicationInsights"));
 
             #region Service
-
             services.AddScoped<ICustomerService, CustomerService>();
 
             #endregion
