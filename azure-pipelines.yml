@@ -18,3 +18,4 @@ extends:
     dotnetcoreBuildConfiguration: Release
     dotnetcoreTestProject: '**/*[Tt]ests/*.csproj'
     dotnetcoreNugetFeed: 00000000-0000-0000-0000-000000000000
+    instrumentationKey: "00000000-0000-0000-0000-000000000000"

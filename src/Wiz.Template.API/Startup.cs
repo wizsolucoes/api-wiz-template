@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HealthChecks.UI.Client;
+using HealthChecks.UI.Core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -13,9 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.Net.Http.Headers;
 using NSwag;
-using NSwag.SwaggerGeneration.Processors.Security;
+using NSwag.Generation.Processors.Security;
 using Polly;
 using System;
 using System.Collections.Generic;
@@ -61,6 +63,8 @@ namespace Wiz.Template.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddControllers();
             services.AddMvc(options =>
             {
@@ -80,12 +84,8 @@ namespace Wiz.Template.API
                 options.RequireHttpsMetadata = false;
                 options.Events = new JwtBearerEvents
                 {
-                    //Remover warning caso há alguma validação do token assíncrona (async/await)
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
                     OnTokenValidated = async ctx =>
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
                     {
-                        //Exemplo para recuperar informações do token JWT e utilizar no serviço: IIdentityService
                         var jwtClaimScope = ctx.Principal.Claims.FirstOrDefault(x => x.Type == "scope")?.Value;
 
                         var claims = new List<Claim>
@@ -107,22 +107,13 @@ namespace Wiz.Template.API
                 x.Providers.Add<GzipCompressionProvider>();
             });
 
-            services.Configure<KestrelServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
-
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.AllowSynchronousIO = true;
-            });
-
             this.RegisterHttpClient(services);
 
             if (PlatformServices.Default.Application.ApplicationName != "testhost")
             {
                 var healthCheck = services.AddHealthChecksUI(setupSettings: setup =>
                 {
+                    setup.DisableDatabaseMigrations();
                     setup.AddWebhookNotification("Teams", Configuration["Webhook:Teams"],
                         payload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceDown.json")),
                         restorePayload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceRestore.json")),
@@ -132,49 +123,38 @@ namespace Wiz.Template.API
                                 return $"{AppDomain.CurrentDomain.FriendlyName}: {failing.Count()} healthchecks are failing";
                             }
                         );
-                }).AddHealthChecks();
+                }).AddInMemoryStorage();
+
+                var builder = healthCheck.Services.AddHealthChecks();
 
                 //500 mb
-                healthCheck.AddProcessAllocatedMemoryHealthCheck(500 * 1024 * 1024, "Process Memory", tags: new[] { "self" });
+                builder.AddProcessAllocatedMemoryHealthCheck(500 * 1024 * 1024, "Process Memory", tags: new[] { "self" });
                 //500 mb
-                healthCheck.AddPrivateMemoryHealthCheck(1500 * 1024 * 1024, "Private memory", tags: new[] { "self" });
-                //healthCheck.AddVirtualMemorySizeHealthCheck(int.MaxValue, "Virtual Memory", tags: new[] { "self" });
+                builder.AddPrivateMemoryHealthCheck(1500 * 1024 * 1024, "Private memory", tags: new[] { "self" });
 
-                healthCheck.AddSqlServer(Configuration["ConnectionStrings:CustomerDB"], tags: new[] { "services" });
-
-                //dotnet add <Project> package AspNetCore.HealthChecks.Redis
-                //healthCheck.AddRedis(Configuration["Data:ConnectionStrings:Redis"], tags: new[] {"services"});
+                builder.AddSqlServer(Configuration["ConnectionStrings:CustomerDB"], tags: new[] { "services" });
 
                 //dotnet add <Project> package AspNetCore.HealthChecks.OpenIdConnectServer
-                healthCheck.AddIdentityServer(new Uri(Configuration["WizID:Authority"]), "SSO Wiz", tags: new[] { "services" });
+                builder.AddIdentityServer(new Uri(Configuration["WizID:Authority"]), "SSO Wiz", tags: new[] { "services" });
 
-                //if (WebHostEnvironment.IsProduction())
-                //{
-                //dotnet add <Project> package AspNetCore.HealthChecks.AzureKeyVault
-                //healthChecks.AddAzureKeyVault(options =>
-                //{
-                //    options.UseKeyVaultUrl($"{Configuration["Azure:KeyVaultUrl"]}");
-                //}, name: "azure-key-vault",tags: new[] {"services"});
-                //}
-
-                healthCheck.AddApplicationInsightsPublisher();
+                builder.AddApplicationInsightsPublisher();
             }
 
             if (!WebHostEnvironment.IsProduction())
             {
-                services.AddSwaggerDocument(document =>
+                services.AddOpenApiDocument(document =>
                 {
                     document.DocumentName = "v1";
                     document.Version = "v1";
                     document.Title = "Template API";
                     document.Description = "API de Template";
                     document.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT"));
-                    document.AddSecurity("JWT", Enumerable.Empty<string>(), new SwaggerSecurityScheme
+                    document.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
                     {
-                        Type = SwaggerSecuritySchemeType.ApiKey,
+                        Type = OpenApiSecuritySchemeType.ApiKey,
                         Name = HeaderNames.Authorization,
                         Description = "Token de autenticação via SSO",
-                        In = SwaggerSecurityApiKeyLocation.Header
+                        In = OpenApiSecurityApiKeyLocation.Header
                     });
                 });
             }
@@ -203,7 +183,7 @@ namespace Wiz.Template.API
 
             if (!env.IsProduction())
             {
-                app.UseSwagger();
+                app.UseOpenApi();
                 app.UseSwaggerUi3();
             }
 
@@ -220,8 +200,6 @@ namespace Wiz.Template.API
             {
                 if (PlatformServices.Default.Application.ApplicationName != "testhost")
                 {
-                    //Para cada sistema de terceiro ou API da Wiz (incluir URL em appsettings.json)
-                    //endpoints.MapHealthChecks("{sistema}", ...);
                     endpoints.MapHealthChecks("/health", new HealthCheckOptions
                     {
                         Predicate = r => r.Tags.Contains("self"),
