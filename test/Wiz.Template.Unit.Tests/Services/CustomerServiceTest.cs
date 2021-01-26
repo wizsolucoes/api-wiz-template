@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wiz.Template.API.Services;
 using Wiz.Template.API.ViewModels.Customer;
+using Wiz.Template.Core.Tests.Mocks;
 using Wiz.Template.Domain.Interfaces.Notifications;
 using Wiz.Template.Domain.Interfaces.Repository;
 using Wiz.Template.Domain.Interfaces.Services;
 using Wiz.Template.Domain.Interfaces.UoW;
 using Wiz.Template.Domain.Models;
 using Wiz.Template.Domain.Models.Dapper;
-using Wiz.Template.Unit.Tests.Mocks;
 using Xunit;
 
 namespace Wiz.Template.Unit.Tests.Services

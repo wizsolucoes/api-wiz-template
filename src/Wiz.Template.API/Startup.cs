@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +19,8 @@ using NSwag.Generation.Processors.Security;
 using Polly;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.IO.Compression;
@@ -34,7 +34,6 @@ using Wiz.Template.API.Middlewares;
 using Wiz.Template.API.Services;
 using Wiz.Template.API.Services.Interfaces;
 using Wiz.Template.API.Settings;
-using Wiz.Template.API.Swagger;
 using Wiz.Template.Domain.Interfaces.Identity;
 using Wiz.Template.Domain.Interfaces.Notifications;
 using Wiz.Template.Domain.Interfaces.Repository;
@@ -47,7 +46,6 @@ using Wiz.Template.Infra.Repository;
 using Wiz.Template.Infra.Services;
 using Wiz.Template.Infra.UoW;
 
-[assembly: ApiConventionType(typeof(MyApiConventions))]
 namespace Wiz.Template.API
 {
     public class Startup
@@ -114,6 +112,7 @@ namespace Wiz.Template.API
                 var healthCheck = services.AddHealthChecksUI(setupSettings: setup =>
                 {
                     setup.DisableDatabaseMigrations();
+                    setup.MaximumHistoryEntriesPerEndpoint(6);
                     setup.AddWebhookNotification("Teams", Configuration["Webhook:Teams"],
                         payload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceDown.json")),
                         restorePayload: File.ReadAllText(Path.Combine(".", "MessageCard", "ServiceRestore.json")),
@@ -156,6 +155,21 @@ namespace Wiz.Template.API
                         Description = "Token de autenticação via SSO",
                         In = OpenApiSecurityApiKeyLocation.Header
                     });
+
+                    document.PostProcess = (configure) => {
+                        configure.Info.TermsOfService = "None";
+                        configure.Info.Contact = new OpenApiContact(){
+                            Name = "Squad",
+                            Email = "squad@xyz.com",
+                            Url = "exemplo.xyz.com"
+                        };
+                        configure.Info.License = new OpenApiLicense(){
+                            Name = "Exemplo",
+                            Url = "exemplo.xyz.com"
+                        };
+                    };
+
+
                 });
             }
 
@@ -255,9 +269,12 @@ namespace Wiz.Template.API
 
             #region Infra
 
-            services.AddDbContext<EntityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
-            services.AddScoped<DapperContext>();
+            if (PlatformServices.Default.Application.ApplicationName != "testhost"){
+                services.AddDbContext<EntityContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
+                services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
+                services.AddScoped<DapperContext>();
+            }
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();

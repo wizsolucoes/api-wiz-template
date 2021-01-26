@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <ProjectGuid>{dc7fde71-e38e-4dbd-8a85-effa3bf95118}</ProjectGuid>
+    <ProjectGuid>{9E49153B-CB6F-40A2-B92B-3D69AEC8C425}</ProjectGuid>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +27,8 @@
     <PackageReference Include="Microsoft.Extensions.Http.Polly" Version="3.1.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.9.4" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.10.1" />
+    <PackageReference Include="NSwag.Annotations" Version="13.10.1" />    
   </ItemGroup>
 
   <ItemGroup>

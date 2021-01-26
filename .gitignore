@@ -338,3 +338,4 @@ tools/
 
 # GitHub Actions
 .github/
+package-lock.json

@@ -31,7 +31,9 @@ namespace Wiz.Template.API.Services
 
         public async Task<IEnumerable<CustomerAddressViewModel>> GetAllAsync()
         {
-            var customers = _mapper.Map<IEnumerable<CustomerAddressViewModel>>(await _customerRepository.GetAllAsync());
+
+            IEnumerable<Wiz.Template.Domain.Models.Dapper.CustomerAddress> customersDb = await _customerRepository.GetAllAsync();
+            var customers = _mapper.Map<IEnumerable<CustomerAddressViewModel>>(customersDb);
 
             foreach (var customer in customers)
             {

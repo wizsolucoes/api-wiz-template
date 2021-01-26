@@ -6,9 +6,9 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Wiz.Template.Core.Tests.Mocks;
 using Wiz.Template.Domain.Models.Services;
 using Wiz.Template.Infra.Services;
-using Wiz.Template.Integration.Tests.Mocks;
 using Xunit;
 
 namespace Wiz.Template.Integration.Tests.Services

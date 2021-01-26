@@ -1,12 +1,12 @@
 ﻿using Bogus;
 using Wiz.Template.Domain.Models.Services;
 
-namespace Wiz.Template.Integration.Tests.Mocks
+namespace Wiz.Template.Core.Tests.Mocks
 {
     public static class ViaCEPMock
     {
         public static Faker<ViaCEP> ViaCEPModelFaker =>
-            new Faker<ViaCEP>()
+            new Faker<ViaCEP>("pt_BR")
             .CustomInstantiator(x => new ViaCEP
             (
                 cep: x.Address.ZipCode(),

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wiz.Template.API.Services.Interfaces;
@@ -24,7 +25,14 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Lista de clientes.
         /// </summary>
-        /// <returns>Clientes.</returns>
+        /// <response code="200">Retorna lista de endereços.</response>
+        /// <response code="400">Erro de requisição.</response>
+        /// <response code="401">Acesso negado.</response>
+        /// <response code="500">Erro interno da API.</response>
+        [ProducesResponseType(typeof(IEnumerable<CustomerAddressViewModel>), 200)]
+        [ProducesResponseType(typeof(ProblemDetails), 400)]
+        [ProducesResponseType(typeof(ProblemDetails), 401)]
+        [ProducesResponseType(typeof(ProblemDetails), 500)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerAddressViewModel>>> GetAll()
         {
@@ -35,7 +43,16 @@ namespace Wiz.Template.API.Controllers
         /// Cliente por Id.
         /// </summary>
         /// <param name="customer">Parâmetro "id" do cliente.</param>
-        /// <returns>Cliente.</returns>
+        /// <response code="200">Retorna endereço.</response>
+        /// <response code="204">Cliente não encontrado.</response>
+        /// <response code="400">Erro de requisição.</response>
+        /// <response code="401">Acesso negado.</response>
+        /// <response code="500">Erro interno da API.</response>
+        [ProducesResponseType(typeof(CustomerAddressViewModel), 200)]
+        [ProducesResponseType(typeof(void), 204)]
+        [ProducesResponseType(typeof(ProblemDetails), 400)]
+        [ProducesResponseType(typeof(ProblemDetails), 401)]
+        [ProducesResponseType(typeof(ProblemDetails), 500)]
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerAddressViewModel>> GetById([FromQuery] CustomerIdViewModel customer)
         {
@@ -43,17 +60,27 @@ namespace Wiz.Template.API.Controllers
 
             if (customerVM == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return Ok(customerVM);
         }
 
+
         /// <summary>
         /// Cliente por nome.
         /// </summary>
         /// <param name="customer">Parâmetro "nome" do cliente.</param>
-        /// <returns>Cliente.</returns>
+        /// <response code="200">Retorna lista de endereços.</response>
+        /// <response code="204">Não encontrado.</response>
+        /// <response code="400">Erro de requisição.</response>
+        /// <response code="401">Acesso negado.</response>
+        /// <response code="500">Erro interno da API.</response>
+        [ProducesResponseType(typeof(IEnumerable<CustomerAddressViewModel>), 200)]
+        [ProducesResponseType(typeof(void), 204)]
+        [ProducesResponseType(typeof(ProblemDetails), 400)]
+        [ProducesResponseType(typeof(ProblemDetails), 401)]
+        [ProducesResponseType(typeof(ProblemDetails), 500)]
         [HttpGet("name/{name}")]
         public async Task<ActionResult<CustomerAddressViewModel>> GetByName([FromQuery] CustomerNameViewModel customer)
         {
@@ -61,7 +88,7 @@ namespace Wiz.Template.API.Controllers
 
             if (customerVM == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return Ok(customerVM);
@@ -71,13 +98,22 @@ namespace Wiz.Template.API.Controllers
         /// Criação de cliente.
         /// </summary>
         /// <param name="customer">Parâmetro "cliente".</param>
-        /// <returns>Cliente criado.</returns>
+        /// <response code="201">Registro criado.</response>
+        /// <response code="204">Cliente não encontrado.</response>
+        /// <response code="400">Erro de requisição.</response>
+        /// <response code="401">Acesso negado.</response>
+        /// <response code="500">Erro interno da API.</response>
+        [ProducesResponseType(typeof(CustomerViewModel), 201)]
+        [ProducesResponseType(typeof(void), 204)]
+        [ProducesResponseType(typeof(ProblemDetails), 400)]
+        [ProducesResponseType(typeof(ProblemDetails), 401)]
+        [ProducesResponseType(typeof(ProblemDetails), 500)]
         [HttpPost]
         public ActionResult<CustomerViewModel> PostCustomer([FromBody] CustomerViewModel customer)
         {
             if (customer == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return Created(nameof(GetByName), _customerService.Add(customer));
@@ -88,7 +124,16 @@ namespace Wiz.Template.API.Controllers
         /// </summary>
         /// <param name="id">Parâmetro "id" do cliente.</param>
         /// <param name="customer">Parâmetro "cliente".</param>
-        /// <returns>Cliente atualizado.</returns>
+        /// <response code="202">Registro criado.</response>
+        /// <response code="204">Cliente não encontrado.</response>
+        /// <response code="400">Erro de requisição.</response>
+        /// <response code="401">Acesso negado.</response>
+        /// <response code="500">Erro interno da API.</response>
+        [ProducesResponseType(typeof(void), 202)]
+        [ProducesResponseType(typeof(void), 204)]
+        [ProducesResponseType(typeof(ProblemDetails), 400)]
+        [ProducesResponseType(typeof(ProblemDetails), 401)]
+        [ProducesResponseType(typeof(ProblemDetails), 500)]
         [HttpPut("{id}")]
         public async Task<ActionResult> PutCustomer(int id, [FromBody] CustomerViewModel customer)
         {
@@ -101,19 +146,28 @@ namespace Wiz.Template.API.Controllers
 
             if (customerVM == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             _customerService.Update(customer);
 
-            return NoContent();
+            return Accepted();
         }
 
         /// <summary>
         /// Exclusão de cliente.
         /// </summary>
         /// <param name="customer">Parâmetro "id" do cliente.</param>
-        /// <returns>Cliente excluido.</returns>
+        /// <response code="202">Registro criado.</response>
+        /// <response code="204">Cliente não encontrado.</response>
+        /// <response code="400">Erro de requisição.</response>
+        /// <response code="401">Acesso negado.</response>
+        /// <response code="500">Erro interno da API.</response>
+        [ProducesResponseType(typeof(void), 202)]
+        [ProducesResponseType(typeof(void), 204)]
+        [ProducesResponseType(typeof(ProblemDetails), 400)]
+        [ProducesResponseType(typeof(ProblemDetails), 401)]
+        [ProducesResponseType(typeof(ProblemDetails), 500)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCustomer([FromQuery] CustomerIdViewModel customer)
         {
@@ -121,12 +175,12 @@ namespace Wiz.Template.API.Controllers
 
             if (customerVM == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             _customerService.Remove(customerVM);
 
-            return NoContent();
+            return Accepted();
         }
     }
 }
