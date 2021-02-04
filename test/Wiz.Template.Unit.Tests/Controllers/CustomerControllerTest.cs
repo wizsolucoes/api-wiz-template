@@ -102,7 +102,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
 
             var actionResult = Assert.IsType<NotFoundResult>(customerService.Result);
 
-            Assert.Equal(StatusCodes.Status404NotFound, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
 
         [Fact]
@@ -133,7 +133,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
 
             var actionResult = Assert.IsType<NotFoundResult>(customerService);
 
-            Assert.Equal(StatusCodes.Status404NotFound, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
 
             var actionResult = Assert.IsType<NoContentResult>(customerService);
 
-            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status202Accepted, actionResult.StatusCode);
         }
 
         [Fact]
@@ -165,7 +165,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
 
             var actionResult = Assert.IsType<NotFoundResult>(customerService);
 
-            Assert.Equal(StatusCodes.Status404NotFound, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
     }
 }

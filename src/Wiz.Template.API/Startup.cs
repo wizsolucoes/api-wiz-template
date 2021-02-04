@@ -80,6 +80,11 @@ namespace Wiz.Template.API
                 options.Authority = Configuration["WizID:Authority"];
                 options.Audience = Configuration["WizID:Audience"];
                 options.RequireHttpsMetadata = false;
+
+                if (PlatformServices.Default.Application.ApplicationName == "testhost"){
+                    options.Configuration = new Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfiguration();
+                }
+
                 options.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = async ctx =>

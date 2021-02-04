@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -58,8 +59,10 @@ namespace Wiz.Template.Core.Tests.Mocks.Factory
                         ValidateIssuer = false,
                         ValidateLifetime = false,
                         ValidateIssuerSigningKey = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
                     };
+
+                    options.Configuration = new OpenIdConnectConfiguration();
                 });
 
             return services.BuildServiceProvider();

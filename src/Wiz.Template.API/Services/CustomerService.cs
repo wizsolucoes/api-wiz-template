@@ -31,20 +31,16 @@ namespace Wiz.Template.API.Services
 
         public async Task<IEnumerable<CustomerAddressViewModel>> GetAllAsync()
         {
-
-            IEnumerable<Wiz.Template.Domain.Models.Dapper.CustomerAddress> customersDb = await _customerRepository.GetAllAsync();
-            var customers = _mapper.Map<IEnumerable<CustomerAddressViewModel>>(customersDb);
+            var customers = _mapper.Map<IEnumerable<CustomerAddressViewModel>>(await _customerRepository.GetAllAsync(););
 
             foreach (var customer in customers)
             {
                 var address = await _viaCEPService.GetByCEPAsync(customer.CEP);
-
                 customer.Address.Id = customer.AddressId;
                 customer.Address.Street = address?.Street;
                 customer.Address.StreetFull = address?.StreetFull;
                 customer.Address.UF = address?.UF;
             }
-
             return customers;
         }
 
