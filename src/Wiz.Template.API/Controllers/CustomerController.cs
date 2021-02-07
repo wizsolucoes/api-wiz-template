@@ -113,6 +113,7 @@ namespace Wiz.Template.API.Controllers
         {
             if (customer == null)
             {
+                //teste
                 return NoContent();
             }
 

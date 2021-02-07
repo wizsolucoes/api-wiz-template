@@ -23,6 +23,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Moq" Version="4.15.2" />
+    <PackageReference Include="ReportGenerator" Version="4.8.5 " />
     <PackageReference Include="RestAssured" Version="1.0.0" />
   </ItemGroup>
 
@@ -30,4 +31,10 @@
     <ProjectReference Include="..\Wiz.Template.Core.Tests\Wiz.Template.Core.Tests.csproj" />  
   </ItemGroup>
 
+  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
+    <ItemGroup>
+      <CoverageFiles Include="..\*\opencovertests.xml" />
+    </ItemGroup>
+    <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="../code_coverage" ReportTypes="Html;lcov;Badges" />
+  </Target>
 </Project>

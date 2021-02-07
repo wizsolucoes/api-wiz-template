@@ -31,7 +31,7 @@ namespace Wiz.Template.API.Services
 
         public async Task<IEnumerable<CustomerAddressViewModel>> GetAllAsync()
         {
-            var customers = _mapper.Map<IEnumerable<CustomerAddressViewModel>>(await _customerRepository.GetAllAsync(););
+            var customers = _mapper.Map<IEnumerable<CustomerAddressViewModel>>(await _customerRepository.GetAllAsync());
 
             foreach (var customer in customers)
             {

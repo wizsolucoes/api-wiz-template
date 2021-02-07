@@ -100,7 +100,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = customerController.PostCustomer(customer);
 
-            var actionResult = Assert.IsType<NotFoundResult>(customerService.Result);
+            var actionResult = Assert.IsType<NoContentResult>(customerService.Result);
 
             Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
@@ -131,7 +131,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.PutCustomer(customer.Id, customer);
 
-            var actionResult = Assert.IsType<NotFoundResult>(customerService);
+            var actionResult = Assert.IsType<NoContentResult>(customerService);
 
             Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
@@ -150,7 +150,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.DeleteCustomer(customerId);
 
-            var actionResult = Assert.IsType<NoContentResult>(customerService);
+            var actionResult = Assert.IsType<AcceptedResult>(customerService);
 
             Assert.Equal(StatusCodes.Status202Accepted, actionResult.StatusCode);
         }
@@ -163,7 +163,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.DeleteCustomer(customerId);
 
-            var actionResult = Assert.IsType<NotFoundResult>(customerService);
+            var actionResult = Assert.IsType<NoContentResult>(customerService);
 
             Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }

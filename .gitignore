@@ -40,6 +40,7 @@ Generated\ Files/
 *.VisualState.xml
 TestResult.xml
 lcov.info
+opencovertests.xml
 
 # Build Results of an ATL Project
 [Dd]ebugPS/

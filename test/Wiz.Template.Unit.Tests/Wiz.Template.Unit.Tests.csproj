@@ -19,6 +19,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="Moq" Version="4.15.2" />
+    <PackageReference Include="ReportGenerator" Version="4.8.5 " />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <PrivateAssets>all</PrivateAssets>
@@ -30,7 +31,7 @@
     <ProjectReference Include="..\..\src\Wiz.Template.API\Wiz.Template.API.csproj" />
     <ProjectReference Include="..\..\src\Wiz.Template.Domain\Wiz.Template.Domain.csproj" />
     <ProjectReference Include="..\..\src\Wiz.Template.Infra\Wiz.Template.Infra.csproj" />
-    <ProjectReference Include="..\Wiz.Template.Core.Tests\Wiz.Template.Core.Tests.csproj" />  
+    <ProjectReference Include="..\Wiz.Template.Core.Tests\Wiz.Template.Core.Tests.csproj" /> 
   </ItemGroup>
 
   <ItemGroup>
@@ -38,4 +39,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
+    <ItemGroup>
+      <CoverageFiles Include="..\*\opencovertests.xml" />
+    </ItemGroup>
+    <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="../code_coverage" ReportTypes="Html;lcov;Badges" />
+  </Target>
 </Project>
