@@ -1,23 +1,20 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Wiz.Template.API.ViewModels.Address;
 
 namespace Wiz.Template.API.ViewModels.Customer
 {
     public class CustomerAddressViewModel
     {
-        public CustomerAddressViewModel()
-        {
-            Address = new AddressViewModel();
-        }
-
-        public CustomerAddressViewModel(int id, int addressId, string name, DateTime dateCreated, string cep)
+        [JsonConstructor]
+        public CustomerAddressViewModel(int id, int addressId, string name, DateTime dateCreated, string cep, AddressViewModel address)
         {
             Id = id;
             AddressId = addressId;
             Name = name;
             DateCreated = dateCreated;
             CEP = cep;
-            Address = new AddressViewModel();
+            Address = address ?? new AddressViewModel(addressId, cep,null,null,null);
         }
 
         public int Id { get; set; }

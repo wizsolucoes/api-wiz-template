@@ -5,8 +5,6 @@ namespace Wiz.Template.API.ViewModels.Customer
 {
     public class CustomerIdViewModel
     {
-        public CustomerIdViewModel() { }
-
         public CustomerIdViewModel(int id)
         {
             Id = id;

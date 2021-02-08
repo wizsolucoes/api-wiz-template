@@ -13,8 +13,20 @@ namespace Wiz.Template.API.AutoMapper
         {
             #region Customer
 
-            CreateMap<CustomerAddress, CustomerAddressViewModel>();
-            CreateMap<Customer, CustomerViewModel>().ReverseMap();
+            CreateMap<CustomerAddress, CustomerAddressViewModel>()
+                .ConstructUsing(s => new CustomerAddressViewModel(
+                    s.Id,
+                    s.AddressId, 
+                    s.Name, 
+                    s.DateCreated, 
+                    s.CEP, 
+                    null));
+            CreateMap<Customer, CustomerViewModel>()
+                .ConstructUsing(s=> new CustomerViewModel(
+                    s.Id,
+                    s.AddressId,
+                    s.Name
+                )).ReverseMap();
 
             #endregion
         }

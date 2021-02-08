@@ -1,11 +1,11 @@
 ﻿using System;
-using Dapper;
+using Newtonsoft.Json;
 
 namespace Wiz.Template.Domain.Models.Dapper
 {
     public class CustomerAddress
     {
-        //[ExplicitConstructor]
+
         public CustomerAddress(int id, int addressId, string name, DateTime dateCreated, string cep)
         {
             Id = id;

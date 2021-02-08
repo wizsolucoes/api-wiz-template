@@ -13,12 +13,6 @@ namespace Wiz.Template.Domain.Models
             Name = name;
         }
 
-        public Customer(int addressId, string name)
-        {
-            AddressId = addressId;
-            Name = name;
-        }
-
         public int Id { get; private set; }
         public int AddressId { get; private set; }
         public string Name { get; private set; }

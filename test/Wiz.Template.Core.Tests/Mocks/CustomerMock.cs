@@ -60,7 +60,8 @@ namespace Wiz.Template.Core.Tests.Mocks
                 addressId: x.Random.Number(1, 10),
                 name: x.Person.FullName,
                 dateCreated: x.Date.Past(),
-                cep: x.Address.ZipCode()
+                cep: x.Address.ZipCode(),
+                address: AddressMock.AddressViewModelFaker
             ));
 
     }

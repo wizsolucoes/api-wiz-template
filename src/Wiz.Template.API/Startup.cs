@@ -63,10 +63,10 @@ namespace Wiz.Template.API
         {
             IdentityModelEventSource.ShowPII = true;
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddMvc(options =>
             {
-                options.Filters.Add<DomainNotificationFilter>();
+                options.Filters.Add<DomainNotificationFilter>(); 
                 options.EnableEndpointRouting = false;
             }).AddJsonOptions(options =>
             {
