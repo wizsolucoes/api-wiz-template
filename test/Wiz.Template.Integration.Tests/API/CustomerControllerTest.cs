@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Moq;
+﻿using Moq;
 using Newtonsoft.Json;
-using System.Data;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,11 +8,11 @@ using Wiz.Template.Core.Tests.Mocks;
 using Wiz.Template.Core.Tests.Mocks.Factory;
 using Wiz.Template.Domain.Models.Dapper;
 using Xunit;
-using System.Linq;
 using System.Collections.Generic;
 using Dapper;
 using System.Text;
 using Moq.Dapper;
+using Wiz.Template.Core.Tests.Mocks.Fixture;
 
 namespace Wiz.Template.Integration.Tests.API
 {

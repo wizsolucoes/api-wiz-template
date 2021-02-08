@@ -10,12 +10,13 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using Wiz.Template.Core.Tests.Mocks.Factory;
 using Wiz.Template.Infra.Context;
 
 
-namespace Wiz.Template.Core.Tests.Mocks.Factory
+namespace Wiz.Template.Core.Tests.Mocks.Fixture
 {
-    public class MockWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup>
+    public class MockWebApplicationFixture<TStartup> : WebApplicationFactory<TStartup>
          where TStartup : class
     {
         private static readonly Lazy<IServiceProvider> LazyServiceProvider = new Lazy<IServiceProvider>();

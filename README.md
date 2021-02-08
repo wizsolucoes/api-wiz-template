@@ -148,13 +148,13 @@ Por padrão, todo projeto executado no **Visual Studio Code** é executado via *
   ├── launch.json
 ```
 
-3. Utilizar a função **task** para executar ações dentro do projeto. A função está presente no caminho do *menu* abaixo:
+3. Utilizar a função **task** (ctrl + shift + p) para executar ações dentro do projeto. A função está presente no caminho do *menu* abaixo:
 
 ```console
 Terminal -> Run Task
 ```
 
-4. Selecionar a função **task** a ser executada no projeto:
+4. Selecionar a função **task** (ctrl + shift + p) a ser executada no projeto:
 
 - *clean* - Limpar solução
 - *restore* - Restaurar pacotes da solução
@@ -183,8 +183,10 @@ Padrão das camadas do projeto:
 1. **Wiz.[NomeProjeto].Domain**: domínio da aplicação, responsável de manter as *regras de negócio* para a API;
 2. **Wiz.[NomeProjeto].Infra**: camada mais baixa, para acesso a dados, infraestrutura e serviços externos;
 3. **Wiz.[NomeProjeto].API**: responsável pela camada de *disponibilização* dos endpoints da API;
-4. **Wiz.[NomeProjeto].Integration.Tests**: responsável pela camada de *testes de integração* dos projetos.
-5. **Wiz.[NomeProjeto].Unit.Tests**: responsável pela camada de *testes unitários* dos projetos.
+4. **Wiz.[NomeProjeto].Contract.Tests**: responsável pela camada de *testes de contrato* dos projetos.
+5. **Wiz.[NomeProjeto].Core.Tests**: responsável por receber objetos mocks, builders e fixtures para ajudar na criação dos testes.
+6. **Wiz.[NomeProjeto].Integration.Tests**: responsável pela camada de *testes de integração* dos projetos.
+7. **Wiz.[NomeProjeto].Unit.Tests**: responsável pela camada de *testes unitários* dos projetos.
 
 Formatação do projeto dentro do repositório:
 
@@ -194,6 +196,8 @@ Formatação do projeto dentro do repositório:
   ├── Wiz.[NomeProjeto].Infra (projeto)
   ├── Wiz.[NomeProjeto].API (projeto)
 ├── test
+  ├── Wiz.[NomeProjeto].Contract.Tests (projeto)
+  ├── Wiz.[NomeProjeto].Core.Tests (projeto)
   ├── Wiz.[NomeProjeto].Integration.Tests (projeto)
   ├── Wiz.[NomeProjeto].Unit.Tests (projeto)
 ├── Wiz.[NomeProjeto] (solução)
@@ -203,7 +207,6 @@ Há possibilidade de inclusão do projeto de testes do tipo **Aceitação (e2e)*
 
 ## Dependências
 
-- [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.2)
 - [Patterns RESTful](http://standards.rest/)
 
 ## Build e testes
@@ -225,57 +228,17 @@ As funcionalidades **Live Unit Testing** e **Code Coverage** estão disponíveis
 
 ### **Build com Visual Studio Code**
 
-1. Executar **task** de teste desejada:
+1. Instalar o pacote [DevZ - Back-end Pack
+](https://marketplace.visualstudio.com/items?itemName=WizSolucoes.devz-back-end-pack)
+
+2. Executar **task** (ctrl + shift + p) e digite **Run Test Task**:
 
 - *test* - Executar projeto de testes
 - *test with coverage* - Executar projeto de testes com cobertura
 
-2. Ativar **Watch** na parte inferior do Visual Studio Code para habilitar cores nas classes que descrevem a cobertura. É necessário executar os testes no modo *test with coverage*.
+3. Ativar **Watch** na parte inferior do Visual Studio Code para habilitar cores nas classes que descrevem a cobertura. É necessário executar os testes no modo *test with coverage*.
 
-### **Code Coverage**
-
-Comandos para geração de relatório de testes:
-
-- **PowerShell (Windows):**
-
-  1. Abrir pasta *scripts/coverage*;
-
-  2. Executar comando:
-  
-  ```sh
-  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
-  
-  ```
-
-  3. Executar testes e relatório de testes:
-  
-  ```sh
-  .\code_coverage.ps1
-  ```
-  
-- **Shell (Linux/Mac):**
-  
-  1. Abrir pasta *scripts/coverage*;
-
-  2. Executar testes e relatório de testes:
-  
-  ```sh
-  sh code_coverage.sh
-  ```
-
-O relatório dos testes são gerados na pasta **code_coverage** localizada na raiz do projeto.
-
-### **Sonar**
-
-1. Dentro do arquivo dos projetos **(.csproj)** no campo **PropertyGroup**, é necessário adicionar um GUID no formato abaixo:
-
-```xml
-<PropertyGroup>
-  <ProjectGuid>{b5c970c2-a7cc-4052-b07b-b599b83fc621}</ProjectGuid>
-</PropertyGroup>
-```
-
-2. O GUID pode ser coletado no arquivo da solution ou criado pelo site: https://www.guidgenerator.com/.
+4. O relatório dos testes são gerados na pasta **test\code_coverage** localizada na raiz do projeto.
 
 ## NuGet privado
 
