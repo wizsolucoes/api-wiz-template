@@ -2,8 +2,6 @@
 {
     public class AddressViewModel
     {
-        public AddressViewModel() { }
-
         public AddressViewModel(int id, string cep, string street, string streetFull, string uf)
         {
             Id = id;

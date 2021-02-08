@@ -12,9 +12,9 @@ namespace Wiz.Template.Infra.Context
             {
                 var addresses = new List<Address>()
                 {
-                    new Address(cep: "17052520"),
-                    new Address(cep: "44573100"),
-                    new Address(cep: "50080490")
+                    new Address().AddCep("17052520"),
+                    new Address().AddCep("17052520"),
+                    new Address().AddCep("17052520")
                 };
 
                 context.AddRange(addresses);
@@ -27,9 +27,9 @@ namespace Wiz.Template.Infra.Context
 
                 var customers = new List<Customer>()
                 {
-                    new Customer(addressId: addresses.First(x => x.CEP == "17052520").Id, name: "Zier Zuveiku"),
-                    new Customer(addressId: addresses.First(x => x.CEP == "44573100").Id, name: "Vikehel Pleamakh"),
-                    new Customer(addressId: addresses.First(x => x.CEP == "50080490").Id, name: "Diuor PleaBolosmakh")
+                    new Customer(id: 0, addressId: addresses.First(x => x.CEP == "17052520").Id, name: "Zier Zuveiku"),
+                    new Customer(id: 0, addressId: addresses.First(x => x.CEP == "44573100").Id, name: "Vikehel Pleamakh"),
+                    new Customer(id: 0, addressId: addresses.First(x => x.CEP == "50080490").Id, name: "Diuor PleaBolosmakh")
                 };
 
                 context.AddRange(customers);

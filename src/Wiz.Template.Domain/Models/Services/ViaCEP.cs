@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Wiz.Template.Domain.Models.Services
 {
@@ -14,13 +15,13 @@ namespace Wiz.Template.Domain.Models.Services
             UF = uf;
         }
 
-        [JsonPropertyName("cep")]
+        [JsonProperty("cep")]
         public string CEP { get; set; }
-        [JsonPropertyName("logradouro")]
+        [JsonProperty("logradouro")]
         public string Street { get; set; }
-        [JsonPropertyName("complemento")]
+        [JsonProperty("complemento")]
         public string StreetFull { get; set; }
-        [JsonPropertyName("uf")]
+        [JsonProperty("uf")]
         public string UF { get; set; }
     }
 }

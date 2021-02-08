@@ -17,10 +17,25 @@ namespace Wiz.Template.Infra.Services
 
         public async Task<ViaCEP> GetByCEPAsync(string cep)
         {
-            var response = await _httpClient.GetAsync($"{cep}/json");
-            var stringResponse = await response.Content.ReadAsStringAsync();
+            ViaCEP result = null;
 
-            return JsonSerializer.Deserialize<ViaCEP>(stringResponse);
+            HttpResponseMessage response = await _httpClient.GetAsync($"{cep}/json", HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+
+            try
+            {
+                if (response.Content is object)
+                {
+                    var stream = await response.Content.ReadAsStreamAsync();
+                    result = await JsonSerializer.DeserializeAsync<ViaCEP>(stream);
+                }
+            }
+            finally
+            {
+                response.Dispose();
+            }
+
+            return result;
         }
     }
 }

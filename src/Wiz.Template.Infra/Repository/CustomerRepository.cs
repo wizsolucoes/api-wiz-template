@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Wiz.Template.Domain.Interfaces.Repository;
 using Wiz.Template.Domain.Models;
@@ -20,12 +21,12 @@ namespace Wiz.Template.Infra.Repository
 
         public async Task<IEnumerable<CustomerAddress>> GetAllAsync()
         {
-            var query = @"SELECT c.Id, a.Id AS AddressId, c.Name, c.DateCreated, a.CEP
+            var query = @"SELECT c.Id AS id, a.Id AS addressId, c.Name AS name, c.DateCreated AS dateCreated, a.CEP AS cep
                             FROM dbo.Customer c
                             INNER JOIN dbo.Address a
-                            ON c.AddressId = a.Id";
+                            ON c.addressId = a.Id";
 
-            return await _dapperContext.DapperConnection.QueryAsync<CustomerAddress>(query);
+            return await _dapperContext.DapperConnection.QueryAsync<CustomerAddress>(query,null,null,null,null);
         }
 
         public async Task<Customer> GetByIdAsync(int id)
@@ -45,18 +46,18 @@ namespace Wiz.Template.Infra.Repository
                           ON c.AddressId = a.Id
                           WHERE c.Id = @Id";
 
-            return await _dapperContext.DapperConnection.QueryFirstOrDefaultAsync<CustomerAddress>(query, new { Id = id });
+            return (await _dapperContext.DapperConnection.QueryAsync<CustomerAddress>(query, new { Id = id })).FirstOrDefault();
         }
 
         public async Task<CustomerAddress> GetByNameAsync(string name)
         {
-            var query = @"SELECT c.Id, a.Id AS AddressId, c.Name, c.DateCreated, a.CEP
+            var query = @"SELECT c.Id AS id, a.Id AS addressId, c.Name AS name, c.DateCreated AS dateCreated, a.CEP AS cep
                           FROM dbo.Customer c
                           INNER JOIN dbo.Address a
-                          ON c.AddressId = a.Id
+                          ON c.addressId = a.Id
                           WHERE c.Name = @Name";
 
-            return await _dapperContext.DapperConnection.QueryFirstOrDefaultAsync<CustomerAddress>(query, new { Name = name });
+            return (await _dapperContext.DapperConnection.QueryAsync<CustomerAddress>(query, new { Name = name })).FirstOrDefault();
         }
     }
 }

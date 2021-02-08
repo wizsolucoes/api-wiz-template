@@ -2,10 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
+using Wiz.Template.Core.Tests.Mocks;
+using Wiz.Template.Core.Tests.Mocks.Factory;
 using Wiz.Template.Infra.Context;
 using Wiz.Template.Infra.Repository;
 using Wiz.Template.Infra.UoW;
-using Wiz.Template.Integration.Tests.Mocks;
 using Xunit;
 
 namespace Wiz.Template.Integration.Tests.Repository
@@ -33,7 +34,7 @@ namespace Wiz.Template.Integration.Tests.Repository
 
             var entityContext = new EntityContext(_entityOptions);
             var unitOfWork = new UnitOfWork(entityContext);
-            var dapperContext = new DapperContext(_configurationMock.Object);
+            var dapperContext = new DapperContext(MockRepositoryBuilder.GetMockDbConnection().Object);
             var customerRepository = new CustomerRepository(entityContext, dapperContext);
 
             customerRepository.Add(customer);

@@ -5,8 +5,6 @@ namespace Wiz.Template.API.ViewModels.Customer
 {
     public class CustomerNameViewModel
     {
-        public CustomerNameViewModel() { }
-
         public CustomerNameViewModel(string name)
         {
             Name = name;

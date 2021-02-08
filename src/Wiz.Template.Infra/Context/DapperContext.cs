@@ -1,23 +1,24 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace Wiz.Template.Infra.Context
 {
     public class DapperContext
     {
-        private readonly IConfiguration _configuration;
+        private readonly DbConnection _conn;
 
-        public DapperContext(IConfiguration configuration)
+        public DapperContext(DbConnection conn)
         {
-            _configuration = configuration;
+            _conn = conn;
         }
 
-        public IDbConnection DapperConnection
+        public DbConnection DapperConnection
         {
             get
             {
-                return new SqlConnection(_configuration["ConnectionStrings:CustomerDB"]);
+                return _conn;
             }
         }
     }

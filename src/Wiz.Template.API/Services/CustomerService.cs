@@ -36,13 +36,11 @@ namespace Wiz.Template.API.Services
             foreach (var customer in customers)
             {
                 var address = await _viaCEPService.GetByCEPAsync(customer.CEP);
-
                 customer.Address.Id = customer.AddressId;
                 customer.Address.Street = address?.Street;
                 customer.Address.StreetFull = address?.StreetFull;
                 customer.Address.UF = address?.UF;
             }
-
             return customers;
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Wiz.Template.API.Controllers;
 using Wiz.Template.API.Services.Interfaces;
 using Wiz.Template.API.ViewModels.Customer;
-using Wiz.Template.Unit.Tests.Mocks;
+using Wiz.Template.Core.Tests.Mocks;
 using Xunit;
 
 namespace Wiz.Template.Unit.Tests.Controllers
@@ -23,8 +23,7 @@ namespace Wiz.Template.Unit.Tests.Controllers
         [Fact]
         public async Task GetAll_SucessTestAsync()
         {
-            _customerServiceMock.Setup(x => x.GetAllAsync())
-                .ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate(3));
+            _customerServiceMock.Setup(x => x.GetAllAsync()).ReturnsAsync(CustomerMock.CustomerAddressViewModelFaker.Generate(3));
 
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.GetAll();
@@ -101,9 +100,9 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = customerController.PostCustomer(customer);
 
-            var actionResult = Assert.IsType<NotFoundResult>(customerService.Result);
+            var actionResult = Assert.IsType<NoContentResult>(customerService.Result);
 
-            Assert.Equal(StatusCodes.Status404NotFound, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
 
         [Fact]
@@ -132,9 +131,9 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.PutCustomer(customer.Id, customer);
 
-            var actionResult = Assert.IsType<NotFoundResult>(customerService);
+            var actionResult = Assert.IsType<NoContentResult>(customerService);
 
-            Assert.Equal(StatusCodes.Status404NotFound, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
 
         [Fact]
@@ -151,9 +150,9 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.DeleteCustomer(customerId);
 
-            var actionResult = Assert.IsType<NoContentResult>(customerService);
+            var actionResult = Assert.IsType<AcceptedResult>(customerService);
 
-            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status202Accepted, actionResult.StatusCode);
         }
 
         [Fact]
@@ -164,9 +163,9 @@ namespace Wiz.Template.Unit.Tests.Controllers
             var customerController = new CustomerController(_customerServiceMock.Object);
             var customerService = await customerController.DeleteCustomer(customerId);
 
-            var actionResult = Assert.IsType<NotFoundResult>(customerService);
+            var actionResult = Assert.IsType<NoContentResult>(customerService);
 
-            Assert.Equal(StatusCodes.Status404NotFound, actionResult.StatusCode);
+            Assert.Equal(StatusCodes.Status204NoContent, actionResult.StatusCode);
         }
     }
 }
