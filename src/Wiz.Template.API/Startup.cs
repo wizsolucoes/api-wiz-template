@@ -66,7 +66,7 @@ namespace Wiz.Template.API
             services.AddControllers().AddNewtonsoftJson();
             services.AddMvc(options =>
             {
-                options.Filters.Add<DomainNotificationFilter>(); 
+                options.Filters.Add<DomainNotificationFilter>();
                 options.EnableEndpointRouting = false;
             }).AddJsonOptions(options =>
             {
@@ -81,7 +81,8 @@ namespace Wiz.Template.API
                 options.Audience = Configuration["WizID:Audience"];
                 options.RequireHttpsMetadata = false;
 
-                if (PlatformServices.Default.Application.ApplicationName == "testhost"){
+                if (PlatformServices.Default.Application.ApplicationName == "testhost")
+                {
                     options.Configuration = new Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfiguration();
                 }
 
@@ -161,14 +162,17 @@ namespace Wiz.Template.API
                         In = OpenApiSecurityApiKeyLocation.Header
                     });
 
-                    document.PostProcess = (configure) => {
+                    document.PostProcess = (configure) =>
+                    {
                         configure.Info.TermsOfService = "None";
-                        configure.Info.Contact = new OpenApiContact(){
+                        configure.Info.Contact = new OpenApiContact()
+                        {
                             Name = "Squad",
                             Email = "squad@xyz.com",
                             Url = "exemplo.xyz.com"
                         };
-                        configure.Info.License = new OpenApiLicense(){
+                        configure.Info.License = new OpenApiLicense()
+                        {
                             Name = "Exemplo",
                             Url = "exemplo.xyz.com"
                         };
@@ -183,9 +187,10 @@ namespace Wiz.Template.API
             services.AddApplicationInsightsTelemetry();
 
             this.RegisterServices(services);
+            this.RegisterDatabaseServices(services);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationInsightsSettings> options)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationInsightsSettings> options)
         {
             if (!env.IsProduction())
             {
@@ -257,7 +262,7 @@ namespace Wiz.Template.API
                         ));
         }
 
-        private void RegisterServices(IServiceCollection services)
+        protected virtual void RegisterServices(IServiceCollection services)
         {
             services.Configure<ApplicationInsightsSettings>(Configuration.GetSection("ApplicationInsights"));
 
@@ -274,18 +279,24 @@ namespace Wiz.Template.API
 
             #region Infra
 
-            if (PlatformServices.Default.Application.ApplicationName != "testhost"){
-                services.AddDbContext<EntityContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
-                services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
-                services.AddScoped<DapperContext>();
-            }
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IIdentityService, IdentityService>();
 
             #endregion
+        }
+
+        protected virtual void RegisterDatabaseServices(IServiceCollection services)
+        {
+            // if (PlatformServices.Default.Application.ApplicationName != "testhost")
+            // {
+                services.AddDbContext<EntityContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
+                services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
+                services.AddScoped<DapperContext>();
+            // }
         }
     }
 }

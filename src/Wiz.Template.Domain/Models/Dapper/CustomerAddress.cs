@@ -6,6 +6,9 @@ namespace Wiz.Template.Domain.Models.Dapper
     public class CustomerAddress
     {
 
+        public CustomerAddress(){
+            
+        }
         public CustomerAddress(int id, int addressId, string name, DateTime dateCreated, string cep)
         {
             Id = id;

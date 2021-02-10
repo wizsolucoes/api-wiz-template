@@ -238,7 +238,7 @@ As funcionalidades **Live Unit Testing** e **Code Coverage** estão disponíveis
 
 3. Ativar **Watch** na parte inferior do Visual Studio Code para habilitar cores nas classes que descrevem a cobertura. É necessário executar os testes no modo *test with coverage*.
 
-4. O relatório dos testes são gerados na pasta **test\code_coverage** localizada na raiz do projeto.
+4. O relatório dos testes são gerados automaticamente na pasta **code_coverage** localizada na pasta **test** sempre que for executado o comando a task *test with coverage*.
 
 ## NuGet privado
 
@@ -268,7 +268,6 @@ Tools -> NuGet Package Manager -> Package Sources
 ## CI/CD
 
 - Arquivo de configuração padrão: [azure-pipelines.yml](azure-pipelines.yml).
-- Caso há necessidade de incluir mais *tasks* ao pipeline, verfique a documentação para inclusão: [Azure DevOps - Yaml Schema](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema).
 
 ## README
 

@@ -6,9 +6,13 @@ namespace Wiz.Template.Domain.Models
     {
         protected Customer() { }
 
-        public Customer(int id, int addressId, string name)
+        public Customer(int id, int addressId, string name) : this(addressId, name)
         {
             Id = id;
+        }
+
+        public Customer(int addressId, string name)
+        {
             AddressId = addressId;
             Name = name;
         }

@@ -7,7 +7,7 @@ namespace Wiz.Template.Infra.UoW
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly EntityContext _entityContext;
+        public readonly EntityContext _entityContext;
         private IDbContextTransaction _transaction;
 
         public UnitOfWork(EntityContext entityContext)
