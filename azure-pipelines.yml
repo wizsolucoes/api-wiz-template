@@ -4,6 +4,12 @@ resources:
       type: git
       name: WizPipelines/core-template
 
+trigger:
+  branches:
+    exclude: [ 'refs/heads/feature/*' ] # nomes de branchs que não irão rodar o pipeline
+  paths:
+    exclude: [ 'README.md' ] # caminhos de arquivos que não irão rodar o pipeline
+
 extends:
   template: main.yml@coretemplate
   parameters:
