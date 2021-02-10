@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
-    <ProjectGuid>{57f893d6-179d-46eb-9784-73ec42b5ead4}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +20,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="Moq" Version="4.15.2" />
+    <PackageReference Include="NJsonSchema" Version="10.3.3" />
     <PackageReference Include="ReportGenerator" Version="4.8.5 " />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -46,7 +46,7 @@
     <ItemGroup>
       <CoverageFiles Include="..\*\opencovertests.xml" />
     </ItemGroup>
-    <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="../code_coverage" ReportTypes="Html;lcov;Badges" HistoryDirectory="../code_coverage/history" />
+    <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="../code_coverage" ReportTypes="HtmlInline_AzurePipelines;lcov;Badges" HistoryDirectory="../code_coverage/history" />
   </Target>
 
 </Project>

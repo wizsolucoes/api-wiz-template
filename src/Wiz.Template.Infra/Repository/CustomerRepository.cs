@@ -35,7 +35,7 @@ namespace Wiz.Template.Infra.Repository
                           FROM dbo.Customer c
                           WHERE c.Id = @Id";
 
-            return await _dapperContext.DapperConnection.QueryFirstOrDefaultAsync<Customer>(query, new { Id = id });
+            return (await _dapperContext.DapperConnection.QueryAsync<Customer>(query, new { Id = id })).FirstOrDefault();
         }
 
         public async Task<CustomerAddress> GetAddressByIdAsync(int id)

@@ -18,7 +18,7 @@ namespace Wiz.Template.API.Extensions
 
                 context.Database.Migrate();
 
-                new EntityContextSeed().SeedInitial(context);
+                new EntityContextSeed(context);
             }
 
             return host;

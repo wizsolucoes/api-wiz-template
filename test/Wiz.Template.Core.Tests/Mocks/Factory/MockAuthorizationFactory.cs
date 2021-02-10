@@ -19,29 +19,22 @@ namespace Wiz.Template.Core.Tests.Mocks.Factory
 
         private static string GerarTokenJWT(IEnumerable<Claim> claims)
         {
-            try
-            {
-                IConfiguration configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile($"appsettings.{PlatformServices.Default.Application.ApplicationName}.json")
-                    .Build();
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile($"appsettings.{PlatformServices.Default.Application.ApplicationName}.json")
+                .Build();
 
-                var issuer = configuration["WizID:Authority"];
-                var audience = configuration["WizID:Audience"];
-                var expiry = DateTime.Now.AddMinutes(300);
-                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("only_test#Desta maneira, o desenvolvimento contínuo de distintas formas de atuação promove a alavancagem das condições inegavelmente apropriadas.#only_test"));
-                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-                var token = new JwtSecurityToken(issuer: issuer, audience: audience,
-    expires: expiry, signingCredentials: credentials, claims: claims);
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var stringToken = tokenHandler.WriteToken(token);
-                return stringToken;
+            var issuer = configuration["WizID:Authority"];
+            var audience = configuration["WizID:Audience"];
+            var expiry = DateTime.Now.AddMinutes(300);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("only_test#Desta maneira, o desenvolvimento contínuo de distintas formas de atuação promove a alavancagem das condições inegavelmente apropriadas.#only_test"));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(issuer: issuer, audience: audience,
+expires: expiry, signingCredentials: credentials, claims: claims);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var stringToken = tokenHandler.WriteToken(token);
+            return stringToken;
 
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
 

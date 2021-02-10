@@ -111,7 +111,7 @@ namespace Wiz.Template.API.Controllers
         [HttpPost]
         public ActionResult<CustomerViewModel> PostCustomer([FromBody] CustomerViewModel customer)
         {
-            if (customer == null)
+            if (customer == null || string.IsNullOrWhiteSpace(customer.Name))
             {
                 //teste
                 return NoContent();

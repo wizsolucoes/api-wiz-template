@@ -51,7 +51,8 @@ namespace Wiz.Template.API.Services
 
         public async Task<CustomerAddressViewModel> GetAddressByIdAsync(CustomerIdViewModel customerVM)
         {
-            var customer = _mapper.Map<CustomerAddressViewModel>(await _customerRepository.GetAddressByIdAsync(customerVM.Id));
+            var teste =  await _customerRepository.GetAddressByIdAsync(customerVM.Id);
+            var customer = _mapper.Map<CustomerAddressViewModel>(teste);
 
             if (customer != null)
             {
