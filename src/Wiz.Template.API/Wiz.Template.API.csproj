@@ -46,3 +46,4 @@
     <Exec Command="npm install" ConsoleToMsBuild="true" />
   </Target>
 </Project>
+  

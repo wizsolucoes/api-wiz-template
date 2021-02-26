@@ -3,7 +3,10 @@ using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using System;
+using System.Buffers;
 using System.IO;
+using System.IO.Pipelines;
 using System.Text;
 using System.Threading.Tasks;
 using Wiz.Template.API.Settings;
@@ -43,16 +46,49 @@ namespace Wiz.Template.API.Middlewares
         {
             var body = string.Empty;
 
-            request.EnableBuffering(bufferThreshold: 1024 * 45, bufferLimit: 1024 * 100);
-
-            using (var reader = new StreamReader(request.Body, Encoding.UTF8, true, 1024, true))
+            if (!request.ContentType.Contains("multipart/form-data", StringComparison.InvariantCultureIgnoreCase))
             {
-                body = await reader.ReadToEndAsync();
+                request.EnableBuffering(bufferThreshold: 1024 * 64);
+
+                body = await GetStringFromPipeReader(request.BodyReader);
+
+                request.Body.Seek(0, SeekOrigin.Begin);
+            }
+            else
+            {
+                body = "multipart/form-data";
             }
 
-            request.Body.Position = 0;
-
             return body;
+        }
+
+        private async Task<string> GetStringFromPipeReader(PipeReader reader)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            while (true)
+            {
+                ReadResult read = await reader.ReadAsync();
+                ReadOnlySequence<byte> buffer = read.Buffer;
+
+                if (buffer.IsEmpty && read.IsCompleted)
+                    break;
+
+                foreach (var segment in buffer)
+                {
+                    string asciString = Encoding.UTF8.GetString(
+                        segment.Span);
+                    stringBuilder.Append(asciString);
+                }
+
+                reader.AdvanceTo(buffer.End);
+
+                if (read.IsCompleted)
+                {
+                    break;
+                }
+
+            }
+            return Convert.ToString(stringBuilder);
         }
     }
 }
