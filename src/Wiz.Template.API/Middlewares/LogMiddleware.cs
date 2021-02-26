@@ -45,11 +45,19 @@ namespace Wiz.Template.API.Middlewares
         private async Task<string> FormatRequestBody(HttpRequest request)
         {
             var body = string.Empty;
-            request.EnableBuffering(bufferThreshold: 1024 * 64);
 
-            body = await GetStringFromPipeReader(request.BodyReader);
- 
-            request.Body.Seek(0, SeekOrigin.Begin);
+            if (!request.ContentType.Contains("multipart/form-data", StringComparison.InvariantCultureIgnoreCase))
+            {
+                request.EnableBuffering(bufferThreshold: 1024 * 64);
+
+                body = await GetStringFromPipeReader(request.BodyReader);
+
+                request.Body.Seek(0, SeekOrigin.Begin);
+            }
+            else
+            {
+                body = "multipart/form-data";
+            }
 
             return body;
         }
@@ -82,7 +90,5 @@ namespace Wiz.Template.API.Middlewares
             }
             return Convert.ToString(stringBuilder);
         }
-
-
     }
 }
