@@ -16,6 +16,13 @@
     "language": "C#",
     "type": "project"
   },
+  "guids":[
+    "{dc7fde71-e38e-4dbd-8a85-effa3bf95118}",
+    "{8a368471-b92b-4be3-808d-04ed5ea09c5e}",
+    "{8ec2f830-9398-42d7-a6d7-9d79e2a9df5e}",
+    "{57f893d6-179d-46eb-9784-73ec42b5ead4}",
+    "{44075a6a-df5d-4a2e-aaab-71628feb9770}"
+  ],
   "sourceName": "Template",
   "preferNameDirectory": false,
   "symbols": {
