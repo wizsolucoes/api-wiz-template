@@ -341,3 +341,4 @@ tools/
 .github/
 package-lock.json
 openapitest.json
+package-lock.json
