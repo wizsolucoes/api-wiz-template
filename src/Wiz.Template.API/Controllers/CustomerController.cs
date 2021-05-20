@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NSwag.Annotations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wiz.Template.API.Services.Interfaces;
@@ -10,6 +11,7 @@ namespace Wiz.Template.API.Controllers
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Produces("application/json")]
     [Route("api/v1/customers")]
+    [OpenApiTag("Customer")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
@@ -22,6 +24,9 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Lista de clientes.
         /// </summary>
+        /// <remarks>
+        /// Retorna uma lista com todos os clientes
+        /// </remarks>
         /// <response code="200">Retorna lista de endereços.</response>
         /// <response code="400">Erro de requisição.</response>
         /// <response code="401">Acesso negado.</response>
@@ -39,6 +44,9 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Cliente por Id.
         /// </summary>
+        /// <remarks>
+        /// Retorna cliente pelo Id
+        /// </remarks>
         /// <param name="customer">Parâmetro "id" do cliente.</param>
         /// <response code="200">Retorna endereço.</response>
         /// <response code="204">Cliente não encontrado.</response>
@@ -67,6 +75,9 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Cliente por nome.
         /// </summary>
+        /// <remarks>
+        /// Retorna cliente pelo nome
+        /// </remarks>
         /// <param name="customer">Parâmetro "nome" do cliente.</param>
         /// <response code="200">Retorna lista de endereços.</response>
         /// <response code="204">Não encontrado.</response>
@@ -94,6 +105,9 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Criação de cliente.
         /// </summary>
+        /// <remarks>
+        /// Cria um novo cliente
+        /// </remarks>
         /// <param name="customer">Parâmetro "cliente".</param>
         /// <response code="201">Registro criado.</response>
         /// <response code="204">Cliente não encontrado.</response>
@@ -120,6 +134,9 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Atualização de cliente.
         /// </summary>
+        /// <remarks>
+        /// Atualiza um cliente
+        /// </remarks>
         /// <param name="id">Parâmetro "id" do cliente.</param>
         /// <param name="customer">Parâmetro "cliente".</param>
         /// <response code="202">Registro criado.</response>
@@ -155,6 +172,9 @@ namespace Wiz.Template.API.Controllers
         /// <summary>
         /// Exclusão de cliente.
         /// </summary>
+        /// <remarks>
+        /// Exclui um cliente
+        /// </remarks>
         /// <param name="customer">Parâmetro "id" do cliente.</param>
         /// <response code="202">Registro criado.</response>
         /// <response code="204">Cliente não encontrado.</response>
