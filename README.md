@@ -20,7 +20,7 @@ Passos para execução do projeto:
 3. Executar os seguintes comandos;
 
   > *dotnet new -i Wiz.Dotnet.Template.API --nuget-source https://api.nuget.org/v3/index.json*
-    *dotnet new wizapi -n [NomeProjeto]*
+  > *dotnet new wizapi -n [NomeProjeto]*
 
 4. Executar comando para configurar aplicação em modo **(HTTPS)**;
 
