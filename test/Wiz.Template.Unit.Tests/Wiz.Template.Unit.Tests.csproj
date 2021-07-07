@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <ProjectGuid>{44075a6a-df5d-4a2e-aaab-71628feb9770}</ProjectGuid>
   </PropertyGroup>

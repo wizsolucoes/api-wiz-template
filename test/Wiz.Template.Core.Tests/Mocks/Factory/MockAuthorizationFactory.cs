@@ -34,7 +34,6 @@ expires: expiry, signingCredentials: credentials, claims: claims);
             var tokenHandler = new JwtSecurityTokenHandler();
             var stringToken = tokenHandler.WriteToken(token);
             return stringToken;
-
         }
 
 

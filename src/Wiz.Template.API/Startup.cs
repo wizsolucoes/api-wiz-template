@@ -62,7 +62,7 @@ namespace Wiz.Template.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            IdentityModelEventSource.ShowPII = true;            
+            IdentityModelEventSource.ShowPII = true;
             services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
@@ -98,6 +98,7 @@ namespace Wiz.Template.API
 
                 options.Events = new JwtBearerEvents
                 {
+                    #pragma warning disable CS1998
                     OnTokenValidated = async ctx =>
                     {
                         var jwtClaimScope = ctx.Principal.Claims.FirstOrDefault(x => x.Type == "scope")?.Value;
@@ -112,6 +113,7 @@ namespace Wiz.Template.API
                         ctx.Principal.AddIdentity(claimsIdentity);
                         ctx.Success();
                     }
+                    #pragma warning restore CS1998
                 };
             });
 
@@ -300,13 +302,10 @@ namespace Wiz.Template.API
 
         protected virtual void RegisterDatabaseServices(IServiceCollection services)
         {
-            // if (PlatformServices.Default.Application.ApplicationName != "testhost")
-            // {
-                services.AddDbContext<EntityContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
-                services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
-                services.AddScoped<DapperContext>();
-            // }
+            services.AddDbContext<EntityContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
+            services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
+            services.AddScoped<DapperContext>();
         }
     }
 }
