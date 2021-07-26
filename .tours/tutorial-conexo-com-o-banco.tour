@@ -1,0 +1,50 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Tutorial conexão com o banco",
+  "steps": [
+    {
+      "title": "Introdução",
+      "description": "Seja muito bem vindo a Wiz!\r\n\r\nCertifique-se de ter instalado o pacote de extensões, caso ainda não o tenha segue o link https://github.com/wizsolucoes/vscode-devz-back-end-pack\r\n\r\nArquitetura de desenvolvimento\r\n\r\nPadrão das camadas do projeto:\r\n\r\nWiz.[NomeProjeto].Domain: domínio da aplicação, responsável de manter as regras de negócio para a API;\r\n\r\nWiz.[NomeProjeto].Infra: camada mais baixa, para acesso a dados, infraestrutura e serviços externos;\r\n\r\nWiz.[NomeProjeto].API: responsável pela camada de disponibilização dos endpoints da API;\r\n\r\nWiz.[NomeProjeto].Contract.Tests: responsável pela camada de testes de contrato dos projetos.\r\n\r\nWiz.[NomeProjeto].Core.Tests: responsável por receber objetos mocks, builders e fixtures para ajudar na criação dos testes.\r\n\r\nWiz.[NomeProjeto].Integration.Tests: responsável pela camada de testes de integração dos projetos.\r\n\r\nWiz.[NomeProjeto].Unit.Tests: responsável pela camada de testes unitários dos projetos.\r\n\r\nNeste breve tutorial seguiremos os passos necessários para a conexão com o banco de dados.\r\n\r\nSua Aplicação está quase pronta siga o passo a passo e construa algo incrível!!!\r\n\r\nClick em \"Next\" para avançar para o próximo passo!"
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.API/Startup.cs",
+      "description": "Remova:\r\n\r\noptions => options.UseSqlServer(Configuration.GetConnectionString(\"CustomerDb));\r\n\r\nO resultado deverá ser este:\r\n\r\nservices.AddDbContext< EntityContext >();\r\n\r\nClick em \"Next\" para avançar para o próximo passo!",
+      "line": 305
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.Infra/Context/EntityContext.cs",
+      "description": "Inserir Construtor sem parâmetros.\r\n\r\nObs: Não remova o construtor atual!\r\n\r\nClick em \"Next\" para avançar para o próximo passo!",
+      "line": 11
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.Infra/Context/EntityContext.cs",
+      "description": "Você precisará sobreescrever o método OnConfiguring() da classe DbContext:\r\n\r\nprotected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)\r\n\r\n{\r\n\r\n          optionsBuilder.UseSqlite(\"Data Source:Teste.db\");\r\n\r\n\r\n         base.OnConfiguring(optionsBuilder);\r\n\r\n}\r\n\r\nAgora vamos para as ConnectionsStrings nos arquivos appsettings.[\"Ambientes\"].json no assembly wiz.Wiz.Api.API\r\n\r\nClick em \"Next\" para avançar para o próximo passo!",
+      "line": 22
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.API/appsettings.Development.json",
+      "description": "Inserir configuração do banco para este ambiente.\r\n\r\nClick em \"Next\" para avançar!",
+      "line": 9
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.API/appsettings.Production.json",
+      "description": "Inserir configuração do banco para este ambiente.\r\n\r\nClick em \"Next\" para avançar!",
+      "line": 9
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.API/appsettings.Staging.json",
+      "description": "Inserir configuração do banco para este ambiente.\r\n\r\nClick em \"Next\" para avançar!",
+      "line": 9
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.API/appsettings.testhost.json",
+      "description": "Inserir configuração do banco para este ambiente.\r\n\r\nClick em \"Next\" para avançar!",
+      "line": 16
+    },
+    {
+      "file": "api-wiz-template/src/Wiz.Template.Infra/Wiz.Template.Infra.csproj",
+      "description": "Por último, mas não menos importante, você deverá fazer referência ao \"EntityFrameworkCore.Design\".\r\n\r\nSua aplicação está pronta!\r\n\r\nAgora abra o terminal e digite os comandos:\r\n\r\ndotnet restore\r\n\r\n*Nota: Certifique-se de estar no diretório \"api-wiz-template\" para restaurar tudo.\r\n\r\nE depois:\r\n\r\ndotnet \"run\" \"--project\" \"c:\\Users[\"usuário\"]\\Desktop.NetCore\\Projeto_1\\src\\Wiz.Wiz.Api.API\\Wiz.Wiz.Api.API.csproj\"",
+      "line": 13
+    }
+  ]
+}
