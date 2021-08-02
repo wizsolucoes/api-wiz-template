@@ -15,20 +15,20 @@ namespace Wiz.Template.API.Middlewares
 {
     public class ErrorHandlerMiddleware
     {
-        private readonly ApplicationInsightsSettings _applicationInsights;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly TelemetryClient _telemetry;
 
         public ErrorHandlerMiddleware(IOptions<ApplicationInsightsSettings> options, IWebHostEnvironment webHostEnvironment)
         {
-            _applicationInsights = options.Value;
             _webHostEnvironment = webHostEnvironment;
+            _telemetry = new TelemetryClient(new TelemetryConfiguration(options.Value.InstrumentationKey));
         }
 
         public async Task Invoke(HttpContext context)
         {
-            var telemetry = new TelemetryClient(new TelemetryConfiguration(_applicationInsights.InstrumentationKey));
+            
 
-            telemetry.Context.Operation.Id = Guid.NewGuid().ToString();
+            _telemetry.Context.Operation.Id = Guid.NewGuid().ToString();
 
             var ex = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
@@ -37,7 +37,7 @@ namespace Wiz.Template.API.Middlewares
                 return;
             }
 
-            telemetry.TrackException(ex);
+            _telemetry.TrackException(ex);
 
             var problemDetails = new ProblemDetails
             {
