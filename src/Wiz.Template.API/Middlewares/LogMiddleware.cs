@@ -17,26 +17,25 @@ namespace Wiz.Template.API.Middlewares
     public class LogMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ApplicationInsightsSettings _applicationInsights;
+        private readonly TelemetryClient _telemetry;
 
         public LogMiddleware(RequestDelegate next, IOptions<ApplicationInsightsSettings> options)
         {
             _next = next;
-            _applicationInsights = options.Value;
+            _telemetry = new TelemetryClient(new TelemetryConfiguration(options.Value.InstrumentationKey));
         }
 
         public async Task Invoke(HttpContext context, IIdentityService identityService)
         {
             var method = context.Request.Method;
-            var telemetry = new TelemetryClient(new TelemetryConfiguration(_applicationInsights.InstrumentationKey));
 
-            telemetry.TrackTrace(new TraceTelemetry(identityService.GetScope(), SeverityLevel.Information));
+            _telemetry.TrackTrace(new TraceTelemetry(identityService.GetScope(), SeverityLevel.Information));
 
             if (HttpMethods.IsPost(method) || HttpMethods.IsPut(method) || HttpMethods.IsPatch(method))
             {
                 var body = await FormatRequestBody(context.Request);
 
-                telemetry.TrackTrace(new TraceTelemetry(body, SeverityLevel.Information));
+                _telemetry.TrackTrace(new TraceTelemetry(body, SeverityLevel.Information));
             }
 
             await _next(context);
