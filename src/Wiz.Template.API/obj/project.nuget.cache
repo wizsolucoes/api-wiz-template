@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "MjY31NldIvkZMecpoDh8vN4nGE311FxopYCSaI0Zrn0d0RkYWQsJhR4IK2CMx6eHEWhAa19T+yafwov6OoD9Ow==",
+  "success": true,
+  "projectFilePath": "D:\\git\\api-wiz-template-4\\src\\Wiz.Template.API\\Wiz.Template.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\juscelioreis\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\juscelioreis\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\juscelioreis\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\juscelioreis\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\juscelioreis\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\juscelioreis\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+  ],
+  "logs": []
+}
