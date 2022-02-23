@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Am7dOZ/ln5eHYF45CKdE7Ruh9y9SlU0q5VLA6dgdJDrwRWeW4NNy5DvotTs+wbwuGUUg+q6r5lKtCpyWv/5Iiw==",
+  "dgSpecHash": "/u6ObhZM2hYloaKTxjxo9brNgRn7nPo1va7v4kykVxHhRVyTVzfAzKjqUyjexkgwviznfyDcp08WobkRzzs6CA==",
   "success": true,
-  "projectFilePath": "D:\\git\\api-wiz-template-4\\src\\Wiz.Template.Domain\\Wiz.Template.Domain.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\bernardocosta\\Desktop\\api-wiz-template\\src\\Wiz.Template.Domain\\Wiz.Template.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bernardocosta\\.nuget\\packages\\fluentvalidation\\10.3.6\\fluentvalidation.10.3.6.nupkg.sha512",
+    "C:\\Users\\bernardocosta\\.nuget\\packages\\valueof\\2.0.27\\valueof.2.0.27.nupkg.sha512"
+  ],
   "logs": []
 }
