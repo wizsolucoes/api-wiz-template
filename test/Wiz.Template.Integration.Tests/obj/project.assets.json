@@ -2592,7 +2592,7 @@
       ]
     },
     "runtime.opensuse.42.1-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "KeLz4HClKf+nFS7p/6Fi/CqyLXh81FpiGzcmuS8DGi9lUqSnZ6Es23/gv2O+1XVGfrbNmviF7CckBpavkBoIFQ==",
+      "sha512": "G2+96gYRbzp1JZCID6B+u2XJ0bs2wCubd6rE3+Tj436dKfnciF7YgsLi2VvLeJq6kxYyU4IJrVrpCvC8Yf6bhA==",
       "type": "package",
       "path": "runtime.opensuse.42.1-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -2632,7 +2632,7 @@
       ]
     },
     "runtime.rhel.7-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "nyFNiCk/r+VOiIqreLix8yN+q3Wga9+SE8BCgkf+2BwEKiNx6DyvFjCgkfV743/grxv8jHJ8gUK4XEQw7yzRYg==",
+      "sha512": "T5NvFgmHX0WH4c7lP72krsnk+IJI10vJf2j2twGE+5QBRA4RyRAgD+ZjEgdmpLOjW4B+nZGaadewTCUcR899OQ==",
       "type": "package",
       "path": "runtime.rhel.7-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -2645,7 +2645,7 @@
       ]
     },
     "runtime.ubuntu.14.04-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
-      "sha512": "ytoewC6wGorL7KoCAvRfsgoJPJbNq+64k2SqW6JcOAebWsFUvCCYgfzQMrnpvPiEl4OrblUlhF2ji+Q1+SVLrQ==",
+      "sha512": "JGc0pAWRE8lB4Ucygk2pYSKbUPLlAIq6Bczf5/WF2D/VKJEPtYlVUMxk8fbl1zRfTWzSHi+VcFZlaPlWiNxeKg==",
       "type": "package",
       "path": "runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl/4.3.0",
       "files": [
@@ -5910,24 +5910,27 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\juscelioreis\\.nuget\\packages\\": {},
+    "C:\\Users\\bernardocosta\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\git\\api-wiz-template-4\\test\\Wiz.Template.Integration.Tests\\Wiz.Template.Integration.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\bernardocosta\\Desktop\\api-wiz-template\\test\\Wiz.Template.Integration.Tests\\Wiz.Template.Integration.Tests.csproj",
       "projectName": "Wiz.Template.Integration.Tests",
-      "projectPath": "D:\\git\\api-wiz-template-4\\test\\Wiz.Template.Integration.Tests\\Wiz.Template.Integration.Tests.csproj",
-      "packagesPath": "C:\\Users\\juscelioreis\\.nuget\\packages\\",
-      "outputPath": "D:\\git\\api-wiz-template-4\\test\\Wiz.Template.Integration.Tests\\obj\\",
+      "projectPath": "C:\\Users\\bernardocosta\\Desktop\\api-wiz-template\\test\\Wiz.Template.Integration.Tests\\Wiz.Template.Integration.Tests.csproj",
+      "packagesPath": "C:\\Users\\bernardocosta\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\bernardocosta\\Desktop\\api-wiz-template\\test\\Wiz.Template.Integration.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\juscelioreis\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\bernardocosta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -5935,7 +5938,7 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {},
-        "https://wizsolucoes.pkgs.visualstudio.com/_packaging/WizCross/nuget/v3/index.json": {}
+        "https://pkgs.dev.azure.com/wizsolucoes/_packaging/wizcross/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
@@ -5989,7 +5992,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }
