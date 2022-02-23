@@ -10,6 +10,11 @@ namespace Wiz.Template.Domain.Entities
         public int TemperatureF { get => 32 + (int)(TemperatureC.Value / 0.5556); }
         public string? Summary { get; private set; }
 
+        public Example() : base(default)
+        {
+            //
+        }
+
         private Example(ExampleDTO dto) : base(dto.Id)
         {
             Date = dto.Date;

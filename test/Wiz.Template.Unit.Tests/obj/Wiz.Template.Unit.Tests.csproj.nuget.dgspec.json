@@ -393,6 +393,10 @@
               "target": "Package",
               "version": "[16.11.0, )"
             },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.16.1, )"
+            },
             "ValueOf": {
               "target": "Package",
               "version": "[2.0.27, )"
