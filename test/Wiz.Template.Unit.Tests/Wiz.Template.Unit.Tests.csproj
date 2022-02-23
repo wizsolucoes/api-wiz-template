@@ -8,7 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.1" />
+    <PackageReference Include="FluentAssertions" Version="6.5.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="ValueOf" Version="2.0.27" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -18,6 +21,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Wiz.Template.API\Wiz.Template.API.csproj" />
+    <ProjectReference Include="..\..\src\Wiz.Template.Infra\Wiz.Template.Infra.csproj" />
+    <ProjectReference Include="..\..\src\Wiz.Template.Domain\Wiz.Template.Domain.csproj" />
+    <ProjectReference Include="..\Wiz.Template.Shared\Wiz.Template.Shared.csproj" />
   </ItemGroup>
 
 </Project>
