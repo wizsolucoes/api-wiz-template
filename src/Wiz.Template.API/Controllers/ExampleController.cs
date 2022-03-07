@@ -1,25 +1,25 @@
 using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Wiz.Template.API.ViewModels.Exemple;
+using Wiz.Template.API.ViewModels.Example;
 
 namespace Wiz.Template.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     [Produces("application/json")]
-    public class ExempleController : ControllerBase
+    public class ExampleController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<ExempleController> _logger;
+        private readonly ILogger<ExampleController> _logger;
         private readonly IMediator _mediator;
 
-        public ExempleController(
-            ILogger<ExempleController> logger,
+        public ExampleController(
+            ILogger<ExampleController> logger,
             IMediator mediator
         )
         {
@@ -33,12 +33,12 @@ namespace Wiz.Template.API.Controllers
         /// <returns>Um exemplo básico de resposta em JSON.</returns>
         /// <response code="200">Retorno esperado da API.</response>
         /// <response code="500">Erro interno no servidor.</response>
-        [HttpGet(Name = "GetExemple")]
+        [HttpGet(Name = "GetExample")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public IEnumerable<ResponseExempleViewModel> Get()
+        public IEnumerable<ResponseExampleViewModel> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new ResponseExempleViewModel
+            return Enumerable.Range(1, 5).Select(index => new ResponseExampleViewModel
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
@@ -58,14 +58,14 @@ namespace Wiz.Template.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<ResponseExempleViewModel>> GetMediatR(
+        public async Task<ActionResult<ResponseExampleViewModel>> GetMediatR(
             [FromBody] RequestExampleViewModel request
         )
         {
             return (await _mediator.Send(request))
-                .Match<ActionResult<ResponseExempleViewModel>>(
+                .Match<ActionResult<ResponseExampleViewModel>>(
                     example => Ok(
-                        new ResponseExempleViewModel
+                        new ResponseExampleViewModel
                         {
                             Date = example.Date,
                             TemperatureC = example.TemperatureC.Value,
@@ -74,6 +74,28 @@ namespace Wiz.Template.API.Controllers
                     ),
                     NotFound()
                 );
+        }
+
+        /// <summary>
+        /// Exemplo de documentação de parâmetro de rota em endpoint.
+        /// </summary>
+        /// <param name="param">Parâmetro de exemplo.</param>
+        /// <remarks>
+        /// Exemplo de requisição:
+        ///
+        ///     GET Example/route/param/lorem%20ipsum
+        ///
+        /// </remarks>
+        /// <returns>Não possui retorno.</returns>
+        /// <response code="204">Nada é retornado.</response>
+        [HttpGet("route/{param}", Name = "Docs Route Param Example")]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public IActionResult GetRouteParam(
+            [FromRoute] string param
+        )
+        {
+            return NoContent();
         }
     }
 }

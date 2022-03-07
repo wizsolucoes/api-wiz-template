@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Wiz.Template.API.Controllers;
-using Wiz.Template.API.ViewModels.Exemple;
+using Wiz.Template.API.ViewModels.Example;
 using Wiz.Template.Domain.Entities;
 using Wiz.Template.Shared.Mocks;
 using Xunit;
@@ -14,15 +14,15 @@ namespace Wiz.Template.Unit.Tests.API.Controllers
 {
     public class ExampleControllerTest
     {
-        private readonly Mock<ILogger<ExempleController>> _logger;
+        private readonly Mock<ILogger<ExampleController>> _logger;
         private readonly Mock<IMediator> _mediator;
-        private readonly ExempleController _controller;
+        private readonly ExampleController _controller;
 
         public ExampleControllerTest()
         {
-            _logger = new Mock<ILogger<ExempleController>>();
+            _logger = new Mock<ILogger<ExampleController>>();
             _mediator = new Mock<IMediator>();
-            _controller = new ExempleController(
+            _controller = new ExampleController(
                 _logger.Object,
                 _mediator.Object
             );
@@ -45,7 +45,7 @@ namespace Wiz.Template.Unit.Tests.API.Controllers
             var result = await _controller.GetMediatR(request);
 
             // Assert
-            result.Should().BeOfType<ActionResult<ResponseExempleViewModel>>();
+            result.Should().BeOfType<ActionResult<ResponseExampleViewModel>>();
             result.Result.Should().BeOfType<OkObjectResult>();
         }
 
@@ -66,7 +66,7 @@ namespace Wiz.Template.Unit.Tests.API.Controllers
             var result = await _controller.GetMediatR(request);
 
             // Assert
-            result.Should().BeOfType<ActionResult<ResponseExempleViewModel>>();
+            result.Should().BeOfType<ActionResult<ResponseExampleViewModel>>();
             result.Result.Should().BeOfType<NotFoundResult>();
         }
     }

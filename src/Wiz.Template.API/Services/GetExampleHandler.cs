@@ -1,6 +1,6 @@
 using LanguageExt;
 using MediatR;
-using Wiz.Template.API.ViewModels.Exemple;
+using Wiz.Template.API.ViewModels.Example;
 using Wiz.Template.Domain.DTOs;
 using Wiz.Template.Domain.Entities;
 

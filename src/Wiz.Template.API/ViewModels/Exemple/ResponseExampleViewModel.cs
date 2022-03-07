@@ -1,6 +1,6 @@
-namespace Wiz.Template.API.ViewModels.Exemple
+namespace Wiz.Template.API.ViewModels.Example
 {
-    public class ResponseExempleViewModel
+    public class ResponseExampleViewModel
     {
         /// <summary>
         /// Data da verificação

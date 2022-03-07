@@ -1,10 +1,10 @@
 using LanguageExt;
 using MediatR;
-using Wiz.Template.Domain.Entities;
 
-namespace Wiz.Template.API.ViewModels.Exemple
+namespace Wiz.Template.API.ViewModels.Example
 {
-    public class RequestExampleViewModel : IRequest<Option<Example>>
+    public class RequestExampleViewModel :
+        IRequest<Option<Wiz.Template.Domain.Entities.Example>>
     {
         /// <summary>
         /// Data de verificação da previsão do tempo
