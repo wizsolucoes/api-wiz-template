@@ -11,25 +11,25 @@
 
 ## Roadmap de melhorias
 
-- [ ] Incluir exemplos de como usar o [MediatR](https://github.com/jbogard/MediatR) no nosso template.
+- [x] Incluir exemplos de como usar o [MediatR](https://github.com/jbogard/MediatR) no nosso template.
 - [ ] Incluir um exemplo de repository sem precisar implementar a interface do Dapper.
 - [ ] Criar artigo explicando o beneficio de usar o mapeamento (Code first).
 - [ ] Criar artigo mostrando um benchmark comparando o [Dapper.SimpleCRUD](https://github.com/ericdc1/Dapper.SimpleCRUD) com o Entity Framework Core.
 - [ ] Criar um exemplo usando a extensão do Dapper utilizada em algumas squads da Wiz.
-- [ ] Criar pasta para incluir tutoriais e instruçoes para utilizar o template.
-- [ ] Remover Entity migration do tempalte.
+- [ ] Criar pasta para incluir tutoriais e instruções para utilizar o template.
+- [ ] Remover Entity migration do template.
 - [ ] Adicionar um artigo de como adicionar o Entity migration na API.
-- [ ] Alterar a nomeclatura das classes Service que estão no projeto Wiz.Template.Infra para HttpService.
-- [ ] Padronizar a nomeclatura da ViewModel para Request...ViewModel e Response...ViewModel.
-- [ ] Adicionar no tempalte exemplo de como trabalhar com cache distribuido (ex: redis).
+- [ ] Alterar a nomenclatura das classes Service que estão no projeto Wiz.Template.Infra para HttpService.
+- [x] Padronizar a nomenclatura da ViewModel para Request...ViewModel e Response...ViewModel.
+- [ ] Adicionar no template exemplo de como trabalhar com cache distribuído (ex: redis).
 - [ ] Atualizar os arquivos dockers para o dotnet 6.
-- [ ] Atualizar as ViewModel para incluir exemplo de como adicionar uma descrição no Swagger.
-- [ ] Adicionar exemplo de como trabalhar com processamento assincrono.
+- [x] Atualizar as ViewModel para incluir exemplo de como adicionar uma descrição no Swagger.
+- [ ] Adicionar exemplo de como trabalhar com processamento assíncrono.
 - [ ] Criar artigo mostrando como trabalhar com Azure Service Bus.
 - [ ] Criar artigo mostrando como trabalhar com Envio de email.
 - [ ] Criar artigo mostrando como trabalhar com geração de pdf.
 - [ ] Criar artigo mostrando como trabalhar com logs da aplicação.
-- [ ] Toda classe do template que for somente para axiliar o desenvolvedor com exemplos, deve começar com o nome Exemple. Indicando que pode ser excluida do projeto com segurança antes de enviar para homologação e produção.
+- [ ] Toda classe do template que for somente para auxiliar o desenvolvedor com exemplos, deve começar com o nome Example. Indicando que pode ser excluída do projeto com segurança antes de enviar para homologação e produção.
 
 ## Desenvolvimento, por onde começar
 
@@ -54,7 +54,7 @@ Padrão das camadas do projeto:
 Formatação do projeto dentro do repositório:
 
 ```console
-├── src 
+├── src
   ├── Wiz.[NomeProjeto].API (projeto)
   ├── Wiz.[NomeProjeto].Domain (projeto)
   ├── Wiz.[NomeProjeto].Infra (projeto)
