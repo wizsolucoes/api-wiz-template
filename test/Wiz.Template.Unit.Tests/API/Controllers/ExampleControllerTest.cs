@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Wiz.Template.API.Controllers;
-using Wiz.Template.API.ViewModels.Example;
+using Wiz.Template.API.ViewModels.ExampleViewModels;
 using Wiz.Template.Domain.Entities;
 using Wiz.Template.Shared.Mocks;
 using Xunit;
@@ -69,6 +69,48 @@ namespace Wiz.Template.Unit.Tests.API.Controllers
             // Assert
             result.Should().BeOfType<ActionResult<ResponseExampleViewModel>>();
             result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async void Deve_Retornar_StatusCode_Created_Ao_Criar_Novo_Example()
+        {
+            // Arrange
+            var request = ExampleMock.RequestCreateExampleViewModelFaker;
+
+            _mediator.Setup(
+                x => x.Send<Option<Example>>(
+                    It.IsAny<RequestCreateExampleViewModel>(),
+                    default
+                )
+            ).ReturnsAsync(ExampleMock.ExampleFaker.Generate());
+
+            // Act
+            var result = await _controller.CreateExample(request);
+
+            // Assert
+            result.Should().BeOfType<ActionResult<ResponseExampleViewModel>>();
+            result.Result.Should().BeOfType<CreatedResult>();
+        }
+
+        [Fact]
+        public async void Deve_Retornar_StatusCode_BadRequest_Ao_Criar_Novo_Example()
+        {
+            // Arrange
+            var request = ExampleMock.RequestCreateExampleViewModelFaker;
+
+            _mediator.Setup(
+                x => x.Send<Option<Example>>(
+                    It.IsAny<RequestCreateExampleViewModel>(),
+                    default
+                )
+            ).ReturnsAsync(Option<Example>.None);
+
+            // Act
+            var result = await _controller.CreateExample(request);
+
+            // Assert
+            result.Should().BeOfType<ActionResult<ResponseExampleViewModel>>();
+            result.Result.Should().BeOfType<BadRequestResult>();
         }
 
         [Fact]

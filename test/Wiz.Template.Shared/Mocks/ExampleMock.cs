@@ -1,6 +1,6 @@
 using System;
 using Bogus;
-using Wiz.Template.API.ViewModels.Example;
+using Wiz.Template.API.ViewModels.ExampleViewModels;
 using Wiz.Template.Domain.Entities;
 using Wiz.Template.Domain.ValueObjects;
 
@@ -20,5 +20,10 @@ namespace Wiz.Template.Shared.Mocks
                 f => Celsius.From(f.Random.Int(-100, 100))
             )
             .RuleFor(x => x.Summary, "Mild");
+
+        public static Faker<RequestCreateExampleViewModel> RequestCreateExampleViewModelFaker =>
+            new Faker<RequestCreateExampleViewModel>()
+                .RuleFor(x => x.TemperatureC, f => f.Random.Int(-100, 100))
+                .RuleFor(x => x.Summary, "Mild");
     }
 }
