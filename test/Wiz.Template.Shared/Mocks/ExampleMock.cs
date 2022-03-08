@@ -1,6 +1,6 @@
 using System;
 using Bogus;
-using Wiz.Template.API.ViewModels.Exemple;
+using Wiz.Template.API.ViewModels.Example;
 using Wiz.Template.Domain.Entities;
 using Wiz.Template.Domain.ValueObjects;
 

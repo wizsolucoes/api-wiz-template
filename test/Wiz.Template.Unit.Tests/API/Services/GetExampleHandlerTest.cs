@@ -3,7 +3,7 @@ using FluentAssertions;
 using LanguageExt;
 using MediatR;
 using Wiz.Template.API.Services;
-using Wiz.Template.API.ViewModels.Exemple;
+using Wiz.Template.API.ViewModels.Example;
 using Wiz.Template.Domain.Entities;
 using Wiz.Template.Shared.Mocks;
 using Xunit;
