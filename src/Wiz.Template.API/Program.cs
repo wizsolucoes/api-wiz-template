@@ -3,14 +3,21 @@ using Wiz.Template.API.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddMediatRApi();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerDocument();
 
+builder.Services.AddHealthCheckApi(builder.Configuration);
+
+builder.Services.AddDatabaseService(builder.Configuration);
+builder.Services.AddRepositoriesServices();
+
 var app = builder.Build();
+
+app.AddHealthCheckEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

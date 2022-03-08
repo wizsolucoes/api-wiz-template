@@ -22,9 +22,21 @@ namespace Wiz.Template.Domain.Entities
             Summary = dto.Summary;
         }
 
+        private Example(int temperatureC, string summary) : base(default)
+        {
+            Date = DateTime.Now;
+            TemperatureC = Celsius.From(temperatureC);
+            Summary = summary;
+        }
+
         public static Example From(ExampleDto dto)
         {
             return new Example(dto);
+        }
+
+        public static Example From(int temperatureC, string summary)
+        {
+            return new Example(temperatureC, summary);
         }
     }
 }

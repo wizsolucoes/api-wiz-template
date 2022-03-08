@@ -1,7 +1,7 @@
 using LanguageExt;
 using MediatR;
 
-namespace Wiz.Template.API.ViewModels.Example
+namespace Wiz.Template.API.ViewModels.ExampleViewModels
 {
     public class RequestExampleViewModel :
         IRequest<Option<Wiz.Template.Domain.Entities.Example>>

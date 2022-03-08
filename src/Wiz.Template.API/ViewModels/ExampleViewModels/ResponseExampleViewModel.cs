@@ -1,4 +1,4 @@
-namespace Wiz.Template.API.ViewModels.Example
+namespace Wiz.Template.API.ViewModels.ExampleViewModels
 {
     public class ResponseExampleViewModel
     {

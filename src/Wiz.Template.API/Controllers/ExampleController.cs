@@ -1,7 +1,7 @@
 using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Wiz.Template.API.ViewModels.Example;
+using Wiz.Template.API.ViewModels.ExampleViewModels;
 
 namespace Wiz.Template.API.Controllers
 {
@@ -77,6 +77,36 @@ namespace Wiz.Template.API.Controllers
         }
 
         /// <summary>
+        /// Cria uma nova entrada de temperatura (exemplo) no banco de dados.
+        /// </summary>
+        /// <param name="request">Exemplo de temperatura.</param>
+        /// <returns code="201">Exemplo de temperatura criada.</returns>
+        /// <returns code="400">Exemplo de temperatura inválida.</returns>
+        /// <returns code="500">Erro interno do servidor.</returns>
+        [HttpPost(Name = "Criar exemplo de temperatura")]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<ResponseExampleViewModel>> CreateExample(
+            [FromBody] RequestCreateExampleViewModel request
+        )
+        {
+            return (await _mediator.Send(request))
+                .Match<ActionResult<ResponseExampleViewModel>>(
+                    example => Created(
+                        $"api/v1/Example/{example.Id}",
+                        new ResponseExampleViewModel
+                        {
+                            Date = example.Date,
+                            TemperatureC = example.TemperatureC.Value,
+                            Summary = example.Summary
+                        }
+                    ),
+                    BadRequest()
+                );
+        }
+
+        /// <summary>
         /// Exemplo de documentação de parâmetro de rota em endpoint.
         /// </summary>
         /// <param name="param">Parâmetro de exemplo.</param>
@@ -88,6 +118,7 @@ namespace Wiz.Template.API.Controllers
         /// </remarks>
         /// <returns>Não possui retorno.</returns>
         /// <response code="204">Nada é retornado.</response>
+        /// <response code="500">Erro interno no servidor.</response>
         [HttpGet("route/{param}", Name = "Docs Route Param Example")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
