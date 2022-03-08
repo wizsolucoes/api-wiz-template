@@ -1,3 +1,4 @@
+using Bogus;
 using FluentAssertions;
 using LanguageExt;
 using MediatR;
@@ -60,7 +61,7 @@ namespace Wiz.Template.Unit.Tests.API.Controllers
                     It.IsAny<RequestExampleViewModel>(),
                     default
                 )
-            ).ReturnsAsync((Example)null);
+            ).ReturnsAsync(Option<Example>.None);
 
             // Act
             var result = await _controller.GetMediatR(request);
@@ -68,6 +69,19 @@ namespace Wiz.Template.Unit.Tests.API.Controllers
             // Assert
             result.Should().BeOfType<ActionResult<ResponseExampleViewModel>>();
             result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public void Deve_Retornar_StatusCode_NoContent_Ao_Passar_Parametro_Rota()
+        {
+            // Arrange
+            var param = new Faker().Random.Word();
+
+            // Act
+            var result = _controller.GetRouteParam(param);
+
+            // Assert
+            result.Should().BeOfType<NoContentResult>();
         }
     }
 }

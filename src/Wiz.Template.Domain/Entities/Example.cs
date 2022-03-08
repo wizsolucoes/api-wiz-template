@@ -12,17 +12,17 @@ namespace Wiz.Template.Domain.Entities
 
         public Example() : base(default)
         {
-            //
+            TemperatureC = new Celsius();
         }
 
-        private Example(ExampleDTO dto) : base(dto.Id)
+        private Example(ExampleDto dto) : base(dto.Id)
         {
             Date = dto.Date;
             TemperatureC = Celsius.From(dto.TemperatureC);
             Summary = dto.Summary;
         }
 
-        public static Example From(ExampleDTO dto)
+        public static Example From(ExampleDto dto)
         {
             return new Example(dto);
         }
