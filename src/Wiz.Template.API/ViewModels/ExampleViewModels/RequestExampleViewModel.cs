@@ -1,9 +1,9 @@
 using LanguageExt;
 using MediatR;
 
-namespace Wiz.Template.API.ViewModels.Example
+namespace Wiz.Template.API.ViewModels.ExampleViewModels
 {
-    public class RequestExampleViewModel :
+    public record RequestExampleViewModel :
         IRequest<Option<Wiz.Template.Domain.Entities.Example>>
     {
         /// <summary>

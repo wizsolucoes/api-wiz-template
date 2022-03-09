@@ -348,3 +348,7 @@ package-lock.json
 
 # SonarQube
 .sonarqube/
+
+# RabbitMQ
+.docker/rabbit/data/
+.docker/rabbit/log/

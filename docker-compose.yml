@@ -1,0 +1,28 @@
+services:
+    ExampleDB:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        container_name: ExampleDB
+        environment:
+            ACCEPT_EULA: Y
+            SA_PASSWORD: "example-secure-password-12345678"
+            MSSQL_PID: "Express"
+        ports:
+            - 1433:1433
+        volumes:
+            - "./.docker/config:/home/example"
+
+    RabbitMQ:
+        image: rabbitmq:3-management
+        container_name: ServiceBus
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - "./.docker/rabbit/data:/var/lib/rabbitmq/"
+            - "./.docker/rabbit/log:/var/log/rabbitmq"
+        networks:
+            - rabbitmq_go_net
+
+networks:
+    rabbitmq_go_net:
+        driver: bridge

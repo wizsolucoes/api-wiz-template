@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Wiz.Template.API.Extensions
 {

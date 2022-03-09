@@ -1,6 +1,6 @@
 namespace Wiz.Template.Domain.DTOs
 {
-    public class ExampleDTO
+    public class ExampleDto
     {
         public int? Id { get; init; }
         public DateTime Date { get; init; }

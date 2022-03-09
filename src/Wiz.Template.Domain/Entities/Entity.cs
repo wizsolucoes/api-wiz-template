@@ -4,7 +4,7 @@ namespace Wiz.Template.Domain.Entities
     {
         public int Id { get; private set; }
 
-        public Entity(int? id)
+        protected Entity(int? id)
         {
             Id = id ?? default;
         }

@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="34.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -25,6 +27,7 @@
     <ProjectReference Include="..\..\src\Wiz.Template.API\Wiz.Template.API.csproj" />
     <ProjectReference Include="..\..\src\Wiz.Template.Domain\Wiz.Template.Domain.csproj" />
     <ProjectReference Include="..\..\src\Wiz.Template.Infra\Wiz.Template.Infra.csproj" />
+    <InternalsVisibleTo Include="Wiz.Template.Integration.Tests" />
   </ItemGroup>
 
 </Project>
