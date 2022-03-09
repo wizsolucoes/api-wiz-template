@@ -14,6 +14,7 @@ builder.Services.AddHealthCheckApi(builder.Configuration);
 
 builder.Services.AddDatabaseService(builder.Configuration);
 builder.Services.AddRepositoriesServices();
+builder.Services.AddExternalServices(builder.Configuration);
 
 var app = builder.Build();
 
