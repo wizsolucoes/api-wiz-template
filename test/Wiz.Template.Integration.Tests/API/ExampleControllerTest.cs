@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Json;
 using FluentAssertions;
+using Wiz.Template.API.ViewModels.CepViewModels;
 using Wiz.Template.API.ViewModels.ExampleViewModels;
 using Wiz.Template.Shared.Fixture;
 using Wiz.Template.Shared.Mocks;
@@ -131,6 +133,67 @@ namespace Wiz.Template.Integration.Tests.API
             // Assert
             response.IsSuccessStatusCode.Should().BeFalse();
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async void GetRouteParam_Get_Returns_InformacaoCep()
+        {
+            // Arrange
+            await using var application = new WebApplicationFixture();
+            var client = application.CreateClient();
+
+            var cep = "74491615";
+
+            // Act
+            var informacaoCep = await client
+                .GetFromJsonAsync<ResponseInformacaoCepViewModel>(
+                    $"{_baseUrl}/route/{cep}"
+                );
+
+            // Assert
+            informacaoCep!.Logradouro.Should().Be("Avenida Sol Nascente");
+        }
+
+        [Fact]
+        public async void GetRouteParam_Get_Returns_NotFound_Cep_Nao_Encontrado()
+        {
+            // Arrange
+            await using var application = new WebApplicationFixture();
+            var client = application.CreateClient();
+
+            var cep = "94491615";
+
+            // Act
+            // Assert
+            var exception = await Assert.ThrowsAsync<HttpRequestException>(
+                async () => await client
+                    .GetFromJsonAsync<ResponseInformacaoCepViewModel>(
+                        $"{_baseUrl}/route/{cep}"
+                    )
+            );
+
+            exception.Message.Should().Be("Response status code does not indicate success: 404 (Not Found).");
+        }
+
+        [Fact]
+        public async void GetRouteParam_Get_Returns_NotFound_Cep_Invalido()
+        {
+            // Arrange
+            await using var application = new WebApplicationFixture();
+            var client = application.CreateClient();
+
+            var cep = "invalid-cep";
+
+            // Act
+            // Assert
+            var exception = await Assert.ThrowsAsync<HttpRequestException>(
+                async () => await client
+                    .GetFromJsonAsync<ResponseInformacaoCepViewModel>(
+                        $"{_baseUrl}/route/{cep}"
+                    )
+            );
+
+            exception.Message.Should().Be("Response status code does not indicate success: 400 (Bad Request).");
         }
     }
 }
