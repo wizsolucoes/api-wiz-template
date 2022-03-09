@@ -1,7 +1,9 @@
 using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Wiz.Template.API.ViewModels.CepViewModels;
 using Wiz.Template.API.ViewModels.ExampleViewModels;
+using Wiz.Template.Domain.Models;
 
 namespace Wiz.Template.API.Controllers
 {
@@ -54,7 +56,7 @@ namespace Wiz.Template.API.Controllers
         /// <response code="200">Retorno esperado da API.</response>
         /// <response code="404">Dados não encontrados.</response>
         /// <response code="500">Erro interno no servidor.</response>
-        [HttpGet("mediatr", Name = "MediatR Example")]
+        [HttpPost("mediatr", Name = "MediatR Example")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -107,26 +109,53 @@ namespace Wiz.Template.API.Controllers
         }
 
         /// <summary>
-        /// Exemplo de documentação de parâmetro de rota em endpoint.
+        /// Exemplo de documentação de parâmetro de rota em endpoint e de acesso
+        /// a serviços externos (ViaCep).
         /// </summary>
-        /// <param name="param">Parâmetro de exemplo.</param>
+        /// <param name="cep">Parâmetro de exemplo.</param>
         /// <remarks>
         /// Exemplo de requisição:
         ///
-        ///     GET Example/route/param/lorem%20ipsum
+        ///     GET Example/route/cep/74491615
         ///
         /// </remarks>
-        /// <returns>Não possui retorno.</returns>
-        /// <response code="204">Nada é retornado.</response>
+        /// <returns>Informações do CEP.</returns>
+        /// <response code="200">Informações do CEP.</response>
+        /// <response code="404">Cep não encontrado.</response>
         /// <response code="500">Erro interno no servidor.</response>
-        [HttpGet("route/{param}", Name = "Docs Route Param Example")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [HttpGet("route/{cep}", Name = "Docs Route Param Example")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        public IActionResult GetRouteParam(
-            [FromRoute] string param
+        public async Task<ActionResult<ResponseInformacaoCepViewModel>> GetRouteParam(
+            [FromRoute] string cep
         )
         {
-            return NoContent();
+            var viaCep = await _mediator.Send(
+                new RequestInformacaoCepViewModel { Cep = cep }
+            );
+
+            return viaCep.Match<ActionResult<ResponseInformacaoCepViewModel>>(
+                x =>
+                {
+                    return !x.Erro ?
+                        Ok(
+                            new ResponseInformacaoCepViewModel
+                            {
+                                Logradouro = x.Logradouro,
+                                Complemento = x.Complemento,
+                                Bairro = x.Bairro,
+                                Localidade = x.Localidade,
+                                UF = x.UF,
+                                Ibge = x.Ibge,
+                                Gia = x.Gia,
+                                DDD = x.DDD,
+                                Siafi = x.Siafi
+                            }
+                        ) :
+                        NotFound();
+                },
+                BadRequest()
+            );
         }
     }
 }
