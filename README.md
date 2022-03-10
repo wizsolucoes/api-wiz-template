@@ -19,7 +19,7 @@
 - [ ] Criar pasta para incluir tutoriais e instruções para utilizar o template.
 - [ ] Remover Entity migration do template.
 - [ ] Adicionar um artigo de como adicionar o Entity migration na API.
-- [ ] Alterar a nomenclatura das classes Service que estão no projeto Wiz.Template.Infra para HttpService.
+- [x] Alterar a nomenclatura das classes Service que estão no projeto Wiz.Template.Infra para HttpService.
 - [x] Padronizar a nomenclatura da ViewModel para Request...ViewModel e Response...ViewModel.
 - [ ] Adicionar no template exemplo de como trabalhar com cache distribuído (ex: redis).
 - [ ] Atualizar os arquivos dockers para o dotnet 6.

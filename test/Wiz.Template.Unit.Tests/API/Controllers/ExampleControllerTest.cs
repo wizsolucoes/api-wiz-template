@@ -1,4 +1,3 @@
-using Bogus;
 using FluentAssertions;
 using LanguageExt;
 using MediatR;
@@ -6,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Wiz.Template.API.Controllers;
+using Wiz.Template.API.ViewModels.CepViewModels;
 using Wiz.Template.API.ViewModels.ExampleViewModels;
 using Wiz.Template.Domain.Entities;
+using Wiz.Template.Domain.Models;
 using Wiz.Template.Shared.Mocks;
 using Xunit;
 
@@ -114,16 +115,61 @@ namespace Wiz.Template.Unit.Tests.API.Controllers
         }
 
         [Fact]
-        public void Deve_Retornar_StatusCode_NoContent_Ao_Passar_Parametro_Rota()
+        public async void Deve_Retornar_StatusCode_OK_Buscar_Cep_Valido()
         {
             // Arrange
-            var param = new Faker().Random.Word();
+            var cep = "74491615";
+
+            _mediator.Setup(
+                x => x.Send(It.IsAny<RequestInformacaoCepViewModel>(), default)
+            ).ReturnsAsync(ExampleMock.ViaCepFaker.Generate());
 
             // Act
-            var result = _controller.GetRouteParam(param);
+            var result = await _controller.GetRouteParam(cep);
 
             // Assert
-            result.Should().BeOfType<NoContentResult>();
+            result.Should().BeOfType<ActionResult<ResponseInformacaoCepViewModel>>();
+            result.Result.Should().BeOfType<OkObjectResult>();
+        }
+
+        [Fact]
+        public async void Deve_Retornar_StatusCode_NotFound_Buscar_Cep_Nao_Encontrado()
+        {
+            // Arrange
+            var cep = "74491615";
+
+            _mediator.Setup(
+                x => x.Send(It.IsAny<RequestInformacaoCepViewModel>(), default)
+            ).ReturnsAsync(
+                ExampleMock.ViaCepFaker
+                    .RuleFor(x => x.Erro, true)
+                    .Generate()
+            );
+
+            // Act
+            var result = await _controller.GetRouteParam(cep);
+
+            // Assert
+            result.Should().BeOfType<ActionResult<ResponseInformacaoCepViewModel>>();
+            result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async void Deve_Retornar_StatusCode_BadRequest_Buscar_Cep_Invalido()
+        {
+            // Arrange
+            var cep = "74491615";
+
+            _mediator.Setup(
+                x => x.Send(It.IsAny<RequestInformacaoCepViewModel>(), default)
+            ).ReturnsAsync(Option<ViaCep>.None);
+
+            // Act
+            var result = await _controller.GetRouteParam(cep);
+
+            // Assert
+            result.Should().BeOfType<ActionResult<ResponseInformacaoCepViewModel>>();
+            result.Result.Should().BeOfType<BadRequestResult>();
         }
     }
 }
