@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Wiz.Template.Domain.Interfaces.Repository
+namespace Wiz.Template.Domain.Interfaces.Repository;
+
+public interface IDapperReadRepository<TEntity> where TEntity : class
 {
-    public interface IDapperReadRepository<TEntity> where TEntity : class
-    {
-        Task<TEntity> GetByIdAsync(int id);
-    }
+    Task<TEntity> GetByIdAsync(int id);
 }

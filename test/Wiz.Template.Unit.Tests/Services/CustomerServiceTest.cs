@@ -145,7 +145,7 @@ namespace Wiz.Template.Unit.Tests.Services
                 _viaCEPServiceMock.Object, _domainNotificationMock.Object,
                 _unitOfWorkMock.Object, _mapperMock.Object);
 
-            customerService.Add(customer);
+            customerService.AddAsync(customer);
 
             Assert.NotNull(customer);
         }
@@ -162,7 +162,7 @@ namespace Wiz.Template.Unit.Tests.Services
                 _viaCEPServiceMock.Object, _domainNotificationMock.Object,
                 _unitOfWorkMock.Object, _mapperMock.Object);
 
-            customerService.Update(customer);
+            customerService.UpdateAsync(customer);
 
             Assert.NotNull(customer);
         }
@@ -179,7 +179,7 @@ namespace Wiz.Template.Unit.Tests.Services
                 _viaCEPServiceMock.Object, _domainNotificationMock.Object,
                 _unitOfWorkMock.Object, _mapperMock.Object);
 
-            customerService.Remove(customer);
+            customerService.RemoveAsync(customer);
 
             Assert.NotNull(customer);
         }

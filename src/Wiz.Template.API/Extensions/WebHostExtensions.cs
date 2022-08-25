@@ -4,24 +4,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Wiz.Template.Infra.Context;
 
-namespace Wiz.Template.API.Extensions
+namespace Wiz.Template.API.Extensions;
+
+[ExcludeFromCodeCoverage]
+public static class WebHostExtensions
 {
-    [ExcludeFromCodeCoverage]
-    public static class WebHostExtensions
+    public static IWebHost SeedData(this IWebHost host)
     {
-        public static IWebHost SeedData(this IWebHost host)
+        using (var scope = host.Services.CreateScope())
         {
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetService<EntityContext>();
+            var services = scope.ServiceProvider;
+            var context = services.GetService<EntityContext>();
 
-                context.Database.Migrate();
+            context.Database.Migrate();
 
-                new EntityContextSeed(context);
-            }
-
-            return host;
+            new EntityContextSeed(context);
         }
+
+        return host;
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Wiz.Template.Domain.Interfaces.UoW
+namespace Wiz.Template.Domain.Interfaces.UoW;
+
+public interface IUnitOfWork : IDisposable
 {
-    public interface IUnitOfWork : IDisposable
-    {
-        int Commit();
-        void BeginTransaction();
-        void BeginCommit();
-        void BeginRollback();
-    }
+    int Commit();
+    void BeginTransaction();
+    void BeginCommit();
+    void BeginRollback();
 }

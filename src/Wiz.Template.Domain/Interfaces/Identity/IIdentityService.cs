@@ -1,7 +1,6 @@
-namespace Wiz.Template.Domain.Interfaces.Identity
+namespace Wiz.Template.Domain.Interfaces.Identity;
+
+public interface IIdentityService
 {
-    public interface IIdentityService
-    {
-        string GetScope();
-    }
+    string GetScope();
 }
