@@ -1,7 +1,6 @@
-﻿namespace Wiz.Template.API.Settings
+﻿namespace Wiz.Template.API.Settings;
+
+public class ApplicationInsightsSettings
 {
-    public class ApplicationInsightsSettings
-    {
-        public string InstrumentationKey { get; set; }
-    }
+    public string InstrumentationKey { get; set; }
 }

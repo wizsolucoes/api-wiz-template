@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace Wiz.Template.API.ViewModels.Customer
+namespace Wiz.Template.API.ViewModels.Customer;
+
+public class CustomerNameViewModel
 {
-    public class CustomerNameViewModel
+    public CustomerNameViewModel()
     {
-        public CustomerNameViewModel()
-        {
 
-        }
-        public CustomerNameViewModel(string name)
-        {
-            Name = name;
-        }
-
-        [FromRoute(Name = "name")]
-        [Required(ErrorMessage = "Nome é obrigatório")]
-        public string Name { get; set; }
     }
+    public CustomerNameViewModel(string name)
+    {
+        Name = name;
+    }
+
+    [FromRoute(Name = "name")]
+    [Required(ErrorMessage = "Nome é obrigatório")]
+    public string Name { get; set; }
 }
