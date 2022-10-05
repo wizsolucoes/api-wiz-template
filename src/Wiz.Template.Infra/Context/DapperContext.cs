@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
+﻿using System.Data.Common;
 
 namespace Wiz.Template.Infra.Context
 {

@@ -1,9 +1,5 @@
 ﻿using Bogus;
-using Bogus.Extensions.Brazil;
 using Wiz.Template.API.ViewModels.Address;
-using Wiz.Template.API.ViewModels.Customer;
-using Wiz.Template.Domain.Models;
-using Wiz.Template.Domain.Models.Dapper;
 
 namespace Wiz.Template.Core.Tests.Mocks
 {

@@ -1,15 +1,12 @@
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using System;
 using System.Buffers;
 using System.IO;
 using System.IO.Pipelines;
 using System.Text;
 using System.Threading.Tasks;
-using Wiz.Template.API.Settings;
 using Wiz.Template.Domain.Interfaces.Identity;
 
 namespace Wiz.Template.API.Middlewares;
@@ -19,10 +16,10 @@ public class LogMiddleware
     private readonly RequestDelegate _next;
     private readonly TelemetryClient _telemetry;
 
-    public LogMiddleware(RequestDelegate next, IOptions<ApplicationInsightsSettings> options)
+    public LogMiddleware(RequestDelegate next, TelemetryClient telemetryClient)
     {
         _next = next;
-        _telemetry = new TelemetryClient(new TelemetryConfiguration(options.Value.InstrumentationKey));
+        _telemetry = telemetryClient;
     }
 
     public async Task Invoke(HttpContext context, IIdentityService identityService)
@@ -41,10 +38,9 @@ public class LogMiddleware
         await _next(context);
     }
 
-    private async Task<string> FormatRequestBody(HttpRequest request)
+    private static async Task<string> FormatRequestBody(HttpRequest request)
     {
-        var body = string.Empty;
-
+        string body;
         if (!request.ContentType.Contains("multipart/form-data", StringComparison.InvariantCultureIgnoreCase))
         {
             request.EnableBuffering(bufferThreshold: 1024 * 64);
@@ -61,9 +57,9 @@ public class LogMiddleware
         return body;
     }
 
-    private async Task<string> GetStringFromPipeReader(PipeReader reader)
+    private static async Task<string> GetStringFromPipeReader(PipeReader reader)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new();
         while (true)
         {
             ReadResult read = await reader.ReadAsync();

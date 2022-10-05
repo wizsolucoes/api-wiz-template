@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
@@ -13,10 +14,12 @@ namespace Wiz.Template.API.Filters;
 public class DomainNotificationFilter : IAsyncResultFilter
 {
     private readonly IDomainNotification _domainNotification;
+    public TelemetryClient _telemetry;
 
-    public DomainNotificationFilter(IDomainNotification domainNotification)
+    public DomainNotificationFilter(IDomainNotification domainNotification, TelemetryClient telemetryClient)
     {
         _domainNotification = domainNotification;
+        _telemetry = telemetryClient;
     }
 
     public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
@@ -29,7 +32,9 @@ public class DomainNotificationFilter : IAsyncResultFilter
                     .Select(x => x.ErrorMessage)) :
                 JsonSerializer.Serialize(_domainNotification.Notifications
                     .Select(x => x.Value));
-
+            
+            _telemetry.TrackTrace(new TraceTelemetry(validations, SeverityLevel.Error));
+            
             var problemDetails = new ProblemDetails
             {
                 Title = "Bad Request",
@@ -41,11 +46,9 @@ public class DomainNotificationFilter : IAsyncResultFilter
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             context.HttpContext.Response.ContentType = "application/problem+json";
 
-            using var writer = new StreamWriter(context.HttpContext.Response.Body);
-            var response = JsonSerializer.Serialize(problemDetails);
-            await writer.WriteAsync(response).ConfigureAwait(false);
-            await writer.FlushAsync();
-
+            await JsonSerializer.SerializeAsync(context.HttpContext.Response.Body, problemDetails);
+            
+            return;
         }
 
         await next();

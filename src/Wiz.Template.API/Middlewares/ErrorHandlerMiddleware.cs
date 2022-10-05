@@ -1,15 +1,12 @@
 ﻿using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Wiz.Template.API.Settings;
 
 namespace Wiz.Template.API.Middlewares;
 
@@ -18,16 +15,14 @@ public class ErrorHandlerMiddleware
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly TelemetryClient _telemetry;
 
-    public ErrorHandlerMiddleware(IOptions<ApplicationInsightsSettings> options, IWebHostEnvironment webHostEnvironment)
+    public ErrorHandlerMiddleware(TelemetryClient telemetryClient, IWebHostEnvironment webHostEnvironment)
     {
         _webHostEnvironment = webHostEnvironment;
-        _telemetry = new TelemetryClient(new TelemetryConfiguration(options.Value.InstrumentationKey));
+        _telemetry = telemetryClient;
     }
 
     public async Task Invoke(HttpContext context)
     {
-        
-
         _telemetry.Context.Operation.Id = Guid.NewGuid().ToString();
 
         var ex = context.Features.Get<IExceptionHandlerFeature>()?.Error;
@@ -57,8 +52,7 @@ public class ErrorHandlerMiddleware
         context.Response.StatusCode = problemDetails.Status.Value;
         context.Response.ContentType = "application/problem+json";
 
-        using var writer = new Utf8JsonWriter(context.Response.Body);
-        JsonSerializer.Serialize(writer, problemDetails);
-        await writer.FlushAsync();
+        var stream = context.Response.Body;
+        await JsonSerializer.SerializeAsync(stream, problemDetails);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -11,13 +13,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Net.Http.Headers;
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using Polly;
+using Polly.CircuitBreaker;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -27,6 +29,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
@@ -63,7 +66,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        IdentityModelEventSource.ShowPII = true;            
+        IdentityModelEventSource.ShowPII = true;
         services.Configure<KestrelServerOptions>(options =>
         {
             options.AllowSynchronousIO = true;
@@ -99,7 +102,8 @@ public class Startup
 
             options.Events = new JwtBearerEvents
             {
-                OnTokenValidated = ctx => {
+                OnTokenValidated = ctx =>
+                {
                     var jwtClaimScope = ctx.Principal.Claims.FirstOrDefault(x => x.Type == "scope")?.Value;
 
                     var claims = new List<Claim>
@@ -115,7 +119,10 @@ public class Startup
                 }
             };
         });
-
+        services.Configure<TelemetryConfiguration>((o) =>
+        {
+            o.TelemetryInitializers.Add(new OperationCorrelationTelemetryInitializer());
+        });
         services.Configure<GzipCompressionProviderOptions>(x => x.Level = CompressionLevel.Optimal);
         services.AddResponseCompression(x =>
         {
@@ -201,7 +208,7 @@ public class Startup
         this.RegisterDatabaseServices(services);
     }
 
-    public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationInsightsSettings> options)
+    public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, TelemetryClient telemetryClient)
     {
         if (!env.IsProduction())
         {
@@ -228,7 +235,7 @@ public class Startup
 
         app.UseExceptionHandler(new ExceptionHandlerOptions
         {
-            ExceptionHandler = new ErrorHandlerMiddleware(options, env).Invoke
+            ExceptionHandler = new ErrorHandlerMiddleware(telemetryClient, env).Invoke
         });
 
         app.UseEndpoints(endpoints =>
@@ -255,22 +262,15 @@ public class Startup
         });
     }
 
-
     private void RegisterHttpClient(IServiceCollection services)
     {
         services.AddHttpClient<IViaCEPService, ViaCEPService>((s, c) =>
                     {
                         c.BaseAddress = new Uri(Configuration["API:ViaCEP"]);
                         c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    }).AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.OrResult(response =>
-                            (int)response.StatusCode == (int)HttpStatusCode.InternalServerError)
-                      .WaitAndRetryAsync(3, retry =>
-                           TimeSpan.FromSeconds(Math.Pow(2, retry)) +
-                           TimeSpan.FromMilliseconds(new Random(9876).Next(0, 100))))
-                      .AddTransientHttpErrorPolicy(policyBuilder => policyBuilder.CircuitBreakerAsync(
-                           handledEventsAllowedBeforeBreaking: 3,
-                           durationOfBreak: TimeSpan.FromSeconds(30)
-                    ));
+                    })
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreakerPolicy());
     }
 
     protected virtual void RegisterServices(IServiceCollection services)
@@ -290,7 +290,6 @@ public class Startup
 
         #region Infra
 
-
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -303,10 +302,39 @@ public class Startup
     {
         // if (PlatformServices.Default.Application.ApplicationName != "testhost")
         // {
-            services.AddDbContext<EntityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
-            services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
-            services.AddScoped<DapperContext>();
+        services.AddDbContext<EntityContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
+        services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
+        services.AddScoped<DapperContext>();
         // }
+    }
+
+    const string SleepDurationKey = "Broken";
+    static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+    {
+        return Policy<HttpResponseMessage>
+                .HandleResult(res => res.StatusCode == HttpStatusCode.GatewayTimeout || res.StatusCode == HttpStatusCode.RequestTimeout)
+                .Or<BrokenCircuitException>()
+                .WaitAndRetryAsync(4,
+                    sleepDurationProvider: (c, ctx) =>
+                    {
+                        if (ctx.ContainsKey(SleepDurationKey))
+                            return (TimeSpan)ctx[SleepDurationKey];
+                        return TimeSpan.FromMilliseconds(200);
+                    },
+                    onRetry: (dr, ts, ctx) =>
+                    {
+                        Console.WriteLine($"Context: {(ctx.ContainsKey(SleepDurationKey) ? "Open" : "Closed")}");
+                        Console.WriteLine($"Waits: {ts.TotalMilliseconds}");
+                    });
+    }
+
+    static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+    {
+        return Policy<HttpResponseMessage>
+            .HandleResult(res => res.StatusCode == HttpStatusCode.GatewayTimeout || res.StatusCode == HttpStatusCode.RequestTimeout)
+            .CircuitBreakerAsync(3, TimeSpan.FromSeconds(30),
+               onBreak: (dr, ts, ctx) => { ctx[SleepDurationKey] = ts; },
+               onReset: (ctx) => { ctx[SleepDurationKey] = null; });
     }
 }
