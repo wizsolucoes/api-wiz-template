@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Core;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -11,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Net.Http.Headers;
@@ -63,7 +64,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        IdentityModelEventSource.ShowPII = true;            
+        IdentityModelEventSource.ShowPII = true;
         services.Configure<KestrelServerOptions>(options =>
         {
             options.AllowSynchronousIO = true;
@@ -99,7 +100,8 @@ public class Startup
 
             options.Events = new JwtBearerEvents
             {
-                OnTokenValidated = ctx => {
+                OnTokenValidated = ctx =>
+                {
                     var jwtClaimScope = ctx.Principal.Claims.FirstOrDefault(x => x.Type == "scope")?.Value;
 
                     var claims = new List<Claim>
@@ -115,7 +117,10 @@ public class Startup
                 }
             };
         });
-
+        services.Configure<TelemetryConfiguration>((o) =>
+        {
+            o.TelemetryInitializers.Add(new OperationCorrelationTelemetryInitializer());
+        });
         services.Configure<GzipCompressionProviderOptions>(x => x.Level = CompressionLevel.Optimal);
         services.AddResponseCompression(x =>
         {
@@ -201,7 +206,7 @@ public class Startup
         this.RegisterDatabaseServices(services);
     }
 
-    public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<ApplicationInsightsSettings> options)
+    public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env, TelemetryClient telemetryClient)
     {
         if (!env.IsProduction())
         {
@@ -228,7 +233,7 @@ public class Startup
 
         app.UseExceptionHandler(new ExceptionHandlerOptions
         {
-            ExceptionHandler = new ErrorHandlerMiddleware(options, env).Invoke
+            ExceptionHandler = new ErrorHandlerMiddleware(telemetryClient, env).Invoke
         });
 
         app.UseEndpoints(endpoints =>
@@ -254,7 +259,6 @@ public class Startup
             endpoints.MapControllers();
         });
     }
-
 
     private void RegisterHttpClient(IServiceCollection services)
     {
@@ -290,7 +294,6 @@ public class Startup
 
         #region Infra
 
-
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -303,10 +306,10 @@ public class Startup
     {
         // if (PlatformServices.Default.Application.ApplicationName != "testhost")
         // {
-            services.AddDbContext<EntityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
-            services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
-            services.AddScoped<DapperContext>();
+        services.AddDbContext<EntityContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("CustomerDB")));
+        services.AddSingleton<DbConnection>(conn => new SqlConnection(Configuration.GetConnectionString("CustomerDB")));
+        services.AddScoped<DapperContext>();
         // }
     }
 }
