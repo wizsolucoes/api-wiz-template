@@ -2,11 +2,7 @@ using Moq;
 using NJsonSchema;
 using NJsonSchema.Generation;
 using RA;
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using Wiz.Template.Domain.Models.Services;
 using Xunit;
 

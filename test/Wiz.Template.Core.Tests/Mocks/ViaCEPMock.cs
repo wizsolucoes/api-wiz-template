@@ -1,5 +1,4 @@
 ﻿using Bogus;
-using Bogus.Extensions.Brazil;
 using Wiz.Template.Domain.Models.Services;
 
 namespace Wiz.Template.Core.Tests.Mocks
