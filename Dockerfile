@@ -1,6 +1,6 @@
 # Stage: Development
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS development
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS development
 
 # Detalhes do PAT_TOKEN no README
 ARG nuget_pat={PAT_TOKEN} 
@@ -43,7 +43,7 @@ RUN dotnet build "./src/Wiz.Template.API/Wiz.Template.API.csproj" -c Release
 FROM build AS publish
 RUN dotnet publish "./src/Wiz.Template.API/Wiz.Template.API.csproj" -c Release -o /publish
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS production
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS production
 ENV ASPNETCORE_ENVIRONMENT=Production
 WORKDIR /app
 COPY --from=publish /publish .
