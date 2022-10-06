@@ -7,7 +7,7 @@
     "Test",
     "xUnit"
   ],
-  "name": "Wiz Template - Web API .NET Core 3",
+  "name": "Wiz Template - Web API .NET 6",
   "generatorVersions": "[1.0.0.0-*)",
   "identity": "Wiz.Template.API",
   "groupIdentity": "Wiz.Template.API.v3",
@@ -32,12 +32,12 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "netcoreapp3.1",
-          "description": "Target netcoreapp3.1"
+          "choice": "net6.0",
+          "description": "Target net6.0"
         }
       ],
-      "replaces": "netcoreapp3.1",
-      "defaultValue": "netcoreapp3.1"
+      "replaces": "net6.0",
+      "defaultValue": "net6.0"
     },
     "copyrightYear": {
       "type": "generated",
