@@ -50,4 +50,10 @@
 		</ItemGroup>
 		<ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="../code_coverage" HistoryDirectory="../code_coverage/history" ReportTypes="HtmlInline_AzurePipelines;lcov;Badges" />
 	</Target>
+	<Target Name="PostClean" AfterTargets="Clean">
+		<RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+		<!-- obj -->
+		<RemoveDir Directories="$(BaseOutputPath)" />
+		<!-- bin -->
+	</Target>
 </Project>
