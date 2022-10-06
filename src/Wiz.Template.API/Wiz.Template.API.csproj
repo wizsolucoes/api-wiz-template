@@ -45,5 +45,11 @@
   <Target Name="InstallNpm" BeforeTargets="_GenerateRestoreProjectSpec">
     <Exec Command="npm install" ConsoleToMsBuild="true" />
   </Target>
+	<Target Name="PostClean" AfterTargets="Clean">
+		<RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+		<!-- obj -->
+		<RemoveDir Directories="$(BaseOutputPath)" />
+		<!-- bin -->
+	</Target>
 </Project>
   
