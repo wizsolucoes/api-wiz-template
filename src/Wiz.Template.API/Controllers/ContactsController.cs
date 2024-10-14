@@ -1,23 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NSwag.Annotations;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Wiz.Template.API.Services.Interfaces;
 using Wiz.Template.API.ViewModels.Customer;
+using Wizco.Common.Base;
+using Wizco.Common.Web;
 
 namespace Wiz.Template.API.Controllers;
 
 [ApiController]
 [Produces("application/json")]
-[Route("api/v1/customers")]
-[OpenApiTag("Customer")]
-public class CustomerController : ControllerBase
+[Route("api/v1/contacts")]
+public class ContactsController : WizcoControllerBase<ContactsController>
 {
-    private readonly ICustomerService _customerService;
-
-    public CustomerController(ICustomerService customerService)
+    public ContactsController(IServiceContext serviceContext, ILogger<ContactsController> logger, IMediator mediator) : base(serviceContext, logger, mediator)
     {
-        _customerService = customerService;
     }
 
     /// <summary>

@@ -1,8 +1,9 @@
 ﻿using System;
+using Wizco.Common.DataAccess;
 
 namespace Wiz.Template.Domain.Models.Dapper;
 
-public class CustomerAddress
+public class CustomerAddress : IModelContext
 {
 
     public CustomerAddress(){
