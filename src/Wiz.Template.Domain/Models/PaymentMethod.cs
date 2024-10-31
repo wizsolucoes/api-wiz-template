@@ -7,7 +7,7 @@ namespace Wiz.Template.Domain.Models;
 public class PaymentMethod : IModelContext
 {
     [Key]
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     public string Name { get; set; }
 

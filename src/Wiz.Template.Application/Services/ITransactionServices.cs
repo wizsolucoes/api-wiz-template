@@ -1,4 +1,5 @@
-﻿using Wiz.Template.Application.Features.PostPayment;
+﻿using Wiz.Template.Application.Features.GetPaymentsByMerchants;
+using Wiz.Template.Application.Features.PostPayment;
 
 namespace Wiz.Template.Application.Services
 {
@@ -16,13 +17,20 @@ namespace Wiz.Template.Application.Services
         /// </summary>
         /// <param name="paymentMethodId">The payment method identifier.</param>
         /// <returns></returns>
-        Task<bool> ExistsPaymentMethodAsync(Guid paymentMethodId);
+        Task<bool> ExistsPaymentMethodAsync(string paymentMethodId);
+
+        /// <summary>
+        /// Gets the payments by merchant asynchronous.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        Task<List<PaymentsByMerchantResponse>> GetPaymentsByMerchantAsync(int input);
 
         /// <summary>
         /// Converts to payasync.
         /// </summary>
         /// <param name="input">The input.</param>
         /// <returns></returns>
-        Task<PaymentResponse> ToPayAsync(PaymentRequest input);
+        Task<MakePaymentResponse> ToPayAsync(MakePaymentRequest input);
     }
 }

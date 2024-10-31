@@ -23,9 +23,11 @@ public class Transaction : IModelContext
 
     public PaymentMethod PaymentMethod { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime CriadoEm { get; set; }
 
     public DateTime? ChangedAt { get; set; }
+
+    public Guid TenantId { get; set; }
 
     public Merchant Merchant { get; set; }
 }

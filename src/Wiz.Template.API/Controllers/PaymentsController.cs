@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Wiz.Template.Application.Features.GetPaymentsByMerchants;
 using Wiz.Template.Application.Features.PostPayment;
 using Wizco.Common.Base;
 using Wizco.Common.Web;
@@ -25,8 +27,16 @@ public class PaymentsController : WizcoControllerBase<PaymentsController>
     /// <param name="request">The request.</param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IServiceResponse<PaymentResponse>> PostPaymentAsync([FromServices] PaymentHandler handler, PaymentRequest request)
+    [Route("make-a-payment")]
+    public async Task<IServiceResponse<MakePaymentResponse>> MakePaymentAsync([FromServices] MakePaymentHandler handler, MakePaymentRequest request)
     {
         return await handler.ProcessAsync(request);
+    }
+
+    [HttpGet]
+    [Route("get-by-merchant/{merchantId}")]
+    public async Task<IServiceResponse<List<PaymentsByMerchantResponse>>> GetAllByMerchantAsync([FromServices] GetPaymentsByMerchantHandler handler, int merchantId)
+    {
+        return await handler.ProcessAsync(merchantId);
     }
 }

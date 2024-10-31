@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wiz.Template.Domain.Interfaces.Repository;
 using Wiz.Template.Domain.Models;
@@ -14,7 +15,7 @@ namespace Wiz.Template.Infra.Repository
         {
         }
 
-        public async Task<bool> ExistsByIdAsync(Guid paymentMethodId) =>
+        public async Task<bool> ExistsByIdAsync(string paymentMethodId) =>
             await DbContext.Set<PaymentMethod>()
                 .AsNoTracking()
                 .AnyAsync(x => x.Id == paymentMethodId);

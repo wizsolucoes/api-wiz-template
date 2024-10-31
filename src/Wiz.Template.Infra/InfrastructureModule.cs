@@ -13,6 +13,7 @@ public static class InfrastructureModule
         service.AddScoped<IContactsRepository, ContactsRepository>();
         service.AddScoped<IMerchantRepository, MerchantRepository>();
         service.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+        service.AddScoped<ITransactionRepository, TransactionRepository>();
 
         service.AddScoped<ITransactionServices, TransactionServices>();
 

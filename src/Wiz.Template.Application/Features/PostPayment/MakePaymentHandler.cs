@@ -4,11 +4,11 @@ using Wizco.Common.Application;
 
 namespace Wiz.Template.Application.Features.PostPayment
 {
-    public class PaymentHandler : HandlerBase<PaymentRequest, PaymentResponse>
+    public class MakePaymentHandler : HandlerBase<MakePaymentRequest, MakePaymentResponse>
     {
         private readonly ITransactionServices transactionServices;
 
-        public PaymentHandler(ILogger<HandlerBase<PaymentRequest, PaymentResponse>> logger, ITransactionServices transactionServices) : base(logger)
+        public MakePaymentHandler(ILogger<HandlerBase<MakePaymentRequest, MakePaymentResponse>> logger, ITransactionServices transactionServices) : base(logger)
         {
             this.transactionServices = transactionServices;
         }
