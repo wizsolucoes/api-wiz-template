@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wiz.Template.Application.Features.GetPaymentsByMerchants;
-using Wiz.Template.Application.Features.PostPayment;
+using Wiz.Template.Application.Features.PostMakePayment;
 using Wizco.Common.Base;
 using Wizco.Common.Web;
 

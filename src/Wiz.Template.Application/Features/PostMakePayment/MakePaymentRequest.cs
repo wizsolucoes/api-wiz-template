@@ -1,4 +1,4 @@
-﻿namespace Wiz.Template.Application.Features.PostPayment;
+﻿namespace Wiz.Template.Application.Features.PostMakePayment;
 
 public class MakePaymentRequest
 {

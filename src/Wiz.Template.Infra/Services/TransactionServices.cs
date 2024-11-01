@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Wiz.Template.Application.Features.GetPaymentsByMerchants;
-using Wiz.Template.Application.Features.PostPayment;
+using Wiz.Template.Application.Features.PostMakePayment;
 using Wiz.Template.Application.Services;
 using Wiz.Template.Domain.Interfaces.Repository;
 

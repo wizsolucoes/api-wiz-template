@@ -15,6 +15,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{79E05ACF-1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Application", "src\Wiz.Template.Application\Wiz.Template.Application.csproj", "{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".template.config", ".template.config", "{097F7C1D-6CC7-4CAE-B197-2A405513C58A}"
+	ProjectSection(SolutionItems) = preProject
+		.template.config\template.json = .template.config\template.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{1EB1B395-987E-41FE-8EB3-6246DC43D099}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{3E3060FB-B468-4775-ABC3-DEDC6F37451B}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README-TEMPLATE.md = README-TEMPLATE.md
+		README.md = README.md
+		Wiz.Dotnet.Template.API.nuspec = Wiz.Dotnet.Template.API.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

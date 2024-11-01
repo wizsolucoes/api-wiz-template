@@ -1,5 +1,5 @@
 ﻿using Wiz.Template.Application.Features.GetPaymentsByMerchants;
-using Wiz.Template.Application.Features.PostPayment;
+using Wiz.Template.Application.Features.PostMakePayment;
 
 namespace Wiz.Template.Application.Services
 {

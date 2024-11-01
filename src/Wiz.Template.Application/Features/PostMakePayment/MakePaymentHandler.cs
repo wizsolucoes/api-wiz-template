@@ -2,7 +2,7 @@
 using Wiz.Template.Application.Services;
 using Wizco.Common.Application;
 
-namespace Wiz.Template.Application.Features.PostPayment
+namespace Wiz.Template.Application.Features.PostMakePayment
 {
     public class MakePaymentHandler : HandlerBase<MakePaymentRequest, MakePaymentResponse>
     {
@@ -15,23 +15,23 @@ namespace Wiz.Template.Application.Features.PostPayment
 
         protected override async Task HandleAsync()
         {
-            this.Response.Data = await this.transactionServices.ToPayAsync(this.Input);
+            Response.Data = await transactionServices.ToPayAsync(Input);
         }
 
         protected override async Task ValidateAsync()
         {
-            bool existeLojista = await this.transactionServices.ExistsMerchantAsync(this.Input.MerchantId);
-            
+            bool existeLojista = await transactionServices.ExistsMerchantAsync(Input.MerchantId);
+
             if (!existeLojista)
             {
-                this.Response.AddError("Logista Inexistente");
+                Response.AddError("Logista Inexistente");
             }
 
-            bool existeMetodoPagamento = await this.transactionServices.ExistsPaymentMethodAsync(this.Input.PaymentMethodId);
+            bool existeMetodoPagamento = await transactionServices.ExistsPaymentMethodAsync(Input.PaymentMethodId);
 
             if (!existeMetodoPagamento)
             {
-                this.Response.AddError("Não há suporte para este metodo de pagmento");
+                Response.AddError("Não há suporte para este metodo de pagmento");
             }
 
         }

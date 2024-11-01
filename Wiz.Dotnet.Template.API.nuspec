@@ -6,8 +6,8 @@
     <description>
       Wiz DotNet Core API Template
     </description>
-    <authors>Wiz</authors>
-    <owners>Wiz</owners>
+    <authors>Wizco</authors>
+    <owners>Wizco</owners>
     <projectUrl>https://github.com/wizsolucoes/api-wiz-template</projectUrl>
     <packageTypes>
       <packageType name="Template" />
@@ -17,7 +17,7 @@
     <releaseNotes>
       First release
     </releaseNotes>
-    <copyright>Copyright 2019-2019</copyright>
+    <copyright>Copyright 2019-2024</copyright>
     <tags>csharp dotnet aspnet core template web http rest api swagger xunit test</tags>
   </metadata>
   <files>
