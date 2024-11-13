@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System;
 using Wizco.Common.Base;
@@ -27,7 +25,7 @@ public class Transaction : IModelContext
 
     public DateTime? ChangedAt { get; set; }
 
-    public Guid TenantId { get; set; }
+    public string TenantId { get; set; }
 
     public Merchant Merchant { get; set; }
 }

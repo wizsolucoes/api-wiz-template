@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Wiz.Template.Application.Features.GetAllContacts;
 using Wizco.Common.Application;
 
 namespace Wiz.Template.Application;

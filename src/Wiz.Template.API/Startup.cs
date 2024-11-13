@@ -22,9 +22,16 @@ public class Startup : WizcoStartupBase
     {
         base.ConfigureServices(services);
 
+        //Responsavel pelos handlers [wizco.commons.application]
         services.AddTemplateApplication();
+
+        //Responsavel pela conexão com banco de dados [wizco.commons.dataaccess]
         services.AddSqlServerContext(Configuration);
+
+        //Responsavel pela validação do token no sso [wizco.commons.webapi]
         services.AddWizApiAuthentication(Configuration, env);
+
+        //seus repositorios e serviços
         services.AddScopedRepositories();
     }
 }

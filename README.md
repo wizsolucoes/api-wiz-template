@@ -41,41 +41,42 @@ Dentro do arquivo *local.settings.json*, há o conteúdo para modificação das 
 
 ```json
 {
-  "ApplicationInsights": {
-    "InstrumentationKey": "KEY_APPLICATION_INSIGHTS"
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Information"
+    }
   },
-  "Azure": {
-    "KeyVaultUrl": "URL_KEY_VAULT"
+  "ApplicationInsights": {
+    "ConnectionString": "<appinsights-connection-string>"
+  },
+  "AppConfiguration": {
+    "Prefix": "WizTemplate:*",
+    "Sentinel": "WizTemplate:Sentinel",
+    "CacheExpirationFromMinutes": 15
   },
   "ConnectionStrings": {
-    "CustomerDB": "CONNECTION_DATABASE"
+    "AppConfig": "<app-configuration-connection-string>",
+    "Database": "<data-base-connection-string>",
+    "Redis": "<redis-connection-string>"
+  },
+  "SwaggerSettings": {
+    "Name": "latest",
+    "Title": "WizTemplate API",
+    "Description": "WizTemplate API",
+    "Version": "latest"
   },
   "WizID": {
-    "Authority": "URL_SSO",
-    "Audience": "SSO_SCOPE"
+    "Authority": "<valor>",
+    "Issues": "<valor>",
+    "Audience": "<valor>",
+    "Audiences": "<valor>"
   },
-  "API": {
-    "ViaCEP": "https://viacep.com.br/ws/"
-  },
-  "Webhook": {
-    "Teams": "{URL Webhook do Teams}"
-  },
-  "HealthChecks-UI": {
-    "HealthChecks": [
-      {
-        "Name": "liveness",
-        "Uri": "http://localhost:5000/health"
-      },
-      {
-        "Name": "readness",
-        "Uri": "http://localhost:5000/ready"
-      }
-    ],
-    "Webhooks": [],
-    "EvaluationTimeInSeconds": 300,
-    "MinimumSecondsBetweenFailureNotifications": 900
+  "WProApi": {
+    "BaseAddress": "<valor>"
   }
 }
+
 ```
 
 6. Inserir chave do **Application Insights** conforme configurado no Azure no arquivo *appsettings.{ENVIRONMENT}.json*.
@@ -100,82 +101,6 @@ Para gerar o token é necessário seguir os seguintes passos:
 
 5. Em **Scopes** selecionar em **Packaging** a opção **Read & write**
 
-No arquivo **Dockerfile** substitua com o token gerado:
-
-```docker
-ARG nuget_pat={PAT_TOKEN}
-```
-
-## Execução do projeto
-
-### **Visual Studio**
-
-1. Executar projeto via **Kestrel**;
-
-Executar o projeto via **Kestrel** facilita a troca de ambientes *(environments)* e a verificação de logs em execução da aplicação em projetos .NET Core. Os ambientes podem ser configurados dentro das propriedades do projeto, conforme caminho abaixo:
-
-```console
-├── Wiz.[NomeProjeto] (solução)
-  ├── Wiz.[NomeProjeto].API (projeto)
-    ├── Properties (pasta física)
-      ├── launchSettings.json
-```
-
-Dentro do arquivo *launchSettings.json*, há o conteúdo que indica a configuração de ambiente via **Kestrel**:
-
-```json
-    "Wiz.[NomeProjeto].API": {
-      "commandName": "Project",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:5001;http://localhost:5000"
-    }
-```
-
-### **Visual Studio Code**
-
-1. *(Recomendado)* Instalar extensões para desenvolvimento:
-
-- [DevZ - Back-end Pack](https://marketplace.visualstudio.com/items?itemName=WizSolucoes.devz-back-end-pack)
-
-2. Executar projeto via **Kestrel** *(Tecla F5)*;
-
-Por padrão, todo projeto executado no **Visual Studio Code** é executado via **Kestrel** *(Tecla F5)*. Os ambientes podem ser configurados dentro das propriedades do projeto, conforme caminho abaixo:
-
-```console
-├── .vscode (pasta física)
-  ├── launch.json
-```
-
-3. Utilizar a função **task** (ctrl + shift + p) para executar ações dentro do projeto. A função está presente no caminho do *menu* abaixo:
-
-```console
-Terminal -> Run Task
-```
-
-4. Selecionar a função **task** (ctrl + shift + p) a ser executada no projeto:
-
-- *clean* - Limpar solução
-- *restore* - Restaurar pacotes da solução
-- *build* - Compilar pacotes da solução
-- *test* - Executar projeto de testes
-- *test with coverage* - Executar projeto de testes com cobertura
-
-### **Docker**
-
-1. Executar comando na **raiz** do projeto:
-
-> *docker-compose up -d*
-
-2. logs de execução:
-
-> *docker-compose logs*
-
-3. Parar e remover container:
-
-> *docker-compose down*
 
 ## Estrutura
 
@@ -183,11 +108,8 @@ Padrão das camadas do projeto:
 
 1. **Wiz.[NomeProjeto].Domain**: domínio da aplicação, responsável de manter as *regras de negócio* para a API;
 2. **Wiz.[NomeProjeto].Infra**: camada mais baixa, para acesso a dados, infraestrutura e serviços externos;
-3. **Wiz.[NomeProjeto].API**: responsável pela camada de *disponibilização* dos endpoints da API;
-4. **Wiz.[NomeProjeto].Contract.Tests**: responsável pela camada de *testes de contrato* dos projetos.
-5. **Wiz.[NomeProjeto].Core.Tests**: responsável por receber objetos mocks, builders e fixtures para ajudar na criação dos testes.
-6. **Wiz.[NomeProjeto].Integration.Tests**: responsável pela camada de *testes de integração* dos projetos.
-7. **Wiz.[NomeProjeto].Unit.Tests**: responsável pela camada de *testes unitários* dos projetos.
+3. **Wiz.[NomeProjeto].Application**: camada mais baixa, para acesso a dados, aplicação e manipulação de fluxos;
+4. **Wiz.[NomeProjeto].API**: responsável pela camada de *disponibilização* dos endpoints da API;
 
 Formatação do projeto dentro do repositório:
 
@@ -195,24 +117,11 @@ Formatação do projeto dentro do repositório:
 ├── src 
   ├── Wiz.[NomeProjeto].Domain (projeto)
   ├── Wiz.[NomeProjeto].Infra (projeto)
+  ├── Wiz.[NomeProjeto].Application (projeto)
   ├── Wiz.[NomeProjeto].API (projeto)
 ├── test
-  ├── Wiz.[NomeProjeto].Contract.Tests (projeto)
-  ├── Wiz.[NomeProjeto].Core.Tests (projeto)
-  ├── Wiz.[NomeProjeto].Integration.Tests (projeto)
-  ├── Wiz.[NomeProjeto].Unit.Tests (projeto)
 ├── Wiz.[NomeProjeto] (solução)
 ```
-
-Há possibilidade de inclusão do projeto de testes do tipo **Aceitação (e2e)** caso necessidade, com o nome: **Wiz.[NomeProjeto].Acceptance.Tests**
-
-## Dependências
-
-- [Patterns RESTful](http://standards.rest/)
-
-## Build e testes
-
-- Obrigatoriedade de **não diminuir** os testes de cobertura.
 
 ### **Build com Visual Studio**
 
