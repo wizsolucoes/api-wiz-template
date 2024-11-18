@@ -5,7 +5,7 @@
 	</ItemGroup>
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<ProjectGuid>{44075a6a-df5d-4a2e-aaab-71628feb9770}</ProjectGuid>
 	</PropertyGroup>
@@ -35,7 +35,6 @@
 		<ProjectReference Include="..\..\src\Wiz.Template.API\Wiz.Template.API.csproj" />
 		<ProjectReference Include="..\..\src\Wiz.Template.Domain\Wiz.Template.Domain.csproj" />
 		<ProjectReference Include="..\..\src\Wiz.Template.Infra\Wiz.Template.Infra.csproj" />
-		<ProjectReference Include="..\Wiz.Template.Core.Tests\Wiz.Template.Core.Tests.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

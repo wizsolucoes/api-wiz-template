@@ -1,27 +1,84 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Autor: Zama Bandeira Braga <zamabraga@wiz.co>
+# Mais informação: https://wizco.topdesk.net/tas/public/ssp/content/detail/knowledgeitem?unid=e7d0f51ade324ec289891b0892dd0837
+# Issues: https://wizco.topdesk.net/tas/public/ssp/content/serviceflow?unid=3cd6a6f61e4a49689212298c0cdbd427&from=86304f95-4cc7-46aa-ae25-1c6af55eafc5&openedFromService=true
+# Exemplos: https://dev.azure.com/wizsolucoes/WizPipelines/_git/exemplos
+
 resources:
   repositories:
     - repository: coretemplate
       type: git
       name: WizPipelines/core-template
+      ref:  refs/heads/v2
+
+pool:
+  vmImage: ubuntu-latest
+
 
 trigger:
-  branches:
-    exclude: [ 'refs/heads/feature/*' ] # nomes de branchs que não irão rodar o pipeline
+  batch: 'true'
   paths:
-    exclude: [ 'README.md' ] # caminhos de arquivos que não irão rodar o pipeline
-
+    exclude:
+      - README.md
+      
 extends:
-  template: main.yml@coretemplate
+  template: dotnetcore/main.yml@coretemplate
   parameters:
-    technology: 'dotnetcore'
-    azResourceName: 'TO DO eg. customer'
-    azWebAppNameUAT: 'TO DO eg. api-customer-hml'
-    azWebAppNamePRD: 'TO DO eg. api-customer-prd'
-    azSubscriptionUAT: 'TO DO'
-    azSubscriptionPRD: 'TO DO'
-    dotnetcoreDotNetVersion: '6.x'
-    dotnetcoreBuildProject: '**/*[API].csproj'
-    dotnetcoreBuildConfiguration: Release
-    dotnetcoreTestProject: '**/*[Tt]ests/*.csproj'
-    dotnetcoreNugetFeed: 00000000-0000-0000-0000-000000000000
-    instrumentationKey: "00000000-0000-0000-0000-000000000000"
+    nome: templateapi
+    produtoDigital: Wiz Pro
+    dotNetVersion: '8.x'
+    dotNetProject: '**/*[API].csproj'
+    dotnetTestProject: '**/*[Tt]ests/*.csproj'
+    executavel: "Wiz.Template.API.dll"
+    buildImageArgs: 
+      - "RUNTIME_IMAGE=mcr.microsoft.com/dotnet/aspnet:8.0"
+    desenvolvimento:
+      deploy: 
+        nomad:
+          type: api
+          env: 
+            ASPNETCORE_ENVIRONMENT: "Development"
+          proxyConfig:
+            - "traefik.enable=true"
+            - "traefik.http.routers.templateapi-dev.entrypoints=websecure"
+            - "traefik.http.routers.templateapi-dev.tls=true"
+            - "traefik.http.routers.templateapi-dev.rule=HostRegexp(`{subdomain:(templateapi-dev)}.wiz.co`)"
+            - "traefik.http.services.templateapi-dev.loadbalancer.server.scheme=https"
+    homologacao:
+      deploy: 
+        nomad:
+          type: api
+          env: 
+            ASPNETCORE_ENVIRONMENT: "Development"
+          proxyConfig:
+            - "traefik.enable=true"
+            - "traefik.http.routers.templateapi-hml.entrypoints=websecure"
+            - "traefik.http.routers.templateapi-hml.tls=true"
+            - "traefik.http.routers.templateapi-hml.rule=HostRegexp(`{subdomain:(templateapi-hml)}.wiz.co`)"
+            - "traefik.http.services.templateapi-hml.loadbalancer.server.scheme=https"
+    producao:
+      deploy: 
+        webapp: 
+          name: "templateapi-prd-api TODO: substitua pelo seu recurso'"
+          subscription: "AmbienteCorporativoExterior"
+          resourceGroupName: "ssowiz-prd-rg"
+          type: "webAppLinux"
+          env:
+            ASPNETCORE_ENVIRONMENT: "Production"
+          deployPackage: "$(Pipeline.Workspace)/drop/**/*.zip"
+          runtimeStack: "DOTNETCORE|8.0"
+          cors:
+            supportCredentials: true
+    sandbox:
+      deploy: 
+        nomad:
+          type: api
+          env:
+            ASPNETCORE_ENVIRONMENT: "Sandbox"
+          proxyConfig:
+             - "traefik.enable=true"
+             - "traefik.http.routers.templateapi-sb.entrypoints=websecure"
+             - "traefik.http.routers.templateapi-sb.tls=true"
+             - "traefik.http.routers.templateapi-sb.rule=HostRegexp(`{subdomain:(templateapi-sb)}.wiz.co`)"
+             - "traefik.http.services.templateapi-sb.loadbalancer.server.scheme=https"  

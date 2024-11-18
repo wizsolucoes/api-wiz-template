@@ -7,10 +7,10 @@
     "Test",
     "xUnit"
   ],
-  "name": "Wiz Template - Web API .NET 6",
+  "name": "Wiz Template - Web API .NET 8",
   "generatorVersions": "[1.0.0.0-*)",
   "identity": "Wiz.Template.API",
-  "groupIdentity": "Wiz.Template.API.v3",
+  "groupIdentity": "Wiz.Template.API.v4",
   "shortName": "wizapi",
   "tags": {
     "language": "C#",
@@ -32,12 +32,12 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "net6.0",
-          "description": "Target net6.0"
+          "choice": "net8.0",
+          "description": "Target net8.0"
         }
       ],
-      "replaces": "net6.0",
-      "defaultValue": "net6.0"
+      "replaces": "net8.0",
+      "defaultValue": "net8.0"
     },
     "copyrightYear": {
       "type": "generated",

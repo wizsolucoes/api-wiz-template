@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28917.181
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.API", "src\Wiz.Template.API\Wiz.Template.API.csproj", "{9E49153B-CB6F-40A2-B92B-3D69AEC8C425}"
 EndProject
@@ -13,13 +13,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{662F7144-A85
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{79E05ACF-1AD9-4B93-AF9F-D04C097545E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Integration.Tests", "test\Wiz.Template.Integration.Tests\Wiz.Template.Integration.Tests.csproj", "{3231A003-A869-4C2F-872C-215E3A1EECE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Application", "src\Wiz.Template.Application\Wiz.Template.Application.csproj", "{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wiz.Template.Unit.Tests", "test\Wiz.Template.Unit.Tests\Wiz.Template.Unit.Tests.csproj", "{BDB38022-3FA4-44C7-9F30-0FDC40F1743C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".template.config", ".template.config", "{097F7C1D-6CC7-4CAE-B197-2A405513C58A}"
+	ProjectSection(SolutionItems) = preProject
+		.template.config\template.json = .template.config\template.json
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wiz.Template.Contract.Tests", "test\Wiz.Template.Contract.Tests\Wiz.Template.Contract.Tests.csproj", "{FACB0155-5AA7-4280-B1E6-B208AE6CBDEC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{1EB1B395-987E-41FE-8EB3-6246DC43D099}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wiz.Template.Core.Tests", "test\Wiz.Template.Core.Tests\Wiz.Template.Core.Tests.csproj", "{B9279132-F22F-48B1-92C3-BB45B2D81807}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{3E3060FB-B468-4775-ABC3-DEDC6F37451B}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README-TEMPLATE.md = README-TEMPLATE.md
+		README.md = README.md
+		Wiz.Dotnet.Template.API.nuspec = Wiz.Dotnet.Template.API.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,22 +51,10 @@ Global
 		{9C8B583D-0E7F-48EF-A96A-6E6D5F85A821}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C8B583D-0E7F-48EF-A96A-6E6D5F85A821}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C8B583D-0E7F-48EF-A96A-6E6D5F85A821}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3231A003-A869-4C2F-872C-215E3A1EECE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3231A003-A869-4C2F-872C-215E3A1EECE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3231A003-A869-4C2F-872C-215E3A1EECE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3231A003-A869-4C2F-872C-215E3A1EECE0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDB38022-3FA4-44C7-9F30-0FDC40F1743C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDB38022-3FA4-44C7-9F30-0FDC40F1743C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDB38022-3FA4-44C7-9F30-0FDC40F1743C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDB38022-3FA4-44C7-9F30-0FDC40F1743C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FACB0155-5AA7-4280-B1E6-B208AE6CBDEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FACB0155-5AA7-4280-B1E6-B208AE6CBDEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FACB0155-5AA7-4280-B1E6-B208AE6CBDEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FACB0155-5AA7-4280-B1E6-B208AE6CBDEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9279132-F22F-48B1-92C3-BB45B2D81807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9279132-F22F-48B1-92C3-BB45B2D81807}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9279132-F22F-48B1-92C3-BB45B2D81807}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9279132-F22F-48B1-92C3-BB45B2D81807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,10 +63,7 @@ Global
 		{9E49153B-CB6F-40A2-B92B-3D69AEC8C425} = {662F7144-A851-40F7-A6EE-DE6325BC07BC}
 		{5AE1A3DC-A81E-4894-8899-F29BFFEC5BC2} = {662F7144-A851-40F7-A6EE-DE6325BC07BC}
 		{9C8B583D-0E7F-48EF-A96A-6E6D5F85A821} = {662F7144-A851-40F7-A6EE-DE6325BC07BC}
-		{3231A003-A869-4C2F-872C-215E3A1EECE0} = {79E05ACF-1AD9-4B93-AF9F-D04C097545E0}
-		{BDB38022-3FA4-44C7-9F30-0FDC40F1743C} = {79E05ACF-1AD9-4B93-AF9F-D04C097545E0}
-		{FACB0155-5AA7-4280-B1E6-B208AE6CBDEC} = {79E05ACF-1AD9-4B93-AF9F-D04C097545E0}
-		{B9279132-F22F-48B1-92C3-BB45B2D81807} = {79E05ACF-1AD9-4B93-AF9F-D04C097545E0}
+		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D} = {662F7144-A851-40F7-A6EE-DE6325BC07BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78CEC30D-00D7-4551-9AAC-C35F54E824BF}

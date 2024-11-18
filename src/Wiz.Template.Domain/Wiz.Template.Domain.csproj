@@ -1,14 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ProjectGuid>{8a368471-b92b-4be3-808d-04ed5ea09c5e}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.123" />
-    <PackageReference Include="FluentValidation" Version="11.2.0" />
-    <PackageReference Include="System.Text.Json" Version="6.0.5" />
+    <Compile Remove="Validation\**" />
+    <EmbeddedResource Remove="Validation\**" />
+    <None Remove="Validation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+	  <PackageReference Include="Wizco.Commons.Base" Version="1.0.10" />
   </ItemGroup>
 	<Target Name="PostClean" AfterTargets="Clean">
 		<RemoveDir Directories="$(BaseIntermediateOutputPath)" />
