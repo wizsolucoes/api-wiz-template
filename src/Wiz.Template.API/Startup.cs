@@ -28,6 +28,9 @@ public class Startup : WizcoStartupBase
         //Responsavel pela conexão com banco de dados [wizco.commons.dataaccess]
         services.AddSqlServerContext(Configuration);
 
+        //Serviços necessarios a aplicação. (opcional)
+        services.AddRefitServices();
+
         //Responsavel pela validação do token no sso [wizco.commons.webapi]
         services.AddWizApiAuthentication(Configuration, env);
 

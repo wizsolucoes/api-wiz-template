@@ -15,23 +15,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{79E05ACF-1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Application", "src\Wiz.Template.Application\Wiz.Template.Application.csproj", "{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".template.config", ".template.config", "{097F7C1D-6CC7-4CAE-B197-2A405513C58A}"
-	ProjectSection(SolutionItems) = preProject
-		.template.config\template.json = .template.config\template.json
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{1EB1B395-987E-41FE-8EB3-6246DC43D099}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines.yml = azure-pipelines.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{3E3060FB-B468-4775-ABC3-DEDC6F37451B}"
-	ProjectSection(SolutionItems) = preProject
-		LICENSE = LICENSE
-		README-TEMPLATE.md = README-TEMPLATE.md
-		README.md = README.md
-		Wiz.Dotnet.Template.API.nuspec = Wiz.Dotnet.Template.API.nuspec
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Application.Tests", "test\Wiz.Template.Application.Tests\Wiz.Template.Application.Tests.csproj", "{BB3910E0-4551-4BC9-9D6A-1C93FD51BAA1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiz.Template.Infra.Tests", "test\Wiz.Template.Infra.Tests\Wiz.Template.Infra.Tests.csproj", "{F49E15A2-BFF7-4364-8B5F-8D28C0A31739}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +46,14 @@ Global
 		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3910E0-4551-4BC9-9D6A-1C93FD51BAA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3910E0-4551-4BC9-9D6A-1C93FD51BAA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3910E0-4551-4BC9-9D6A-1C93FD51BAA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3910E0-4551-4BC9-9D6A-1C93FD51BAA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F49E15A2-BFF7-4364-8B5F-8D28C0A31739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F49E15A2-BFF7-4364-8B5F-8D28C0A31739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F49E15A2-BFF7-4364-8B5F-8D28C0A31739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F49E15A2-BFF7-4364-8B5F-8D28C0A31739}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +63,8 @@ Global
 		{5AE1A3DC-A81E-4894-8899-F29BFFEC5BC2} = {662F7144-A851-40F7-A6EE-DE6325BC07BC}
 		{9C8B583D-0E7F-48EF-A96A-6E6D5F85A821} = {662F7144-A851-40F7-A6EE-DE6325BC07BC}
 		{BF771F4A-5DF8-4021-B845-0DF9DB91E32D} = {662F7144-A851-40F7-A6EE-DE6325BC07BC}
+		{BB3910E0-4551-4BC9-9D6A-1C93FD51BAA1} = {79E05ACF-1AD9-4B93-AF9F-D04C097545E0}
+		{F49E15A2-BFF7-4364-8B5F-8D28C0A31739} = {79E05ACF-1AD9-4B93-AF9F-D04C097545E0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78CEC30D-00D7-4551-9AAC-C35F54E824BF}
