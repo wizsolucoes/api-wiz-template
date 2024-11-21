@@ -1,6 +1,6 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "author": "Wiz Solucoes e Corretagem de Seguros S.A.",
+  "author": "Wizco",
   "classifications": [
     "Web",
     "WebAPI",
@@ -8,7 +8,6 @@
     "xUnit"
   ],
   "name": "Wiz Template - Web API .NET 8",
-  "generatorVersions": "[1.0.0.0-*)",
   "identity": "Wiz.Template.API",
   "groupIdentity": "Wiz.Template.API.v4",
   "shortName": "wizapi",
@@ -16,13 +15,6 @@
     "language": "C#",
     "type": "project"
   },
-  "guids":[
-    "{dc7fde71-e38e-4dbd-8a85-effa3bf95118}",
-    "{8a368471-b92b-4be3-808d-04ed5ea09c5e}",
-    "{8ec2f830-9398-42d7-a6d7-9d79e2a9df5e}",
-    "{57f893d6-179d-46eb-9784-73ec42b5ead4}",
-    "{44075a6a-df5d-4a2e-aaab-71628feb9770}"
-  ],
   "sourceName": "Template",
   "preferNameDirectory": false,
   "symbols": {
@@ -52,6 +44,69 @@
       "datatype": "bool",
       "description": "If specified, skips the automatic restore of the project on create.",
       "defaultValue": "false"
+    },
+    "RepositoryConnectionString": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "Server=<server-name>;Database=<database-name>;User Id=<user-id>;Password=<user-pass>;MultipleActiveResultSets=true;TrustServerCertificate=true",
+      "replaces": "<REPOSITORY-CONNECTIONSTRING>",
+      "description": "connection string do repositorio. o valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+    "AppInsightsConnectionString": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "<instrumentation-key-connection-string>",
+      "replaces": "<APPINSIGHTS-CONNECTIONSTRING>",
+      "description": "connection string do WPRO. obtenha esse valor do appInsights do wpro. O valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+	"AppConfigConnectionString": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "Endpoint=https://<name>-appconfig.azconfig.io;Id=<id>;Secret=<secret>",
+      "replaces": "<APPCONFIG-CONNECTIONSTRING>",
+      "description": "connection string do Azure App Configuration. Obtenha esse valor com o time de techleads. O valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+    "RedisConnectionString": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "<redis-server>:<redis-port>,password=<redis-pass>,ssl=True,sslprotocols=tls12,abortConnect=false",
+      "replaces": "<REDIS-CONNECTIONSTRING>",
+      "description": "connection string do REDIS. o valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+    "SsoAuthority": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "https://sso-dev.wiz.co",
+      "replaces": "<WIZID-AUTHORITY>",
+      "description": "O valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+    "SsoIssues": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "https://sso-dev.wiz.co;https://sso-dev.wizsolucoes.com.br",
+      "replaces": "<WIZID-ISSUES>",
+      "description": "O valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+    "SsoAudience": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "https://sso-dev.wiz.co/resources",
+      "replaces": "<WIZID-AUDIENCE>",
+      "description": "O valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+    "SsoAudiences": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "https://sso-dev.wiz.co/resources",
+      "replaces": "<WIZID-AUDIENCES>",
+      "description": "O valor que for inserido aqui, será substituido no seu appsettings.config"
+    },
+    "WproUrl": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "https://apis.com/wpro",
+      "replaces": "<URL-WPRO>",
+      "description": "Url da API do WPRO. o valor que for inserido aqui, será substituido no seu appsettings.config"
     }
   },
   "primaryOutputs": [
@@ -90,7 +145,7 @@
           "text": "Run 'dotnet restore'"
         }
       ],
-      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+	    "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
       "continueOnError": true
     }
   ]

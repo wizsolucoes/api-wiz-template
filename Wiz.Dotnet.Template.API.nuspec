@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Wiz.Dotnet.Template.API</id>
-    <version>1.0.0.0</version>
+    <version>8.0.0.3</version>
     <description>
       Wiz DotNet Core API Template
     </description>
@@ -15,9 +15,10 @@
     <license type="expression">MIT</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>
-      First release
+      - First release
+	  - Update netcore8
     </releaseNotes>
-    <copyright>Copyright 2019-2024</copyright>
+    <copyright>Copyright 2019-2025</copyright>
     <tags>csharp dotnet aspnet core template web http rest api swagger xunit test</tags>
   </metadata>
   <files>
