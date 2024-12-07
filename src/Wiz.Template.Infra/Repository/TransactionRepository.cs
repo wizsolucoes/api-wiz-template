@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Wiz.Template.Domain.Entities;
 using Wiz.Template.Domain.Interfaces.Repository;
-using Wiz.Template.Domain.Models;
 using Wizco.Common.DataAccess.Dapper;
 using Wizco.Common.DataAccess.Entity;
 

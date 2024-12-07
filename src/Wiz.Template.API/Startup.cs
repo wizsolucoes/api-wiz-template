@@ -4,18 +4,15 @@ using Wizco.Common.Web;
 using Wiz.Template.Application;
 using Wiz.Template.Infra;
 using Microsoft.AspNetCore.Hosting;
+using Wiz.SsoConnect.Extension.Sso;
 using Wizco.Common.Web.Authentication;
-using Wizco.Common.DataAccess;
 
 namespace Wiz.Template.API;
 
 public class Startup : WizcoStartupBase
 {
-    private readonly IWebHostEnvironment env;
-
-    public Startup(IConfiguration configuration, IWebHostEnvironment env) : base(configuration)
+    public Startup(IConfiguration config, IWebHostEnvironment webHostEnvironment) : base(config, webHostEnvironment)
     {
-        this.env = env;
     }
 
     public override void ConfigureServices(IServiceCollection services)
@@ -25,16 +22,20 @@ public class Startup : WizcoStartupBase
         //Responsavel pelos handlers [wizco.commons.application]
         services.AddTemplateApplication();
 
-        //Responsavel pela conexão com banco de dados [wizco.commons.dataaccess]
-        services.AddSqlServerContext(Configuration);
-
         //Serviços necessarios a aplicação. (opcional)
         services.AddRefitServices();
 
-        //Responsavel pela validação do token no sso [wizco.commons.webapi]
-        services.AddWizApiAuthentication(Configuration, env);
+        services.AddWizApiAuthentication(Configuration, WebHostEnvironment);
+
+        ////Responsavel pela validação do token no sso [sso.connect]
+        //services.AddSsoConnectJwt(this.WebHostEnvironment, options =>
+        //{
+        //    options.Audience = Configuration["WizID:Audience"];
+        //});
+
+        //services.AddSsoConnect(this.WebHostEnvironment);
 
         //seus repositorios e serviços
-        services.AddScopedRepositories();
+        services.AddScopedRepositories(Configuration);
     }
 }

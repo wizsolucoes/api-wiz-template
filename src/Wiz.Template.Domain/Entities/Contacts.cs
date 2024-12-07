@@ -2,9 +2,8 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Wizco.Common.Base;
 
-namespace Wiz.Template.Domain.Models;
+namespace Wiz.Template.Domain.Entities;
 
-[Table(name: "ses_contatos")]
 public class Contacts : IModelContext
 {
     [Key]
@@ -16,12 +15,21 @@ public class Contacts : IModelContext
     /// <value>
     /// The razao social.
     /// </value>
-    [Column(name: "pesrazaosocial")]
     public string RazaoSocial { get; set; }
 
-    [Column(name: "dircargo")]
+    /// <summary>
+    /// Gets or sets the cargo.
+    /// </summary>
+    /// <value>
+    /// The cargo.
+    /// </value>
     public string Cargo { get; set; }
 
-    [Column(name: "entcodigofip")]
+    /// <summary>
+    /// Gets or sets the codigo fip.
+    /// </summary>
+    /// <value>
+    /// The codigo fip.
+    /// </value>
     public int CodigoFip { get; set; }
 }

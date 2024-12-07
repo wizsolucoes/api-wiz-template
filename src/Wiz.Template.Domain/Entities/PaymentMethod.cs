@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Wizco.Common.Base;
 
-namespace Wiz.Template.Domain.Models;
+namespace Wiz.Template.Domain.Entities;
 
 public class PaymentMethod : IModelContext
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Wiz.Template.Domain.Models;
+using Wiz.Template.Domain.Entities;
 using Wizco.Common.Base;
 using Wizco.Common.Base.Paging;
 

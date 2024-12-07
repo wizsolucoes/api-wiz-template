@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using Wizco.Common.Base;
 
-namespace Wiz.Template.Domain.Models;
+namespace Wiz.Template.Domain.Entities;
 
 public class Merchant : IModelContext
 {
