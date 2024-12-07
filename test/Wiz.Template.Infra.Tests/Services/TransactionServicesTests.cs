@@ -1,8 +1,10 @@
 ﻿using FluentAssertions;
 using NSubstitute;
 using Wiz.Template.Application.Clients.OpenFinanceBb;
+using Wiz.Template.Domain.Entities;
 using Wiz.Template.Domain.Interfaces.Repository;
 using Wiz.Template.Infra.Services;
+using Wizco.Common.DataAccess;
 
 namespace Wiz.Template.Infra.Tests.Services;
 
@@ -13,6 +15,7 @@ public class TransactionServicesTests
     private readonly ITransactionRepository transactionRepository;
     private readonly IOpenRatesService openRatesService;
     private readonly TransactionServices transactionServices;
+    private readonly IUnitOfWork unitOfWork;
 
     public TransactionServicesTests()
     {
@@ -20,7 +23,9 @@ public class TransactionServicesTests
         paymentMethodRepository = Substitute.For<IPaymentMethodRepository>();
         transactionRepository = Substitute.For<ITransactionRepository>();
         openRatesService = Substitute.For<IOpenRatesService>();
-        transactionServices = new TransactionServices(merchantRepository, paymentMethodRepository, transactionRepository, openRatesService);
+        unitOfWork = Substitute.For<IUnitOfWork>();
+
+        transactionServices = new TransactionServices(merchantRepository, paymentMethodRepository, transactionRepository, openRatesService, unitOfWork);
     }
 
     [Fact]
@@ -85,7 +90,7 @@ public class TransactionServicesTests
         // Arrange
         var transactionId = Guid.NewGuid();
         int merchantId = 1;
-        var transactions = new List<Wiz.Template.Domain.Models.Transaction>
+        var transactions = new List<Transaction>
         {
             new()
             {
@@ -95,8 +100,8 @@ public class TransactionServicesTests
                 ExternalId = "EXT123",
                 CriadoEm = DateTime.UtcNow,
                 PaymentMethodId = "PM01",
-                Merchant = new Wiz.Template.Domain.Models.Merchant { Name = "Merchant1" },
-                PaymentMethod = new Wiz.Template.Domain.Models.PaymentMethod { Name = "Credit Card" }
+                Merchant = new Wiz.Template.Domain.Entities.Merchant { Name = "Merchant1" },
+                PaymentMethod = new Wiz.Template.Domain.Entities.PaymentMethod { Name = "Credit Card" }
             }
         };
         transactionRepository.GetPaymentsByMerchantAsync(merchantId).Returns(transactions);
@@ -115,7 +120,7 @@ public class TransactionServicesTests
     {
         // Arrange
         int merchantId = 1;
-        transactionRepository.GetPaymentsByMerchantAsync(merchantId).Returns(new List<Wiz.Template.Domain.Models.Transaction>());
+        transactionRepository.GetPaymentsByMerchantAsync(merchantId).Returns(new List<Transaction>());
 
         // Act
         var result = await transactionServices.GetPaymentsByMerchantAsync(merchantId);

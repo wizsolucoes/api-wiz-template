@@ -1,12 +1,10 @@
-using System.ComponentModel.DataAnnotations;
 using System;
 using Wizco.Common.Base;
 
-namespace Wiz.Template.Domain.Models;
+namespace Wiz.Template.Domain.Entities;
 
 public class Transaction : IModelContext
 {
-    [Key]
     public Guid Id { get; set; }
 
     public int MerchantId { get; set; }

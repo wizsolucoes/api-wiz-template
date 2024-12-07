@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System;
 using Wizco.Common.Base;
 using System.Collections.Generic;
-using Wiz.Template.Domain.Models;
+using Wiz.Template.Domain.Entities;
 
 namespace Wiz.Template.Domain.Interfaces.Repository;
 

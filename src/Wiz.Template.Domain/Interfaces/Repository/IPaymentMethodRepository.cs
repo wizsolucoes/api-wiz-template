@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Wiz.Template.Domain.Models;
+﻿using System.Threading.Tasks;
 using Wizco.Common.Base;
 
 namespace Wiz.Template.Domain.Interfaces.Repository

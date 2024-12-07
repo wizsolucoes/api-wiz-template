@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,7 @@ namespace Wiz.Template.API.Controllers;
 
 [ApiController]
 [Route("contacts")]
-[Authorize]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class ContactsController : WizcoControllerBase<ContactsController>
 {
     public ContactsController(IServiceContext serviceContext, ILogger<ContactsController> logger, IMediator mediator) : base(serviceContext, logger, mediator)
