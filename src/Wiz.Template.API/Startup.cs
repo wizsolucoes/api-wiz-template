@@ -25,15 +25,13 @@ public class Startup : WizcoStartupBase
         //Serviços necessarios a aplicação. (opcional)
         services.AddRefitServices();
 
-        services.AddWizApiAuthentication(Configuration, WebHostEnvironment);
-
         ////Responsavel pela validação do token no sso [sso.connect]
-        //services.AddSsoConnectJwt(this.WebHostEnvironment, options =>
-        //{
-        //    options.Audience = Configuration["WizID:Audience"];
-        //});
+        services.AddSsoConnectJwt(this.WebHostEnvironment, options =>
+        {
+            options.Audience = Configuration["WizID:Audience"];
+        });
 
-        //services.AddSsoConnect(this.WebHostEnvironment);
+        services.AddSsoConnect(this.WebHostEnvironment);
 
         //seus repositorios e serviços
         services.AddScopedRepositories(Configuration);
