@@ -6,7 +6,9 @@ using Wiz.Template.Application.Clients.OpenFinanceBb;
 using Wiz.Template.Application.Features.GetPaymentsByMerchants;
 using Wiz.Template.Application.Features.PostMakePayment;
 using Wiz.Template.Application.Services;
+using Wiz.Template.Domain.Entities;
 using Wiz.Template.Domain.Interfaces.Repository;
+using Wizco.Common.DataAccess;
 
 namespace Wiz.Template.Infra.Services;
 
@@ -33,6 +35,11 @@ public class TransactionServices : ITransactionServices
     private IOpenRatesService _openRateService;
 
     /// <summary>
+    /// The unit of work
+    /// </summary>
+    private readonly IUnitOfWork _unitOfWork;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="TransactionServices"/> class.
     /// </summary>
     /// <param name="merchantRepository">The merchant repository.</param>
@@ -42,12 +49,14 @@ public class TransactionServices : ITransactionServices
         IMerchantRepository merchantRepository,
         IPaymentMethodRepository paymentMethodRepository,
         ITransactionRepository transactionRepository,
-        IOpenRatesService openRateService)
+        IOpenRatesService openRateService,
+        IUnitOfWork unitOfWork)
     {
         this.merchantRepository = merchantRepository;
         this.paymentMethodRepository = paymentMethodRepository;
         this.transactionRepository = transactionRepository;
         _openRateService = openRateService;
+        _unitOfWork = unitOfWork;
     }
 
     /// <summary>
@@ -99,7 +108,7 @@ public class TransactionServices : ITransactionServices
     {
         RateResponse rates = await this._openRateService.GetOnlineRates();
 
-        Wiz.Template.Domain.Models.Transaction payment = new()
+        Transaction payment = new()
         {
             Amount = input.Amount,
             MerchantId = input.MerchantId,
@@ -109,7 +118,19 @@ public class TransactionServices : ITransactionServices
             ExternalId = Guid.NewGuid().ToString() 
         };
 
-        await this.transactionRepository.AddAsync<Wiz.Template.Domain.Models.Transaction>(payment);
+        try
+        {
+            await this._unitOfWork.BeginTransactionAsync();
+            
+            await this.transactionRepository.AddAsync<Transaction>(payment);
+
+            await this._unitOfWork.BeginCommitAsync();
+        }
+        catch (Exception)
+        {
+            await this._unitOfWork.BeginRollbackAsync();
+            throw;
+        }
 
         return new()
         {

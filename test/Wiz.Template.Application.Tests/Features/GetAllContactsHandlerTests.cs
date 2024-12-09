@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Wiz.Template.Application.Features.GetAllContacts;
+using Wiz.Template.Domain.Entities;
 using Wiz.Template.Domain.Interfaces.Repository;
-using Wiz.Template.Domain.Models;
 using Wizco.Common.Application;
 using Wizco.Common.Base.Paging;
 
