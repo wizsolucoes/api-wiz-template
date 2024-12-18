@@ -13,7 +13,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-	  <PackageReference Include="Wizco.Commons.Base" Version="1.0.12" />
+	  <PackageReference Include="Wizco.Commons.Base" Version="1.0.13" />
   </ItemGroup>
 	<Target Name="PostClean" AfterTargets="Clean">
 		<RemoveDir Directories="$(BaseIntermediateOutputPath)" />
