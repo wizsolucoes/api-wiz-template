@@ -7,7 +7,10 @@ namespace Wiz.Template.Application.Features.GetPaymentsByMerchants;
 /// <summary>
 /// Get Payments By Merchant Handler
 /// </summary>
-public class GetPaymentsByMerchantHandler(ILogger<HandlerBase<int, List<PaymentsByMerchantResponse>>> logger, ITransactionServices transactionServices) : HandlerBase<int, List<PaymentsByMerchantResponse>>(logger)
+public class GetPaymentsByMerchantHandler(
+    ILogger<HandlerBase<int, List<PaymentsByMerchantResponse>>> logger, 
+    ITransactionServices transactionServices) : 
+        HandlerBase<int, List<PaymentsByMerchantResponse>>(logger)
 {
     private ITransactionServices transactionServices = transactionServices;
 

@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Wizco.Common.Base;
 
-namespace Wiz.Template.Domain.Interfaces.Repository
+namespace Wiz.Template.Domain.Interfaces.Repository;
+
+public interface IMerchantRepository : IRepository
 {
-    public interface IMerchantRepository : IRepository
-    {
-        Task<bool> ExistsByIdAsync(int merchantId);
-    }
+    Task<bool> ExistsByIdAsync(int merchantId);
 }

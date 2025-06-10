@@ -11,8 +11,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
-		<PackageReference Include="Wizco.Commons.WebApi" Version="1.0.17" />
-		<PackageReference Include="Wiz.SsoConnect" Version="8.0.2" />
+		<PackageReference Include="Wizco.Commons.WebApi" Version="1.0.18" />
+		<PackageReference Include="Wiz.SsoConnect" Version="8.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>

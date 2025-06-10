@@ -2,38 +2,35 @@
 using Wiz.Template.Application.Services;
 using Wizco.Common.Application;
 
-namespace Wiz.Template.Application.Features.PostMakePayment
+namespace Wiz.Template.Application.Features.PostMakePayment;
+
+public class MakePaymentHandler(
+    ILogger<HandlerBase<MakePaymentRequest, MakePaymentResponse>> logger, 
+    ITransactionServices transactionServices) : 
+        HandlerBase<MakePaymentRequest, MakePaymentResponse>(logger)
 {
-    public class MakePaymentHandler : HandlerBase<MakePaymentRequest, MakePaymentResponse>
+    private readonly ITransactionServices transactionServices = transactionServices;
+
+    protected override async Task HandleAsync()
     {
-        private readonly ITransactionServices transactionServices;
+        Response.Data = await transactionServices.ToPayAsync(Input);
+    }
 
-        public MakePaymentHandler(ILogger<HandlerBase<MakePaymentRequest, MakePaymentResponse>> logger, ITransactionServices transactionServices) : base(logger)
+    protected override async Task ValidateAsync()
+    {
+        bool existeLojista = await transactionServices.ExistsMerchantAsync(Input.MerchantId);
+
+        if (!existeLojista)
         {
-            this.transactionServices = transactionServices;
+            Response.AddError("Logista Inexistente");
         }
 
-        protected override async Task HandleAsync()
+        bool existeMetodoPagamento = await transactionServices.ExistsPaymentMethodAsync(Input.PaymentMethodId);
+
+        if (!existeMetodoPagamento)
         {
-            Response.Data = await transactionServices.ToPayAsync(Input);
+            Response.AddError("Não há suporte para este metodo de pagmento");
         }
 
-        protected override async Task ValidateAsync()
-        {
-            bool existeLojista = await transactionServices.ExistsMerchantAsync(Input.MerchantId);
-
-            if (!existeLojista)
-            {
-                Response.AddError("Logista Inexistente");
-            }
-
-            bool existeMetodoPagamento = await transactionServices.ExistsPaymentMethodAsync(Input.PaymentMethodId);
-
-            if (!existeMetodoPagamento)
-            {
-                Response.AddError("Não há suporte para este metodo de pagmento");
-            }
-
-        }
     }
 }

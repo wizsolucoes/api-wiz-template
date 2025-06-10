@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Wiz.Dotnet.Template.API</id>
-    <version>8.0.0.3</version>
+    <version>8.0.0.4</version>
     <description>
       Wiz DotNet Core API Template
     </description>
