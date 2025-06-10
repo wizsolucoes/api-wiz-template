@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Refit" Version="8.0.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
-    <PackageReference Include="Wizco.Commons.Application" Version="1.0.7" />
+    <PackageReference Include="Wizco.Commons.Application" Version="1.0.8" />
   </ItemGroup>
 
   <ItemGroup>

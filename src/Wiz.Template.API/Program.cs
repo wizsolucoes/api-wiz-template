@@ -15,12 +15,4 @@ public class Program
     {
         WizcoProgramBase.CreateHostBuilder<Startup>(args).Build().Run();
     }
-
-    /// <summary>
-    /// Create the host builder
-    /// </summary>
-    /// <param name="args"></param>
-    /// <returns>The host builder</returns>
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        WizcoProgramBase.CreateHostBuilder<Startup>(args);
 }

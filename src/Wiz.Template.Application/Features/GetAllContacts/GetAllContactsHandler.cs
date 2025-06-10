@@ -7,18 +7,16 @@ using Wizco.Common.Base.Paging;
 
 namespace Wiz.Template.Application.Features.GetAllContacts;
 
-public class GetAllContactsHandler : HandlerBase<ContactsRequest, PagedList<ContactsResponse>>
+/// <summary>
+/// Initializes a new instance of the <see cref="GetAllContactsHandler"/> class.
+/// </summary>
+/// <param name="logger">The logger.</param>
+public class GetAllContactsHandler(
+    ILogger<HandlerBase<ContactsRequest, PagedList<ContactsResponse>>> logger, 
+    IContactsRepository contactsRepository) : 
+        HandlerBase<ContactsRequest, PagedList<ContactsResponse>>(logger)
 {
-    private readonly IContactsRepository contactsRepository;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="GetAllContactsHandler"/> class.
-    /// </summary>
-    /// <param name="logger">The logger.</param>
-    public GetAllContactsHandler(ILogger<HandlerBase<ContactsRequest, PagedList<ContactsResponse>>> logger, IContactsRepository contactsRepository) : base(logger)
-    {
-        this.contactsRepository = contactsRepository;
-    }
+    private readonly IContactsRepository contactsRepository = contactsRepository;
 
     protected override async Task HandleAsync()
     {

@@ -12,52 +12,43 @@ using Wizco.Common.DataAccess;
 
 namespace Wiz.Template.Infra.Services;
 
-public class TransactionServices : ITransactionServices
+/// <summary>
+/// Initializes a new instance of the <see cref="TransactionServices"/> class.
+/// </summary>
+/// <param name="merchantRepository">The merchant repository.</param>
+/// <param name="paymentMethodRepository">The payment method repository.</param>
+/// <param name="transactionRepository">The transaction repository.</param>
+public class TransactionServices(
+    IMerchantRepository merchantRepository,
+    IPaymentMethodRepository paymentMethodRepository,
+    ITransactionRepository transactionRepository,
+    IOpenRatesService openRateService,
+    IUnitOfWork unitOfWork) : ITransactionServices
 {
     /// <summary>
     /// The merchant repository
     /// </summary>
-    private IMerchantRepository merchantRepository;
+    private IMerchantRepository merchantRepository = merchantRepository;
 
     /// <summary>
     /// The payment method repository
     /// </summary>
-    private IPaymentMethodRepository paymentMethodRepository;
+    private IPaymentMethodRepository paymentMethodRepository = paymentMethodRepository;
 
     /// <summary>
     /// The transaction repository
     /// </summary>
-    private ITransactionRepository transactionRepository;
+    private ITransactionRepository transactionRepository = transactionRepository;
 
     /// <summary>
     /// The open rate service
     /// </summary>
-    private IOpenRatesService _openRateService;
+    private IOpenRatesService _openRateService = openRateService;
 
     /// <summary>
     /// The unit of work
     /// </summary>
-    private readonly IUnitOfWork _unitOfWork;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TransactionServices"/> class.
-    /// </summary>
-    /// <param name="merchantRepository">The merchant repository.</param>
-    /// <param name="paymentMethodRepository">The payment method repository.</param>
-    /// <param name="transactionRepository">The transaction repository.</param>
-    public TransactionServices(
-        IMerchantRepository merchantRepository,
-        IPaymentMethodRepository paymentMethodRepository,
-        ITransactionRepository transactionRepository,
-        IOpenRatesService openRateService,
-        IUnitOfWork unitOfWork)
-    {
-        this.merchantRepository = merchantRepository;
-        this.paymentMethodRepository = paymentMethodRepository;
-        this.transactionRepository = transactionRepository;
-        _openRateService = openRateService;
-        _unitOfWork = unitOfWork;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     /// <summary>
     /// Existses the merchant asynchronous.

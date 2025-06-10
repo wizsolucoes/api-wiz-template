@@ -8,23 +8,19 @@ using Wiz.Template.Domain.Interfaces.Repository;
 using Wizco.Common.DataAccess.Dapper;
 using Wizco.Common.DataAccess.Entity;
 
-namespace Wiz.Template.Infra.Repository
-{
-    public class TransactionRepository : Wizco.Common.DataAccess.Repository, ITransactionRepository
-    {
-        public TransactionRepository(SqlServerContext context, DapperContext dapperContext) : base(context, dapperContext)
-        {
-        }
+namespace Wiz.Template.Infra.Repository;
 
-        /// <summary>
-        /// Gets the payments by merchant asynchronous.
-        /// </summary>
-        /// <param name="input">The input.</param>
-        public async Task<List<Transaction>> GetPaymentsByMerchantAsync(int merchantId) =>
-            await DbContext.Set<Transaction>()
-                .Where(x => x.MerchantId == merchantId)
-                .Include(x => x.Merchant)
-                .Include(x => x.PaymentMethod)
-                .ToListAsync();
-    }
+public class TransactionRepository(SqlServerContext context, DapperContext dapperContext) : Wizco.Common.DataAccess.Repository(context, dapperContext), ITransactionRepository
+{
+
+    /// <summary>
+    /// Gets the payments by merchant asynchronous.
+    /// </summary>
+    /// <param name="input">The input.</param>
+    public async Task<List<Transaction>> GetPaymentsByMerchantAsync(int merchantId) =>
+        await DbContext.Set<Transaction>()
+            .Where(x => x.MerchantId == merchantId)
+            .Include(x => x.Merchant)
+            .Include(x => x.PaymentMethod)
+            .ToListAsync();
 }

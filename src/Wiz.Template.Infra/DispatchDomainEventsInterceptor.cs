@@ -8,14 +8,9 @@ using Wizco.Common.Base;
 
 namespace Wiz.Template.Infra;
 
-public class DispatchDomainEventsInterceptor : SaveChangesInterceptor
+public class DispatchDomainEventsInterceptor(IServiceContext serviceContext) : SaveChangesInterceptor
 {
-    private readonly IServiceContext _serviceContext;
-
-    public DispatchDomainEventsInterceptor(IServiceContext serviceContext)
-    {
-        _serviceContext = serviceContext;
-    }
+    private readonly IServiceContext _serviceContext = serviceContext;
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
